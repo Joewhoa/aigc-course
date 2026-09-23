@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段 3 · Agent + 工具调用</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.75; font-size:16px;
+}
+.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a:hover{border-bottom-color:var(--accent);}
+strong{color:#000;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>阶段 3 · Agent + 工具调用</h1>
+<p><strong>核心问题</strong>：怎么让它不光会说，还能动手做事？</p>
+<h2>本阶段学什么</h2>
+<table>
+<thead>
+<tr>
+<th>节</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1</td>
+<td>Agent 和「会聊天的模型」差在哪（= 模型 + 工具 + 循环 + <strong>环境</strong>）</td>
+</tr>
+<tr>
+<td>3.2</td>
+<td><strong>工具调用六步机制</strong>（模型只出请求，程序才执行）；上下文 = <strong>静态前缀 + 轨迹</strong></td>
+</tr>
+<tr>
+<td>3.3</td>
+<td>ReAct：边想边做（想 / 做 / 看）</td>
+</tr>
+<tr>
+<td>3.4</td>
+<td><strong>四道防线 + 三层护栏</strong>（权限最小化 / 高风险确认 / 参数校验 / 轮次成本上限；护栏分上下文层·执行层·数据层）</td>
+</tr>
+<tr>
+<td>3.5</td>
+<td>怎么证明它干对了：测试驱动开发（先定验收条件）</td>
+</tr>
+<tr>
+<td>3.6</td>
+<td><strong>编排模式：工作流 vs 自主 Agent</strong>（★ 本阶段最该记的一节）</td>
+</tr>
+<tr>
+<td>3.7</td>
+<td>工具的五种类型（以及工具该怎么设计）</td>
+</tr>
+<tr>
+<td>3.8</td>
+<td>面试会怎么问</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>共 8 节。其中 <strong>3.6 编排模式</strong>是教材（李博杰书）交叉参考补进来的，<br>
+它是「什么时候该用 Agent」的标准答案——面试高频，别跳。</p>
+<p><strong>教材依据</strong>：李博杰书第 1 章（Agent 机制 / ReAct / Harness / 编排模式 / 护栏）<br>
+＋ 第 4 章（工具分类 / 工具设计 / MCP 与生态）。<br>
+逐节对照记录见 <code>核验与参考/课程设计-教材依据核验.md</code> 的「核验 ③」。</p>
+<p><strong>本次开课前的教材核验</strong>（2026-09-23）就地补了 4 处：3.1 补「环境 / 观察空间·动作空间」、<br>
+3.2 补「静态前缀 + 轨迹」、3.4 补「三层护栏」、3.6 补「任务拆解」一行注。</p>
+</blockquote>
+<h2>文件</h2>
+<ul>
+<li><code>讲义.md</code> / <code>讲义.html</code> —— 正文</li>
+<li><code>测验.md</code> / <code>测验.html</code> —— <strong>14 题（选择 6 ＋ 简答 8），11.2 分及格</strong> ＋ 配套 <code>测验-答案与解析.json</code></li>
+<li><code>补充讲义-三问-2026-09-23.md</code> —— 三处讲不透的地方（参数校验 / 数据层护栏 / 「确认失败」）<strong>补讲</strong></li>
+</ul>
+<h2>过关标准</h2>
+<ul>
+<li>测验 ≥ 11.2 分（80%）</li>
+<li>六步链条能背，四道防线能举例</li>
+<li><strong>能说清「什么时候不该用 Agent」</strong>（3.6 的编排模式）</li>
+<li>能说出<strong>护栏分三层</strong>，以及「为什么上下文层给不了保证」</li>
+</ul>
+<h2>本阶段最该记住的一句</h2>
+<blockquote>
+<p><strong>模型只出请求，执行永远在外层程序。</strong> 这个主语不能错。</p>
+</blockquote>
+</div>
+</body>
+</html>

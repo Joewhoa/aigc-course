@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阶段 1 测验：Prompt 工程 · AIGC 求职培训</title>
+<style>
+  :root{
+    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
+    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
+      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
+      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  .meta{color:var(--muted);font-size:14px;line-height:1.9}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
+    padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
+  button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
+  button:hover{opacity:.85}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  .score{font-weight:600;font-size:15px;margin-left:auto}
+  .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
+  .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
+  .qtext{margin:0 0 12px;font-weight:500}
+  .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
+  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    font-family:"SF Mono",Consolas,monospace;font-size:.88em}
+  .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
+    border:1px solid transparent;transition:background .12s}
+  .opt:hover{background:var(--accent-bg)}
+  .opt input{margin-right:9px;accent-color:var(--accent)}
+  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
+  .fb.show{display:block}
+  .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
+  .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
+  .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
+  textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
+    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+  .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
+    font-size:14.5px;line-height:1.8;display:none}
+  .hint.show{display:block}
+  .hint b{color:var(--accent)}
+  .hint ul{margin:8px 0 0;padding-left:22px}
+  .hint li{margin:4px 0}
+  .note{color:var(--muted);font-size:14px;margin-top:10px}
+  .rule{background:var(--warn-bg);border-radius:10px;padding:14px 18px;margin:18px 0;
+    border-left:3px solid var(--warn);font-size:14.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>阶段 1 测验：Prompt 工程</h1>
+  <div class="meta">日期：2026-09-22 ｜ 满分 10 分 ｜ <strong>及格线 8 分（80%）</strong><br>规则：不及格不进阶段 2。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。</div>
+</header>
+<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制下来，交给你的教练批改（或对照参考要点自评）。</div>
+<div class="bar">
+  <button onclick="checkChoice()">检查选择题</button>
+  <button class="ghost" onclick="resetAll()">清空重做</button>
+  <span class="score" id="score">选择题得分：— / 6</span>
+</div>
+<h2 style="font-size:18px;margin:32px 0 4px">一、选择题（每题 1 分，共 6 分）</h2>
+<div class="item" id="q-q1">
+  <div class="qhead">Q1</div>
+  <div class="qtext">下面哪句话最能说明「提示词工程」和「跟 AI 聊天」的区别？</div>
+  <label class="opt"><input type="radio" name="q1" value="A"><span>A. 提示词要写得更长</span></label>
+  <label class="opt"><input type="radio" name="q1" value="B"><span>B. 提示词是被设计出来的输入，有明确功能目标，可以反复测试和改进</span></label>
+  <label class="opt"><input type="radio" name="q1" value="C"><span>C. 提示词要用英文写效果才好</span></label>
+  <label class="opt"><input type="radio" name="q1" value="D"><span>D. 提示词里要加礼貌用语</span></label>
+  <div class="fb" id="fb-q1"></div>
+</div>
+<div class="item" id="q-q2">
+  <div class="qhead">Q2</div>
+  <div class="qtext">要让模型把一段乱糟糟的日志变成结构化数据。下面哪条写法最有用？</div>
+  <label class="opt"><input type="radio" name="q2" value="A"><span>A. 「请仔细分析这段日志，提取关键信息」</span></label>
+  <label class="opt"><input type="radio" name="q2" value="B"><span>B. 「只输出 JSON，包含 level（字符串）、time（时间）、msg（字符串）三个字段，不要输出任何 JSON 之外的内容」</span></label>
+  <label class="opt"><input type="radio" name="q2" value="C"><span>C. 「输出格式随意，能看懂就行」</span></label>
+  <label class="opt"><input type="radio" name="q2" value="D"><span>D. 「尽量准确地提取」</span></label>
+  <div class="fb" id="fb-q2"></div>
+</div>
+<div class="item" id="q-q3">
+  <div class="qhead">Q3</div>
+  <div class="qtext">few-shot（给例子）最大的价值是什么？</div>
+  <label class="opt"><input type="radio" name="q3" value="A"><span>A. 让模型回答得更快</span></label>
+  <label class="opt"><input type="radio" name="q3" value="B"><span>B. 节省 token</span></label>
+  <label class="opt"><input type="radio" name="q3" value="C"><span>C. 用具体样例表达那些「没法用文字描述清楚」的要求</span></label>
+  <label class="opt"><input type="radio" name="q3" value="D"><span>D. 让模型变得更聪明</span></label>
+  <div class="fb" id="fb-q3"></div>
+</div>
+<div class="item" id="q-q4">
+  <div class="qhead">Q4</div>
+  <div class="qtext">在提示词里写了「不要编造数据」，但模型还是会编。下面哪个做法最有效？</div>
+  <label class="opt"><input type="radio" name="q4" value="A"><span>A. 把「不要编造」写得更严厉，加感叹号、加「绝对不许」</span></label>
+  <label class="opt"><input type="radio" name="q4" value="B"><span>B. 明确要求「如果资料里没有相关内容，就回答：资料未提及」，并把这条约束放在结尾</span></label>
+  <label class="opt"><input type="radio" name="q4" value="C"><span>C. 换一个更贵的模型</span></label>
+  <label class="opt"><input type="radio" name="q4" value="D"><span>D. 同一个问题多问几遍，取多数答案</span></label>
+  <div class="fb" id="fb-q4"></div>
+</div>
+<div class="item" id="q-q5">
+  <div class="qhead">Q5</div>
+  <div class="qtext">为什么说「提示词需要被测试」？</div>
+  <label class="opt"><input type="radio" name="q5" value="A"><span>A. 因为模型会随机出错，必须多跑几遍才保险</span></label>
+  <label class="opt"><input type="radio" name="q5" value="B"><span>B. 因为它像代码一样，改一处可能影响其他场景，需要用固定用例做回归验证</span></label>
+  <label class="opt"><input type="radio" name="q5" value="C"><span>C. 因为使用的平台有要求</span></label>
+  <label class="opt"><input type="radio" name="q5" value="D"><span>D. 因为测试本身能提高模型准确率</span></label>
+  <div class="fb" id="fb-q5"></div>
+</div>
+<div class="item" id="q-q6">
+  <div class="qhead">Q6</div>
+  <div class="qtext">一个完整的工业级提示词（角色 / 任务 / 约束 / 格式），哪一段最容易被新手漏掉、而漏掉后后果最严重？</div>
+  <label class="opt"><input type="radio" name="q6" value="A"><span>A. 角色设定</span></label>
+  <label class="opt"><input type="radio" name="q6" value="B"><span>B. 任务描述</span></label>
+  <label class="opt"><input type="radio" name="q6" value="C"><span>C. 约束和输出格式</span></label>
+  <label class="opt"><input type="radio" name="q6" value="D"><span>D. 礼貌用语</span></label>
+  <div class="fb" id="fb-q6"></div>
+</div>
+<h2 style="font-size:18px;margin:40px 0 4px">二、简答题（每题 1 分，共 4 分｜答到要点就给分）</h2>
+<div class="item" id="q-q7">
+  <div class="qhead">Q7</div>
+  <div class="qtext"><p>用四段式（角色 / 任务 / 约束 / 格式）设计一个提示词。<br>
+场景：<strong>把一份客户投诉邮件分类，并给出处理建议。</strong></p>
+<p>请把四段各自要写的内容列出来。</p></div>
+  <textarea id="a7" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h7')">查看参考要点</button>
+  <div class="hint" id="h7"><b>要点：</b><br>
+    · <b>角色</b>：客服主管 / 投诉处理专员<br>
+    · <b>任务</b>：阅读邮件 → 归类 → 给出处理建议<br>
+    · <b>约束</b>：分类只能从给定类别里选（如 产品质量 / 物流 / 服务态度 / 退款 / 其他）；只依据邮件内容，不脑补；不确定的归入「其他」<br>
+    · <b>格式</b>：输出 JSON，含 <code>category</code>（字符串，类别名）、<code>urgency</code>（高/中/低）、<code>suggestion</code>（字符串，一句话建议）</div>
+</div>
+<div class="item" id="q-q8">
+  <div class="qhead">Q8</div>
+  <div class="qtext">假设要用 AI 完成一个「批量把一批图片里的某个颜色换成另一个颜色」的任务。<br>
+要通过提示词让 AI 帮你完成整件事，<strong>你会加哪三条约束</strong>？每条说明<strong>为什么必须加</strong>。</div>
+  <textarea id="a8" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h8')">查看参考要点</button>
+  <div class="hint" id="h8"><b>参考答案（任三条成立即可）：</b><br>
+    · <b>容差范围</b>（如 RGB 差值 ±10）—— 不写，它不知道「颜色相同」怎么判定，会把相近色一起换掉<br>
+    · <b>其余像素一律不动、不得改变尺寸</b> —— 不写，它可能顺手做别的处理（压缩、裁剪、缩放）<br>
+    · <b>失败必须报告文件名和原因</b> —— 不写，它可能静默跳过，你根本不知道有图没处理<br>
+    · 输出格式明确（成功 N 张 / 失败 M 张 / 失败清单）—— 不写，你没法自动核对结果</div>
+</div>
+<div class="item" id="q-q9">
+  <div class="qhead">Q9</div>
+  <div class="qtext">「模型不听话」有三种常见表现：<strong>格式不对、内容跑偏、编造事实</strong>。<br>
+针对这三种，各说一个最有效的应对办法。</div>
+  <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
+  <div class="hint" id="h9"><b>要点：</b><br>
+    · <b>格式不对</b> → 给出字段名 + 类型的明确格式说明，并附一组「输入→输出」样例（few-shot）；仍不稳就把温度调低<br>
+    · <b>内容跑偏</b> → 把任务收窄（限定数量、范围、长度）；把最关键的约束挪到提示词结尾<br>
+    · <b>编造事实</b> → 加约束「只依据我提供的资料」，并给出替代动作「资料未提及就回答：资料未提及」；更彻底的做法是把资料随提示一起给它（这是 RAG 的思路，阶段 2 会讲）</div>
+</div>
+<div class="item" id="q-q10">
+  <div class="qhead">Q10</div>
+  <div class="qtext">面试官问：「<strong>你怎么保证 AI 的输出稳定？</strong>」<br>
+请给出回答，至少要包含<strong>三个具体做法</strong>。</div>
+  <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
+  <div class="hint" id="h10"><b>要点（答出三个即可）：</b><br>
+    · 把<b>温度</b>调到接近 0（不要让它在多个答案之间随机跳）<br>
+    · 用 <b>few-shot</b> 给出输入输出样例，让格式和判断标准都具体化<br>
+    · <b>明确限定输出格式</b>：字段名 + 类型 + 取值范围，让程序能自动解析<br>
+    · 固定一组<b>测试用例</b>，每次改动后重跑对比（回归测试）<br>
+    · 把<b>关键约束放结尾</b>，离生成位置最近<br>
+    · 涉及事实的，把资料<b>随提示一起给</b>，并要求「资料未提及」就明说</div>
+</div>
+<h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
+<div class="bar" style="position:static">
+  <button onclick="buildSheet()">生成答卷</button>
+  <button class="ghost" onclick="copySheet()">复制到剪贴板</button>
+</div>
+<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制发给我批改。"></textarea>
+<p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
+<footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
+  文件：<code>阶段1-Prompt工程/测验.md</code>
+</footer>
+</div>
+<script>
+var KEY = {"q1": "B", "q2": "B", "q3": "C", "q4": "B", "q5": "B", "q6": "C"};
+var WHY = {"q1": "考「设计」与「沟通」的区别。判断标准是：输出要可预测、可复用、可验证，而且能跑测试用例对比。写得更长、用英文、加礼貌用语都不是要点。", "q2": "考输出格式的工程价值。关键在「给出字段名和类型」——A、C、D 都只说了目标，没说输出长什么样，程序无法自动解析。只有格式固定，自动化才成立。", "q3": "考 few-shot 的本质。它的价值不是提速也不是省 token，而是把「说不清的标准」用具体样例表达出来。常见的例子：什么叫「礼貌的回复」——写十条规则不如给三个例子。", "q4": "考防幻觉的设计思路。关键不是语气更严厉，而是给出「那该做什么」——给了替代动作「资料未提及」，模型才有得选。只禁止不给替代方案，它总得输出点什么，于是继续编。", "q5": "考「工程」二字的含义。把提示词当代码看待：改一处要回归测试，避免改好一个场景、弄坏另一个；要有版本记录；要有可量化的成功标准。", "q6": "考四段式的薄弱点。角色和任务谁都会写，最常漏的是约束和输出格式——而这两段恰恰决定结果能不能被程序直接用。"};
+var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
+var ESSAY = ["a7", "a8", "a9", "a10"];
+var ESSAY_NO = [7, 8, 9, 10];
+var TOTAL = 6;
+var PAPER = "阶段 1 测验：Prompt 工程";
+
+function checkChoice(){
+  var score = 0;
+  CHOICE.forEach(function(id){
+    var sel = document.querySelector('input[name="'+id+'"]:checked');
+    var box = document.getElementById('fb-' + id);
+    if(!sel){
+      box.className = 'fb show warn';
+      box.innerHTML = '<strong>未作答</strong>——漏答按 0 分算。';
+      return;
+    }
+    var ok = sel.value === KEY[id];
+    if(ok) score++;
+    box.className = 'fb show ' + (ok ? 'ok' : 'bad');
+    box.innerHTML = '<strong>' + (ok ? '正确' : '错误——正确答案是 ' + KEY[id]) + '</strong>'
+                    + (WHY[id] ? '<br>' + WHY[id] : '');
+  });
+  document.getElementById('score').textContent = '选择题得分：' + score + ' / ' + TOTAL;
+}
+function toggleHint(id){
+  document.getElementById(id).classList.toggle('show');
+}
+function buildSheet(){
+  var out = '【' + PAPER + ' 答卷】\n';
+  if(CHOICE.length){
+    out += '\n一、选择题\n';
+    CHOICE.forEach(function(id, i){
+      var sel = document.querySelector('input[name="'+id+'"]:checked');
+      out += 'Q' + (i+1) + ': ' + (sel ? sel.value : '未答') + '\n';
+    });
+  }
+  if(ESSAY.length){
+    out += '\n二、简答题\n';
+    ESSAY.forEach(function(id, i){
+      var v = (document.getElementById(id).value || '').trim();
+      out += '\nQ' + ESSAY_NO[i] + ': ' + (v || '（未作答）') + '\n';
+    });
+  }
+  document.getElementById('sheet').value = out;
+}
+function copySheet(){
+  var t = document.getElementById('sheet');
+  if(!t.value) buildSheet();
+  t.select();
+  try{ document.execCommand('copy'); alert('已复制，粘贴发给你的教练即可。'); }
+  catch(e){ alert('复制失败，请手动选中文本复制。'); }
+}
+function resetAll(){
+  document.querySelectorAll('input[type=radio]').forEach(function(r){ r.checked = false; });
+  document.querySelectorAll('.fb').forEach(function(b){ b.className = 'fb'; b.innerHTML = ''; });
+  document.querySelectorAll('.hint').forEach(function(h){ h.classList.remove('show'); });
+  document.querySelectorAll('textarea').forEach(function(t){ t.value = ''; });
+  var s = document.getElementById('score');
+  if(s) s.textContent = '选择题得分：— / ' + TOTAL;
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段 1 附录：上下文工程（Context Engineering）</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.75; font-size:16px;
+}
+.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a:hover{border-bottom-color:var(--accent);}
+strong{color:#000;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>阶段 1 附录：上下文工程（Context Engineering）</h1>
+<blockquote>
+<p>日期：2026-09-22<br>
+<strong>为什么有这一节</strong>：阶段 1 讲的是「怎么写一条提示词」。但行业术语已经往前推了一步——<br>
+面试官现在更可能问的是「<strong>你怎么管理上下文</strong>」，而不只是「你怎么写提示词」。<br>
+一个词的差别，但它是面试官衡量你「跟不跟得上行业」的信号。<br>
+阅读重点：<strong>1.3 上下文里都放了什么</strong> 和 <strong>1.4 四个管理动作</strong>。</p>
+</blockquote>
+<hr>
+<h2>1.1 先分清两个词：Prompt 工程 vs 上下文工程</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Prompt 工程</th>
+<th>上下文工程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关心什么</td>
+<td><strong>一条提示词怎么写好</strong></td>
+<td><strong>模型这一次能看到的所有内容，怎么组织</strong></td>
+</tr>
+<tr>
+<td>范围</td>
+<td>单条指令的措辞、结构、例子</td>
+<td>指令 + 历史对话 + 检索到的资料 + 工具定义 + 工具返回结果……</td>
+</tr>
+<tr>
+<td>类比</td>
+<td>怎么写好一封信</td>
+<td>怎么安排整张办公桌，让最重要的东西在最顺手的位置</td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句话区别</strong>：</p>
+<blockquote>
+<p><strong>Prompt 工程是「怎么把一句话说好」；上下文工程是「怎么把一张桌子摆好」。</strong></p>
+</blockquote>
+<p>桌子上的东西包括：系统指令、对话历史、检索到的资料、可用工具清单、工具返回的结果。<br>
+<strong>这些全都要挤进同一个上下文窗口。</strong></p>
+<hr>
+<h2>1.2 为什么这个概念会火起来</h2>
+<p>因为它解决的是<strong>阶段 0 埋下的那个根本矛盾</strong>：</p>
+<blockquote>
+<p><strong>模型没有记忆，上下文窗口有限，超出就丢最早的内容。</strong></p>
+</blockquote>
+<p>于是所有「想让模型表现好」的努力，最终都归结为一个问题：</p>
+<blockquote>
+<p><strong>在这一窗有限的容量里，我该放什么、不该放什么、放哪个位置？</strong></p>
+</blockquote>
+<p>这就是上下文工程。</p>
+<hr>
+<h2>1.3 上下文里都放了什么</h2>
+<p>一次调用发出去，上下文里通常有这几块：</p>
+<table>
+<thead>
+<tr>
+<th>块</th>
+<th>内容</th>
+<th>谁放的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>系统指令</strong></td>
+<td>「你是什么角色、必须遵守什么」</td>
+<td>开发者写死</td>
+</tr>
+<tr>
+<td><strong>可用工具清单</strong></td>
+<td>有哪些工具、参数是什么（阶段 3 第 1 步）</td>
+<td>程序注入</td>
+</tr>
+<tr>
+<td><strong>对话历史</strong></td>
+<td>前面几轮说了什么</td>
+<td>程序累积</td>
+</tr>
+<tr>
+<td><strong>检索到的资料</strong></td>
+<td>RAG 找到的片段（阶段 2 第 ⑤ 步）</td>
+<td>程序注入</td>
+</tr>
+<tr>
+<td><strong>工具返回结果</strong></td>
+<td>上一步工具跑出来的东西（阶段 3 第 5 步）</td>
+<td>程序注入</td>
+</tr>
+<tr>
+<td><strong>用户当前输入</strong></td>
+<td>这次要问的</td>
+<td>用户</td>
+</tr>
+</tbody>
+</table>
+<p><strong>看出来了吗</strong>：真正「用户说的那句话」往往只占很小一块。<strong>上下文工程主要管的，是其他五块。</strong></p>
+<h3>一个重要拆解：静态前缀 + 轨迹</h3>
+<p>把上面六块按「会不会变」重新切一刀，得到两个部分：</p>
+<blockquote>
+<p><strong>Agent 的上下文 = 静态前缀 + 轨迹</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>部分</th>
+<th>包含什么</th>
+<th>会不会变</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>静态前缀</strong></td>
+<td>系统提示词 + 工具定义</td>
+<td><strong>一次确定后基本不变</strong></td>
+</tr>
+<tr>
+<td><strong>轨迹</strong></td>
+<td>用户消息 + 模型回复 + 工具执行结果</td>
+<td><strong>每轮都在增长</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>这个拆解为什么重要</strong>：因为它直接决定了<strong>你该怎么排序</strong>——<br>
+<strong>不变的放前面，会变的放后面。</strong> 下一节的 KV Cache 会告诉你为什么。</p>
+<hr>
+<h2>1.4 四个管理动作</h2>
+<h3>动作一：挑选——只放相关的</h3>
+<p>上下文是稀缺资源。<strong>塞进去的每一段无关内容，都会稀释有效信息。</strong></p>
+<ul>
+<li>RAG 要限制 top-k（阶段 2 失效模式 4：找到太多，噪音淹没信号）</li>
+<li>对话历史不该全放，只放相关的几轮</li>
+</ul>
+<h3>动作二：压缩——把长的弄短</h3>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>摘要</strong></td>
+<td>把长对话历史压成一段摘要再放</td>
+</tr>
+<tr>
+<td><strong>裁剪</strong></td>
+<td>工具返回的长结果只保留关键字段</td>
+</tr>
+<tr>
+<td><strong>结构化</strong></td>
+<td>用 JSON 代替大段自然语言（信息密度更高）</td>
+</tr>
+</tbody>
+</table>
+<h3>动作三：排序——重要的放对位置</h3>
+<p>实践中发现一个现象（俗称「中间迷失」）：</p>
+<blockquote>
+<p><strong>放在开头和结尾的内容，模型记得更牢；放在中间的容易被忽略。</strong></p>
+</blockquote>
+<p>所以：</p>
+<ul>
+<li><strong>最关键的约束放结尾</strong>（阶段 1 讲过这条）</li>
+<li><strong>最重要的资料别埋在中间</strong></li>
+</ul>
+<h3>动作四：隔离——别让它们互相打架</h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户输入里可能藏着指令（阶段 5 的提示词注入）</td>
+<td>用户输入和系统指令<strong>分开标注</strong>，让模型能区分</td>
+</tr>
+<tr>
+<td>多轮对话越滚越长</td>
+<td>定期把历史压成摘要，或开新会话</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1.5 为什么「排序」能省钱：KV Cache</h2>
+<p>1.4 说了「重要的放对位置」。这一节讲<strong>另一个排序理由——钱</strong>。</p>
+<h3>先说 KV Cache 是什么</h3>
+<p>模型生成文字前，要先读一遍你给的整个上下文，<strong>把中间计算结果存下来</strong>。<br>
+<strong>存下来的这个缓存，就叫 KV Cache。</strong></p>
+<p><strong>下一次调用时</strong>——如果开头部分没变，<strong>这段缓存可以直接复用，不用重算。</strong></p>
+<p><strong>为什么这很关键</strong>：不用重算 = <strong>更快 + 更便宜</strong>。</p>
+<h3>关键约束（一条就能决定你的设计）</h3>
+<blockquote>
+<p><strong>KV Cache 只能复用「从开头开始、连续相同的」那一长串。</strong><br>
+<strong>这串里只要有一个字变了，从那个字往后全部要重算。</strong></p>
+</blockquote>
+<p>用大白话说：<strong>它只认「从头开始的相同前缀」。</strong> 中间改一个字，后面全废。</p>
+<h3>一个真实事故（这个例子值得记住）</h3>
+<p>有人在系统提示词里放了一句：</p>
+<pre><code>Current time: {{now}}
+</code></pre>
+<p><strong>为什么这是错的</strong>：<code>{{now}}</code> 每次都不一样，等于<strong>把变化的东西放在了最前面</strong>——<br>
+于是整段 KV Cache 每轮都失效，全部重算。</p>
+<p><strong>后果</strong>：首字延迟从 <strong>0.5 秒飙到 3～5 秒</strong>，<strong>月度账单翻倍。</strong></p>
+<p><strong>这就是「排序影响成本」的真实机制。</strong></p>
+<h3>三条实践规则（背下来，面试能用）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">#</th>
+<th>规则</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">1</td>
+<td><strong>系统提示词和工具定义一旦确定，不要随意改动</strong></td>
+<td>它们在最前面，一改整段缓存全废</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td><strong>动态信息（当前时间、用户输入）放到消息末尾，不要放进系统提示词</strong></td>
+<td>变化的东西放后面，前面的缓存就保住了</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td><strong>用标准 API 格式组织消息</strong></td>
+<td>有些非标准写法（比如把系统提示塞进对话历史）会导致缓存无法匹配</td>
+</tr>
+</tbody>
+</table>
+<h3>顺带一个名词：Prompt Cache</h3>
+<p>上面说的是<strong>单次对话内部</strong>的缓存。还有一层是<strong>跨请求</strong>的：<br>
+同样的前缀在<strong>多次不同请求之间</strong>也能复用，这叫 <strong>Prompt Cache（上下文缓存）</strong>。</p>
+<p><strong>它的效果有多好</strong>：<strong>读取缓存的成本大约是首次计算的 1/10。</strong></p>
+<p><strong>所以结论</strong>：<strong>把稳定的内容放前面、把变化的内容放后面</strong>——<br>
+这个设计一次做对，<strong>成本和延迟能差好几倍</strong>。</p>
+<h3>这条对面试的价值</h3>
+<p>如果有人问「你怎么控制成本」，<strong>只答「用便宜的模型」是入门答案</strong>。<br>
+能答出「<strong>我把系统提示词和工具定义固定下来，让 KV Cache 能命中，<br>
+缓存读取成本只有首次的十分之一</strong>」——<strong>这是有工程经验的答案。</strong></p>
+<hr>
+<h2>1.6 Agent Skills：把「全量加载」改成「按需查阅」</h2>
+<h3>问题是什么</h3>
+<p>工具和知识越多，<strong>全塞进上下文</strong>就越糟：</p>
+<ul>
+<li>占 token → <strong>贵</strong></li>
+<li>内容太长，真正重要的被稀释 → <strong>模型抓不住重点</strong></li>
+<li>每次变动都击穿 KV Cache → <strong>缓存失效</strong>（见上一节）</li>
+</ul>
+<h3>解法：渐进式披露（Progressive Disclosure）</h3>
+<p><strong>不让全部内容常驻上下文，只放一个简短的目录；需要时再加载完整内容。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>全量加载</th>
+<th><strong>Agent Skills 方式</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上下文里放什么</td>
+<td>所有技能的完整内容</td>
+<td><strong>只放技能名 + 一句话描述</strong></td>
+</tr>
+<tr>
+<td>什么时候加载完整内容</td>
+<td>一直占着</td>
+<td><strong>确定要用时才读进来</strong></td>
+</tr>
+<tr>
+<td>类比</td>
+<td>把整本书背下来</td>
+<td>先看目录，用到再翻那一章</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这就是「按需查阅」的思路。</strong></p>
+<h3>你其实每天在用</h3>
+<blockquote>
+<p><strong>WorkBuddy 的技能（Skills）就是这个机制</strong>——<br>
+一堆技能放在那里，每个只用一句话描述；你让我用某个技能时，我才会去读它的完整内容。</p>
+</blockquote>
+<p><strong>所以这块你有实操，只是以前没有概念名。</strong> 面试时可以说：<br>
+「我日常用 Agent Skills 这种按需加载的机制来管上下文，<br>
+它把全量加载变成按需查阅，既省 token 又不冲淡重点。」</p>
+<hr>
+<h2>1.7 行业术语的阶梯（面试用它显得跟得上）</h2>
+<p>「提示工程」这个词已经不够用了。行业里已经往上叠了几层，一层包一层：</p>
+<blockquote>
+<p><strong>提示工程 ⊂ 上下文工程 ⊂ Harness 工程 ⊂ Loop 工程 ⊂ Graph 工程</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>管什么</th>
+<th>关注范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>提示工程</strong></td>
+<td>一句话怎么写好</td>
+<td>单条指令</td>
+</tr>
+<tr>
+<td><strong>上下文工程</strong></td>
+<td>这一窗内容怎么组织</td>
+<td>整个上下文</td>
+</tr>
+<tr>
+<td><strong>Harness 工程</strong></td>
+<td>模型怎么运行、怎么和环境交互</td>
+<td>Agent 边界内、模型之外</td>
+</tr>
+<tr>
+<td><strong>Loop 工程</strong></td>
+<td>循环怎么编排</td>
+<td>整个执行循环</td>
+</tr>
+<tr>
+<td><strong>Graph 工程</strong></td>
+<td>多个循环怎么组成一张图</td>
+<td>单 Agent 循环只是图里的一个节点</td>
+</tr>
+</tbody>
+</table>
+<p><strong>它们不是替代关系，是层层包含</strong>：提示工程是上下文工程的子集，<br>
+上下文工程是 Harness 工程的子集……<strong>每上一层，工程师能影响的边界就更大一圈。</strong></p>
+<p><strong>书里给的核心判断</strong>（可以直接拿去面试）：</p>
+<blockquote>
+<p>「<strong>当各家模型的能力越来越接近、不再是决定性的差异因素时，<br>
+竞争优势就转移到了模型之外的工程实践。</strong>」</p>
+</blockquote>
+<p><strong>这一句话是你面试的加分项</strong>——它说明你知道「该往哪儿使劲」。</p>
+<hr>
+<h2>1.8 和前面几阶段的关系</h2>
+<p><strong>上下文工程不是新东西，它是把前面学的内容收口：</strong></p>
+<table>
+<thead>
+<tr>
+<th>前面学的</th>
+<th>在上下文工程里是哪一块</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段 0 的 Token / 上下文窗口</td>
+<td>这是<strong>约束条件</strong>（桌子就这么大）</td>
+</tr>
+<tr>
+<td>阶段 1 的四段式</td>
+<td>这是<strong>系统指令</strong>部分的写法</td>
+</tr>
+<tr>
+<td>阶段 2 的 RAG 检索</td>
+<td>检索结果就是<strong>要放上桌的资料</strong></td>
+</tr>
+<tr>
+<td>阶段 3 的工具清单和返回结果</td>
+<td>这是<strong>桌面上另一大块内容</strong></td>
+</tr>
+<tr>
+<td>阶段 5 的提示词注入防御</td>
+<td>这是<strong>隔离</strong>动作</td>
+</tr>
+</tbody>
+</table>
+<p><strong>所以这一节的位置是对的</strong>：学完阶段 1 的「怎么写」，这里补上「怎么摆」。</p>
+<hr>
+<h2>1.9 面试会怎么问</h2>
+<table>
+<thead>
+<tr>
+<th>面试官问</th>
+<th>别这么答</th>
+<th>该这么答</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「你怎么写提示词？」</td>
+<td>只讲措辞</td>
+<td>先讲<strong>提示词结构</strong>（角色/任务/约束/格式），再讲<strong>上下文里还放了什么</strong></td>
+</tr>
+<tr>
+<td>「上下文工程和 Prompt 工程什么区别？」</td>
+<td>「差不多吧」</td>
+<td>「Prompt 工程管一句话怎么写；上下文工程管整张桌子怎么摆——包括历史、检索资料、工具清单这些」</td>
+</tr>
+<tr>
+<td>「上下文太长怎么办？」</td>
+<td>「换个窗口大的模型」</td>
+<td>说四个动作：<strong>挑选、压缩、排序、隔离</strong>；换大窗口只是拖延，不是解决</td>
+</tr>
+<tr>
+<td>「为什么关键约束要放结尾？」</td>
+<td>「习惯」</td>
+<td>「开头和结尾的注意力更高，中间容易被忽略」</td>
+</tr>
+<tr>
+<td>「<strong>你怎么控制成本</strong>？」</td>
+<td>「用便宜的模型」</td>
+<td>⭐ 说<strong>前缀缓存</strong>：系统提示词和工具定义固定不动、动态信息放末尾，让 KV Cache 能命中，缓存读取成本约首次的 1/10</td>
+</tr>
+<tr>
+<td>「<strong>怎么给 Agent 加技能</strong>？」</td>
+<td>「都塞进提示词」</td>
+<td>⭐ 说 <strong>Agent Skills 的渐进式披露</strong>：只放技能目录，用到才加载完整内容</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>本节要带走的三句话</h2>
+<ol>
+<li><strong>Prompt 工程管一句话；上下文工程管整张桌子。</strong> 行业术语已经往前推了一步。</li>
+<li><strong>上下文是稀缺资源。</strong> 挑选、压缩、排序、隔离——四个动作都是为了「在这一窗里放对东西」。</li>
+<li><strong>排序影响成本</strong>：不变的放前面、会变的放后面，KV Cache 才命中。<strong>缓存读取成本约首次的 1/10。</strong></li>
+<li><strong>「提示工程 → 上下文工程 → Harness 工程 → Loop 工程」是层层包含的阶梯。</strong><br>
+   模型能力在商品化，<strong>竞争优势转移到了模型之外的工程</strong>。</li>
+</ol>
+</div>
+</body>
+</html>

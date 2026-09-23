@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阶段 3 测验：Agent + 工具调用 · AIGC 求职培训</title>
+<style>
+  :root{
+    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
+    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
+      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
+      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  .meta{color:var(--muted);font-size:14px;line-height:1.9}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
+    padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
+  button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
+  button:hover{opacity:.85}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  .score{font-weight:600;font-size:15px;margin-left:auto}
+  .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
+  .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
+  .qtext{margin:0 0 12px;font-weight:500}
+  .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
+  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    font-family:"SF Mono",Consolas,monospace;font-size:.88em}
+  .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
+    border:1px solid transparent;transition:background .12s}
+  .opt:hover{background:var(--accent-bg)}
+  .opt input{margin-right:9px;accent-color:var(--accent)}
+  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
+  .fb.show{display:block}
+  .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
+  .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
+  .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
+  textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
+    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+  .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
+    font-size:14.5px;line-height:1.8;display:none}
+  .hint.show{display:block}
+  .hint b{color:var(--accent)}
+  .hint ul{margin:8px 0 0;padding-left:22px}
+  .hint li{margin:4px 0}
+  .note{color:var(--muted);font-size:14px;margin-top:10px}
+  .rule{background:var(--warn-bg);border-radius:10px;padding:14px 18px;margin:18px 0;
+    border-left:3px solid var(--warn);font-size:14.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>阶段 3 测验：Agent + 工具调用</h1>
+  <div class="meta">日期：2026-09-23（v2，按规则 13c 随讲义核验重编）｜ 满分 14 分 ｜ <strong>及格线 11.2 分（80%）</strong><br>规则：不及格不进阶段 4。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。<br><strong>考点声明</strong>（规则 13c-b）：本题库覆盖 3.1 / 3.2 / 3.3 / 3.4 / 3.5 / 3.6 / 3.7 共 7 节；3.8 是面试汇总节，<strong>不单独出题</strong>。</div>
+</header>
+<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制下来，交给你的教练批改（或对照参考要点自评）。</div>
+<div class="bar">
+  <button onclick="checkChoice()">检查选择题</button>
+  <button class="ghost" onclick="resetAll()">清空重做</button>
+  <span class="score" id="score">选择题得分：— / 6</span>
+</div>
+<h2 style="font-size:18px;margin:32px 0 4px">一、选择题（每题 1 分，共 6 分）</h2>
+<div class="item" id="q-q1">
+  <div class="qhead">Q1</div>
+  <div class="qtext">Agent 和普通模型调用最本质的区别是什么？<br>
+<code>考点：3.1</code></div>
+  <label class="opt"><input type="radio" name="q1" value="A"><span>A. Agent 用的模型更大</span></label>
+  <label class="opt"><input type="radio" name="q1" value="B"><span>B. Agent 支持多模态输入</span></label>
+  <label class="opt"><input type="radio" name="q1" value="C"><span>C. Agent 多了一个循环：能看到执行结果再决定下一步</span></label>
+  <label class="opt"><input type="radio" name="q1" value="D"><span>D. Agent 运行速度更快</span></label>
+  <div class="fb" id="fb-q1"></div>
+</div>
+<div class="item" id="q-q2">
+  <div class="qhead">Q2</div>
+  <div class="qtext">工具调用过程中，真正执行那个工具的是谁？<br>
+<code>考点：3.2</code></div>
+  <label class="opt"><input type="radio" name="q2" value="A"><span>A. 模型自己</span></label>
+  <label class="opt"><input type="radio" name="q2" value="B"><span>B. 工具自己会响应</span></label>
+  <label class="opt"><input type="radio" name="q2" value="C"><span>C. 用户手动执行</span></label>
+  <label class="opt"><input type="radio" name="q2" value="D"><span>D. 外层程序（harness）</span></label>
+  <div class="fb" id="fb-q2"></div>
+</div>
+<div class="item" id="q-q3">
+  <div class="qhead">Q3</div>
+  <div class="qtext">模型是怎么「请求」调用工具的？<br>
+<code>考点：3.2</code></div>
+  <label class="opt"><input type="radio" name="q3" value="A"><span>A. 输出一段结构化文本（通常是 JSON）</span></label>
+  <label class="opt"><input type="radio" name="q3" value="B"><span>B. 直接调用工具的函数</span></label>
+  <label class="opt"><input type="radio" name="q3" value="C"><span>C. 发一个网络请求给工具</span></label>
+  <label class="opt"><input type="radio" name="q3" value="D"><span>D. 弹窗询问用户</span></label>
+  <div class="fb" id="fb-q3"></div>
+</div>
+<div class="item" id="q-q4">
+  <div class="qhead">Q4</div>
+  <div class="qtext">ReAct 循环里的三个动作是？<br>
+<code>考点：3.3</code></div>
+  <label class="opt"><input type="radio" name="q4" value="A"><span>A. 输入 / 处理 / 输出</span></label>
+  <label class="opt"><input type="radio" name="q4" value="B"><span>B. 读 / 写 / 改</span></label>
+  <label class="opt"><input type="radio" name="q4" value="C"><span>C. 想 / 做 / 看（Thought / Action / Observation）</span></label>
+  <label class="opt"><input type="radio" name="q4" value="D"><span>D. 提问 / 回答 / 确认</span></label>
+  <div class="fb" id="fb-q4"></div>
+</div>
+<div class="item" id="q-q5">
+  <div class="qhead">Q5</div>
+  <div class="qtext">Agent 反复调用同一个工具、停不下来。最直接有效的防线是？<br>
+<code>考点：3.4</code></div>
+  <label class="opt"><input type="radio" name="q5" value="A"><span>A. 换一个更强的模型</span></label>
+  <label class="opt"><input type="radio" name="q5" value="B"><span>B. 在提示词里写「不要重复」</span></label>
+  <label class="opt"><input type="radio" name="q5" value="C"><span>C. 把温度调到 0</span></label>
+  <label class="opt"><input type="radio" name="q5" value="D"><span>D. 设置最大轮次上限</span></label>
+  <div class="fb" id="fb-q5"></div>
+</div>
+<div class="item" id="q-q6">
+  <div class="qhead">Q6</div>
+  <div class="qtext">要让 Agent 能删除服务器上的旧文件。最稳妥的做法是？<br>
+<code>考点：3.4</code></div>
+  <label class="opt"><input type="radio" name="q6" value="A"><span>A. 直接授权，效率最高</span></label>
+  <label class="opt"><input type="radio" name="q6" value="B"><span>B. 不把这个工具给它；或者要求执行前先人工确认</span></label>
+  <label class="opt"><input type="radio" name="q6" value="C"><span>C. 在提示词里提醒它「小心操作」</span></label>
+  <label class="opt"><input type="radio" name="q6" value="D"><span>D. 换一个更贵的模型</span></label>
+  <div class="fb" id="fb-q6"></div>
+</div>
+<h2 style="font-size:18px;margin:40px 0 4px">二、简答题（每题 1 分，共 6 分｜答到要点就给分）</h2>
+<div class="item" id="q-q7">
+  <div class="qhead">Q7</div>
+  <div class="qtext">用<strong>六步</strong>说清工具调用的完整机制，每步一句话。<br>
+<code>考点：3.2</code></div>
+  <textarea id="a7" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h7')">查看参考要点</button>
+  <div class="hint" id="h7">考点：3.2。<b>要点（六步，缺一步扣分）：</b><br>
+    ① 给模型一份<b>工具清单</b>（有哪些工具、各干什么、要什么参数）<br>
+    ② 模型决定<b>用哪个工具、参数填什么</b><br>
+    ③ 模型<b>输出一段结构化文本</b>（通常是 JSON）——注意，这只是「说」，不是「做」<br>
+    ④ <b>外层程序</b>解析这段文本，真的去执行那个工具<br>
+    ⑤ 外层程序把执行结果<b>塞回上下文</b><br>
+    ⑥ 模型基于结果继续：要么再调一个工具，要么给出最终回答</div>
+</div>
+<div class="item" id="q-q8">
+  <div class="qhead">Q8</div>
+  <div class="qtext">什么是 <strong>ReAct</strong>？<br>
+它和「想完再做」相比，<strong>好在哪、贵在哪</strong>？<br>
+<code>考点：3.3</code></div>
+  <textarea id="a8" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h8')">查看参考要点</button>
+  <div class="hint" id="h8">考点：3.3。<b>要点：</b><br>
+    · <b>是什么</b>：ReAct = Reasoning + Acting，即「想 → 做 → 看」三步循环，看完结果回到第一步<br>
+    · <b>好在哪</b>：模型的「想」会出错，每做一步看一眼结果，下一步就能及时纠偏；「想完再做」中间错了它不知道，可能一直错下去<br>
+    · <b>贵在哪</b>：每一步都要调一次模型，调用次数多，所以更慢更贵<br>
+    · <b>判断标准</b>：步骤确定、不怎么会变 → 一次性规划更划算；情况会变 → 用 ReAct</div>
+</div>
+<div class="item" id="q-q9">
+  <div class="qhead">Q9</div>
+  <div class="qtext">Agent 有四道防线：<strong>权限最小化 / 高风险确认 / 参数校验 / 轮次与成本上限</strong>。<br>
+请挑其中<strong>两条</strong>，各说明它防的是什么问题。<br>
+<code>考点：3.4</code></div>
+  <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
+  <div class="hint" id="h9">考点：3.4。<b>参考答案（任两条成立即可）：</b><br>
+    · <b>权限最小化</b>：防「它不该做的事」。只给必须的工具，不需要删文件的权限就别给<br>
+    · <b>高风险确认</b>：防「做了就不可逆的事」。删除、发送、付款、重启服务 → 先问人再执行<br>
+    · <b>参数校验</b>：防「参数填错填坏」。程序在执行前检查参数合法性（比如路径是否在允许范围内）<br>
+    · <b>轮次与成本上限</b>：防「死循环烧钱」。设最大循环次数、单次任务设 token 上限</div>
+</div>
+<div class="item" id="q-q10">
+  <div class="qhead">Q10</div>
+  <div class="qtext">有句话叫「护栏分三层：上下文层 / 执行层 / 数据层」。<br>
+请说明 <strong>① 为什么「越往下越硬」</strong>；<strong>② 为什么光是上下文层给不了保证</strong>。<br>
+<code>考点：3.4</code></div>
+  <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
+  <div class="hint" id="h10">考点：3.4。<b>要点（两问都要答到）：</b><br>
+    · <b>① 为什么越往下越硬</b>：三层是<b>按「有多难被绕过」排的</b>，不是按先后顺序。上下文层拦「模型能看到什么」、执行层拦「模型能做什么」、数据层管「世界最终能被改成什么样」。<b>越往下越不靠模型自己判断</b>，所以越难被一次攻击打穿<br>
+    · <b>② 为什么上下文层给不了保证</b>：<b>处在同一个上下文里的 Agent，很难判断自己是不是已经被注入</b>。恶意指令如果藏在网页、文档、工具描述里混进上下文，Agent 自己分辨不出来。所以上下文层只能<b>降低成功率</b>，给不了保证<br>
+    · <b>加分</b>：能点出「真正兜底的是数据层——就算模型被骗了，它手上的凭证也不允许它做那件事」<br>
+    · ⚠️ 若只答「三道护栏分别是什么」而不答这两问，<b>不给分</b></div>
+</div>
+<div class="item" id="q-q11">
+  <div class="qhead">Q11</div>
+  <div class="qtext">什么是「<strong>Agent 的上下文 = 静态前缀 + 轨迹</strong>」？<br>
+<strong>这两块各自的特性是什么、对工程有什么影响？</strong><br>
+<code>考点：3.2</code></div>
+  <textarea id="a11" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h11')">查看参考要点</button>
+  <div class="hint" id="h11">考点：3.2。<b>要点：</b><br>
+    · <b>是什么</b>：模型每一轮看到的上下文分两块——<b>静态前缀</b>（系统提示词 + 工具清单）+ <b>轨迹</b>（用户消息 + 模型回复 + 工具返回）<br>
+    · <b>静态前缀的特性</b>：一次任务里<b>基本不变</b> → 所以能被<b>缓存</b>（省钱、加速）<br>
+    · <b>轨迹的特性</b>：<b>只增不减</b>，每跑一轮就长一截 → 所以任务跑得越久越贵<br>
+    · <b>工程影响</b>：这就是为什么需要「上下文压缩」和「轮次/成本上限」；也是回答「Agent 的上下文怎么管」时的标准切口<br>
+    · ⚠️ 只答出两块名词、说不出「不变→可缓存 / 只增→越跑越贵」，扣一半</div>
+</div>
+<div class="item" id="q-q12">
+  <div class="qhead">Q12</div>
+  <div class="qtext"><p>面试官问你：「<strong>你怎么知道 AI 干对了？</strong>」<br>
+请给出回答。</p>
+<p><strong>要求：成段说，不要分点符号。</strong> 要包含测试驱动开发的思路。<br>
+<code>考点：3.5</code></p></div>
+  <textarea id="a12" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h12')">查看参考要点</button>
+  <div class="hint" id="h12">考点：3.5。<b>要点（成段说，至少包含下面三条）：</b><br>
+    · 先说<b>不靠「看一眼」</b>——处理的量一大，人眼根本检查不过来<br>
+    · 再说<b>测试驱动</b>：先写清「什么算合格」的验收条件 → 跑一次确认它会失败 → 让 AI 实现 → 再跑，通过才算完成<br>
+    · 强调<b>顺序不能反</b>：先写实现再补测试，测试会写成「实现干了什么就测什么」，等于没测<br>
+    · 加分：提到<b>期望值要来自独立来源</b>（手算结果、真实样本），否则就是自己测自己（同义反复）</div>
+</div>
+<div class="item" id="q-q13">
+  <div class="qhead">Q13</div>
+  <div class="qtext"><p>面试官问你：「<strong>什么时候你会用 Agent？</strong>」</p>
+<p><strong>要求：成段说，不要分点符号。</strong> 要包含<strong>编排模式</strong>的选择判据（工作流 vs 自主）。<br>
+<code>考点：3.6</code></p></div>
+  <textarea id="a13" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h13')">查看参考要点</button>
+  <div class="hint" id="h13">考点：3.6。<b>要点（成段说，要包含选择判据）：</b><br>
+    · <b>从简单到复杂，第一个「是」就是答案</b>：① 单个模型调用能解决吗？→ 就一次调用，别搞编排 ② 能清晰分解成固定的子任务吗？→ <b>工作流</b>（步骤写死） ③ 步骤数不确定、需要边走边看吗？→ <b>自主 Agent</b><br>
+    · <b>为什么不该上来就自主</b>：自主更贵、更慢、更难控制；<b>Agent 系统是用延迟和成本换任务性能</b><br>
+    · <b>工作流的优势</b>：执行路径确定 → 流程控制严格、更安全（攻击面被限制在单个节点内）<br>
+    · <b>加分</b>：提到「实际项目里常常混着用——关键流程用工作流兜底，灵活的部分放自主」<br>
+    · ⚠️ 若只答「Agent 更智能所以能用就用」，<b>不给分</b></div>
+</div>
+<div class="item" id="q-q14">
+  <div class="qhead">Q14</div>
+  <div class="qtext"><p>你的 Agent 老是<strong>选错工具</strong>（该用 A 的时候用了 B）。<br>
+请说明<strong>你第一步会去查什么、为什么</strong>；并说出<strong>工具描述该写清哪两件事</strong>。<br>
+<code>考点：3.7</code></p>
+<blockquote>
+<p>📎 <strong>3.8 是面试汇总节</strong>，内容全部由 3.1–3.7 的答案拼成，<strong>不单独出题</strong>（重复考没有意义）。</p>
+</blockquote></div>
+  <textarea id="a14" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h14')">查看参考要点</button>
+  <div class="hint" id="h14">考点：3.7。<b>要点：</b><br>
+    · <b>第一步：先改工具描述，不是换模型</b>。大多数工具选错的根因是描述不准确（边界不清、缺少反例、参数含义模糊），改描述的投入产出比远高于换个更强的模型<br>
+    · <b>描述该写清的两件事</b>：① <b>什么时候用</b>——不是「这个工具能做什么」，而是「什么情况下该选我」 ② <b>边界与反例</b>——做不到什么、不接受什么输入；<b>大多数调用失败的根因不是不知道能做什么，而是不知道不能做什么</b><br>
+    · <b>加分</b>：提到「附 1–5 个真实调用示例，准确率约 72% → 90%」或「参数描述用具体例子代替抽象规范（如 E.164 格式 + 一个真实号码）」</div>
+</div>
+<h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
+<div class="bar" style="position:static">
+  <button onclick="buildSheet()">生成答卷</button>
+  <button class="ghost" onclick="copySheet()">复制到剪贴板</button>
+</div>
+<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制发给我批改。"></textarea>
+<p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
+<footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
+  文件：<code>阶段3-Agent与工具调用/测验.md</code>
+</footer>
+</div>
+<script>
+var KEY = {"q1": "C", "q2": "D", "q3": "A", "q4": "C", "q5": "D", "q6": "B"};
+var WHY = {"q1": "考点：3.1。考 Agent 的本质。区别不在模型大小、模态、速度，而在<b>多了一个循环</b>——它能拿到执行结果再决定下一步。这就是 ReAct，也是它需要一个「循环器」（harness）的原因。", "q2": "考点：3.2。考「谁在动手」。这是全阶段最容易答错的一题：模型只会输出文字，<b>真正执行的是外层程序（harness）</b>。A 是最典型的错答——把「AI 帮我把事办了」等同于「模型把事办了」。", "q3": "考点：3.2。考工具调用的机制细节。模型「请求调用」的方式是<b>输出一段结构化文本</b>（通常 JSON），不是真的去调函数、发请求或弹窗。记住这个区别，才不会把第 3 步和第 4 步搞混。", "q4": "考点：3.3。考 ReAct 的三个环节。<b>想（Thought）→ 做（Action）→ 看（Observation）</b>。名字里只有 Reasoning 和 Acting，实际必须加上 Observation——没有「看结果」这一步，循环就失去意义。", "q5": "考点：3.4。考第 4 道防线。反复调用停不下来属于「循环失控」，<b>最直接有效的是设最大轮次上限</b>。提示词写「不要重复」对它约束力很弱；换模型和调温度都不对症。", "q6": "考点：3.4。考第 1、2 道防线。删文件是<b>不可逆</b>操作，正确做法是「权限最小化」（不给这个工具）或「高风险确认」（执行前先问人）。在提示词里提醒「小心操作」等于把安全押在模型的自觉上——这正是阶段 5 要讲的反面教材。"};
+var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
+var ESSAY = ["a7", "a8", "a9", "a10", "a11", "a12", "a13", "a14"];
+var ESSAY_NO = [7, 8, 9, 10, 11, 12, 13, 14];
+var TOTAL = 6;
+var PAPER = "阶段 3 测验：Agent + 工具调用";
+
+function checkChoice(){
+  var score = 0;
+  CHOICE.forEach(function(id){
+    var sel = document.querySelector('input[name="'+id+'"]:checked');
+    var box = document.getElementById('fb-' + id);
+    if(!sel){
+      box.className = 'fb show warn';
+      box.innerHTML = '<strong>未作答</strong>——漏答按 0 分算。';
+      return;
+    }
+    var ok = sel.value === KEY[id];
+    if(ok) score++;
+    box.className = 'fb show ' + (ok ? 'ok' : 'bad');
+    box.innerHTML = '<strong>' + (ok ? '正确' : '错误——正确答案是 ' + KEY[id]) + '</strong>'
+                    + (WHY[id] ? '<br>' + WHY[id] : '');
+  });
+  document.getElementById('score').textContent = '选择题得分：' + score + ' / ' + TOTAL;
+}
+function toggleHint(id){
+  document.getElementById(id).classList.toggle('show');
+}
+function buildSheet(){
+  var out = '【' + PAPER + ' 答卷】\n';
+  if(CHOICE.length){
+    out += '\n一、选择题\n';
+    CHOICE.forEach(function(id, i){
+      var sel = document.querySelector('input[name="'+id+'"]:checked');
+      out += 'Q' + (i+1) + ': ' + (sel ? sel.value : '未答') + '\n';
+    });
+  }
+  if(ESSAY.length){
+    out += '\n二、简答题\n';
+    ESSAY.forEach(function(id, i){
+      var v = (document.getElementById(id).value || '').trim();
+      out += '\nQ' + ESSAY_NO[i] + ': ' + (v || '（未作答）') + '\n';
+    });
+  }
+  document.getElementById('sheet').value = out;
+}
+function copySheet(){
+  var t = document.getElementById('sheet');
+  if(!t.value) buildSheet();
+  t.select();
+  try{ document.execCommand('copy'); alert('已复制，粘贴发给你的教练即可。'); }
+  catch(e){ alert('复制失败，请手动选中文本复制。'); }
+}
+function resetAll(){
+  document.querySelectorAll('input[type=radio]').forEach(function(r){ r.checked = false; });
+  document.querySelectorAll('.fb').forEach(function(b){ b.className = 'fb'; b.innerHTML = ''; });
+  document.querySelectorAll('.hint').forEach(function(h){ h.classList.remove('show'); });
+  document.querySelectorAll('textarea').forEach(function(t){ t.value = ''; });
+  var s = document.getElementById('score');
+  if(s) s.textContent = '选择题得分：— / ' + TOTAL;
+}
+
+</script>
+</body>
+</html>

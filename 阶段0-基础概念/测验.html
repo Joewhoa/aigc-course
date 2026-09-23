@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阶段 0 测验：基础概念 · AIGC 求职培训</title>
+<style>
+  :root{
+    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
+    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
+      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
+      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  .meta{color:var(--muted);font-size:14px;line-height:1.9}
+  .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
+    padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
+  button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
+    border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
+  button:hover{opacity:.85}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  .score{font-weight:600;font-size:15px;margin-left:auto}
+  .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
+  .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
+  .qtext{margin:0 0 12px;font-weight:500}
+  .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
+  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    font-family:"SF Mono",Consolas,monospace;font-size:.88em}
+  .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
+    border:1px solid transparent;transition:background .12s}
+  .opt:hover{background:var(--accent-bg)}
+  .opt input{margin-right:9px;accent-color:var(--accent)}
+  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
+  .fb.show{display:block}
+  .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
+  .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
+  .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
+  textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
+    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+  .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
+    font-size:14.5px;line-height:1.8;display:none}
+  .hint.show{display:block}
+  .hint b{color:var(--accent)}
+  .hint ul{margin:8px 0 0;padding-left:22px}
+  .hint li{margin:4px 0}
+  .note{color:var(--muted);font-size:14px;margin-top:10px}
+  .rule{background:var(--warn-bg);border-radius:10px;padding:14px 18px;margin:18px 0;
+    border-left:3px solid var(--warn);font-size:14.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>阶段 0 测验：基础概念</h1>
+  <div class="meta">日期：2026-09-21 ｜ 满分 10 分 ｜ <strong>及格线 8 分（80%）</strong><br>规则：不及格不进阶段 1。答错的题会记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。</div>
+</header>
+<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制下来，交给你的教练批改（或对照参考要点自评）。</div>
+<div class="bar">
+  <button onclick="checkChoice()">检查选择题</button>
+  <button class="ghost" onclick="resetAll()">清空重做</button>
+  <span class="score" id="score">选择题得分：— / 6</span>
+</div>
+<h2 style="font-size:18px;margin:32px 0 4px">一、选择题（每题 1 分，共 6 分）</h2>
+<div class="item" id="q-q1">
+  <div class="qhead">Q1</div>
+  <div class="qtext">让 AI「读一下这个 120 万行的 Excel，告诉我哪个部门花钱最多」，它说做不到。最根本的原因是：</div>
+  <label class="opt"><input type="radio" name="q1" value="A"><span>A. Excel 这种格式模型不支持</span></label>
+  <label class="opt"><input type="radio" name="q1" value="B"><span>B. 整张表换算成 token 后，远超它的上下文窗口上限</span></label>
+  <label class="opt"><input type="radio" name="q1" value="C"><span>C. 需要付费升级到更高版本</span></label>
+  <label class="opt"><input type="radio" name="q1" value="D"><span>D. 模型不太会算数</span></label>
+  <div class="fb" id="fb-q1"></div>
+</div>
+<div class="item" id="q-q2">
+  <div class="qhead">Q2</div>
+  <div class="qtext">AI 非常自信地告诉你「《XX 行业白皮书》2023 年版第 47 页指出……」，而这本书根本不存在。这属于：</div>
+  <label class="opt"><input type="radio" name="q2" value="A"><span>A. 模型的知识过时了</span></label>
+  <label class="opt"><input type="radio" name="q2" value="B"><span>B. 幻觉——它在生成「看起来最顺的下一句」，而不是在核对事实</span></label>
+  <label class="opt"><input type="radio" name="q2" value="C"><span>C. 提问方式有问题</span></label>
+  <label class="opt"><input type="radio" name="q2" value="D"><span>D. 网络传输出了问题</span></label>
+  <div class="fb" id="fb-q2"></div>
+</div>
+<div class="item" id="q-q3">
+  <div class="qhead">Q3</div>
+  <div class="qtext">账单核对助手如果去掉检索环节，直接把几百条账单原文丢给模型问「这堆数加起来对不对」，最可能出现什么？</div>
+  <label class="opt"><input type="radio" name="q3" value="A"><span>A. 算得更快</span></label>
+  <label class="opt"><input type="radio" name="q3" value="B"><span>B. 结果基本准确，还省事</span></label>
+  <label class="opt"><input type="radio" name="q3" value="C"><span>C. 数字可能被「编」出来或算错，而且看不出哪里错</span></label>
+  <label class="opt"><input type="radio" name="q3" value="D"><span>D. 程序直接报错，跑不起来</span></label>
+  <div class="fb" id="fb-q3"></div>
+</div>
+<div class="item" id="q-q4">
+  <div class="qhead">Q4</div>
+  <div class="qtext">下面哪种需求，最应该考虑用微调（Fine-tune）？</div>
+  <label class="opt"><input type="radio" name="q4" value="A"><span>A. 让模型知道公司下周调整的新价格表</span></label>
+  <label class="opt"><input type="radio" name="q4" value="B"><span>B. 让模型的输出严格符合公司固定的审校报告格式，且每天要跑几千次</span></label>
+  <label class="opt"><input type="radio" name="q4" value="C"><span>C. 让模型能查到本地的文件</span></label>
+  <label class="opt"><input type="radio" name="q4" value="D"><span>D. 让模型回答得再礼貌一点</span></label>
+  <div class="fb" id="fb-q4"></div>
+</div>
+<div class="item" id="q-q5">
+  <div class="qhead">Q5</div>
+  <div class="qtext">关于「模型有记忆」这个说法，下面哪个是对的？</div>
+  <label class="opt"><input type="radio" name="q5" value="A"><span>A. 它会自动记住之前聊过的内容</span></label>
+  <label class="opt"><input type="radio" name="q5" value="B"><span>B. 它本身没有记忆，是每次把历史记录重新塞进上下文给它</span></label>
+  <label class="opt"><input type="radio" name="q5" value="C"><span>C. 它把记忆存在自己的服务器上，只是平时不调用</span></label>
+  <label class="opt"><input type="radio" name="q5" value="D"><span>D. 充值开通高级版之后就有记忆了</span></label>
+  <div class="fb" id="fb-q5"></div>
+</div>
+<div class="item" id="q-q6">
+  <div class="qhead">Q6</div>
+  <div class="qtext">对 AI 说「帮我关掉客厅的灯」，灯真的关了。这件事的本质是：</div>
+  <label class="opt"><input type="radio" name="q6" value="A"><span>A. 模型直接控制了那盏灯</span></label>
+  <label class="opt"><input type="radio" name="q6" value="B"><span>B. 模型输出了一段文字指令，外层程序读到以后去执行的</span></label>
+  <label class="opt"><input type="radio" name="q6" value="C"><span>C. 模型内置了智能家居通信协议</span></label>
+  <label class="opt"><input type="radio" name="q6" value="D"><span>D. 灯自己听懂了人话</span></label>
+  <div class="fb" id="fb-q6"></div>
+</div>
+<h2 style="font-size:18px;margin:40px 0 4px">二、简答题（每题 1 分，共 4 分｜答到要点就给分）</h2>
+<div class="item" id="q-q7">
+  <div class="qhead">Q7</div>
+  <div class="qtext">用自己的话说清楚：<strong>Token 是什么？它跟「钱」和跟「忘性」分别是什么关系？</strong><br>
+（要点 3 个，缺一个扣 0.3 分）</div>
+  <textarea id="a7" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h7')">查看参考要点</button>
+  <div class="hint" id="h7"><b>要点（3 个，缺一个扣 0.3 分）：</b><br>
+    1. Token 是模型处理文字的<strong>最小单位</strong>，不等于字也不等于词<br>
+    2. 它跟<strong>钱</strong>的关系：按 token 双向收费，输入和输出分开计价，输出更贵<br>
+    3. 它跟<strong>忘性</strong>的关系：上下文窗口按 token 计上限，超了就丢掉最早的内容，表现为「忘」</div>
+</div>
+<div class="item" id="q-q8">
+  <div class="qhead">Q8</div>
+  <div class="qtext">「模型不执行，它只输出文字。」<br>
+请<strong>用一个「用自然语言远程控制电脑」类的项目（比如手机远程控制台）举例</strong>，说明这句话里：哪部分是模型干的？哪部分<strong>不是</strong>模型干的？</div>
+  <textarea id="a8" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h8')">查看参考要点</button>
+  <div class="hint" id="h8"><b>要点：</b><br>
+    · <strong>模型干的</strong>：理解自然语言 → 生成「要执行什么动作」的指令<br>
+    · <strong>不是模型干的</strong>：真正的文件读写、命令执行、结果回传——那是外层程序在干<br>
+    · 加分：模型是「提议者」，程序是「执行者」；模型从头到尾没碰过被控制的机器</div>
+</div>
+<div class="item" id="q-q9">
+  <div class="qhead">Q9</div>
+  <div class="qtext"><p>现在有人提出这个需求：</p>
+<blockquote>
+<p>「我要做一个能回答内部制度文档问题的 AI，文档一共 800 页，每个月更新一次。」</p>
+</blockquote>
+<p>四个手段：<strong>Prompt / RAG / Agent+工具 / 微调</strong>，选哪个？为什么选它？<strong>再说明为什么不是另外那三个中最容易选错的那个。</strong></p></div>
+  <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
+  <div class="hint" id="h9"><b>要点：</b><br>
+    · 选 <strong>RAG</strong><br>
+    · 理由：知识是私有的（模型没学过）+ 文档频繁更新（微调跟不上）+ 需要可溯源<br>
+    · 最容易选错的：<strong>微调</strong>。因为它看起来「更彻底」。但微调改变的是风格不是知识，而且文档一更新就得重训，成本高还不准<br>
+    · 顺带排除：Prompt 塞不下 800 页；Agent 在这里是过度设计</div>
+</div>
+<div class="item" id="q-q10">
+  <div class="qhead">Q10</div>
+  <div class="qtext"><p>判断题 + 说理由：</p>
+<blockquote>
+<p>「AI 应用工程师的核心工作是训练模型。」</p>
+</blockquote>
+<p>这句话对不对？如果不对，那核心工作到底是什么？</p></div>
+  <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
+  <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
+  <div class="hint" id="h10"><b>要点：</b><br>
+    · <strong>错</strong><br>
+    · 核心工作是：拆问题 / 设计输入输出 / 验证结果 / 控制成本<br>
+    · 训练基座模型是极少数公司的事，跟绝大多数 AI 应用岗位无关</div>
+</div>
+<h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
+<div class="bar" style="position:static">
+  <button onclick="buildSheet()">生成答卷</button>
+  <button class="ghost" onclick="copySheet()">复制到剪贴板</button>
+</div>
+<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制发给我批改。"></textarea>
+<p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
+<footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
+  文件：<code>阶段0-基础概念/测验.md</code>
+</footer>
+</div>
+<script>
+var KEY = {"q1": "B", "q2": "B", "q3": "C", "q4": "B", "q5": "B", "q6": "B"};
+var WHY = {"q1": "考 Token 与上下文窗口。120 万行 × 20 列 × 5 token ≈ 1.2 亿 token，而典型上下文窗口只有 128K——差约 1000 倍。正确做法是本地用代码算出结果，只把汇总结果给模型看。", "q2": "考幻觉的根因。它的产出机制是「挑最顺的下一句」，而不是「先核对事实再输出」。书名、页码、链接正是引用性幻觉的重灾区。", "q3": "考 RAG 的必要性，以及模型不做确定性计算。去掉检索，它就退化成「凭印象报数」，错得还很流畅。对账这类任务必须用代码算，不能交给模型估。", "q4": "考四层手段的选择逻辑。A 用 RAG（数据频繁变动）；C 用工具调用；D 用 Prompt。B 是「格式极稳定 + 高频调用」，量大时微调可以用小模型替代「大模型 + 长提示」，更省 token 也更稳。", "q5": "考上下文的本质。模型是无状态的，所谓「记忆」全靠外层每次把历史重新塞进去。跨过窗口上限就会丢掉最早的内容。", "q6": "考模型的能力边界。它只输出文字，真正的执行发生在外部程序里。凡是「用自然语言控制设备」的项目，都是这个结构。"};
+var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
+var ESSAY = ["a7", "a8", "a9", "a10"];
+var ESSAY_NO = [7, 8, 9, 10];
+var TOTAL = 6;
+var PAPER = "阶段 0 测验：基础概念";
+
+function checkChoice(){
+  var score = 0;
+  CHOICE.forEach(function(id){
+    var sel = document.querySelector('input[name="'+id+'"]:checked');
+    var box = document.getElementById('fb-' + id);
+    if(!sel){
+      box.className = 'fb show warn';
+      box.innerHTML = '<strong>未作答</strong>——漏答按 0 分算。';
+      return;
+    }
+    var ok = sel.value === KEY[id];
+    if(ok) score++;
+    box.className = 'fb show ' + (ok ? 'ok' : 'bad');
+    box.innerHTML = '<strong>' + (ok ? '正确' : '错误——正确答案是 ' + KEY[id]) + '</strong>'
+                    + (WHY[id] ? '<br>' + WHY[id] : '');
+  });
+  document.getElementById('score').textContent = '选择题得分：' + score + ' / ' + TOTAL;
+}
+function toggleHint(id){
+  document.getElementById(id).classList.toggle('show');
+}
+function buildSheet(){
+  var out = '【' + PAPER + ' 答卷】\n';
+  if(CHOICE.length){
+    out += '\n一、选择题\n';
+    CHOICE.forEach(function(id, i){
+      var sel = document.querySelector('input[name="'+id+'"]:checked');
+      out += 'Q' + (i+1) + ': ' + (sel ? sel.value : '未答') + '\n';
+    });
+  }
+  if(ESSAY.length){
+    out += '\n二、简答题\n';
+    ESSAY.forEach(function(id, i){
+      var v = (document.getElementById(id).value || '').trim();
+      out += '\nQ' + ESSAY_NO[i] + ': ' + (v || '（未作答）') + '\n';
+    });
+  }
+  document.getElementById('sheet').value = out;
+}
+function copySheet(){
+  var t = document.getElementById('sheet');
+  if(!t.value) buildSheet();
+  t.select();
+  try{ document.execCommand('copy'); alert('已复制，粘贴发给你的教练即可。'); }
+  catch(e){ alert('复制失败，请手动选中文本复制。'); }
+}
+function resetAll(){
+  document.querySelectorAll('input[type=radio]').forEach(function(r){ r.checked = false; });
+  document.querySelectorAll('.fb').forEach(function(b){ b.className = 'fb'; b.innerHTML = ''; });
+  document.querySelectorAll('.hint').forEach(function(h){ h.classList.remove('show'); });
+  document.querySelectorAll('textarea').forEach(function(t){ t.value = ''; });
+  var s = document.getElementById('score');
+  if(s) s.textContent = '选择题得分：— / ' + TOTAL;
+}
+
+</script>
+</body>
+</html>

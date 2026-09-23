@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段 0 讲义：把地基认清楚</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.75; font-size:16px;
+}
+.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a:hover{border-bottom-color:var(--accent);}
+strong{color:#000;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>阶段 0 讲义：把地基认清楚</h1>
+<blockquote>
+<p>日期：2026-09-21<br>
+本阶段目标：把已经干过的事，装进一张统一的地图里，并拿到一套能顶住面试追问的底层认知。<br>
+阅读方式：分 8 节，每节不长。看不懂的节直接说，不要硬扛。</p>
+</blockquote>
+<hr>
+<h2>0.1 大模型到底是什么机器</h2>
+<p><strong>一句话：它是一台超级接话机器。</strong></p>
+<p>它的工作原理只有一件事——你给它一段文字（上文），它算出「下一个最可能出现的词」，把这个词接到后面，再算下一个……一个字一个字往外蹦，直到它觉得该停了。</p>
+<p>所谓「AI 在思考」，其实是它在海量文字里学出来的规律：<strong>什么样的上文，后面该接什么样的下文。</strong></p>
+<p>这个定义听上去简单，但能推出三件极其重要的事：</p>
+<table>
+<thead>
+<tr>
+<th>推论</th>
+<th>大白话</th>
+<th>对应后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>它没有「查资料」的能力</td>
+<td>它只知道训练时见过的句子</td>
+<td>这是<strong>幻觉</strong>的根源</td>
+</tr>
+<tr>
+<td>它不会「记住」你上次说的话</td>
+<td>除非你把上次的话重新塞给它</td>
+<td>这是<strong>上下文窗口</strong></td>
+</tr>
+<tr>
+<td>它输出的是「最顺的词」，不是「正确的词」</td>
+<td>通顺 ≠ 正确</td>
+<td>它能写得特别专业，但错得理直气壮</td>
+</tr>
+</tbody>
+</table>
+<p><strong>记住第 2 条</strong>：面试官问「模型有记忆吗」，正确答案是「没有，记忆是外面存的」。</p>
+<hr>
+<h2>0.2 Token：AI 的眼睛一次能看多少字，也是它的收费表</h2>
+<p>Token（词元）是模型处理文字的最小单位。<strong>它不等于一个字，也不等于一个词。</strong></p>
+<p>粗略换算（够用了）：</p>
+<ul>
+<li>1 个汉字 ≈ 0.6 ~ 1 个 token</li>
+<li>1 个英文单词 ≈ 1.3 个 token</li>
+</ul>
+<p>Token 同时管两件事：</p>
+<ol>
+<li><strong>钱</strong>：付的钱 = 输入 token 数 × 输入单价 + 输出 token 数 × 输出单价。<br>
+   注意，输入和输出<strong>分开计价</strong>，而且<strong>输出通常贵好几倍</strong>。<br>
+   公开报价里常见 <strong>2~6 倍</strong>（4 倍左右最常见）；也有厂商输入输出同价。</li>
+</ol>
+<p><strong>为什么输出更贵</strong>（2026-09-22 补：原先只写了结论，没写原因）：</p>
+<ul>
+<li>
+<p><strong>输入可以一次读完</strong>：你发过去 1000 个 token，模型做<strong>一次前向计算</strong>就把它们全部读进去了。<br>
+     这一步（prefill）是算力密集型的活，能把显卡吃满。</p>
+</li>
+<li>
+<p><strong>输出只能一个一个往外蹦</strong>：模型是<strong>自回归</strong>的——生成第 1 个 token，接到后面，再生成第 2 个……<br>
+<strong>500 个输出 token 就要跑 500 次前向计算</strong>，每次都得把整个模型权重重新过一遍，<br>
+     而且<strong>没法并行</strong>（后一个依赖前一个）。</p>
+</li>
+<li>
+<p>所以同样叫「一个 token」，<strong>输出那一个花的显卡时间远多于输入那一个</strong>，厂商自然把它定得更贵。</p>
+</li>
+</ul>
+<p><strong>别急着下「那就只压输出」的结论</strong>：单价上输出贵，但<strong>总量上输入往往更多</strong>——<br>
+   多轮对话每发一句，都要<strong>把全部历史重新发一遍</strong>，输入 token 是滚雪球式增长的。<br>
+   所以控成本要两头管：</p>
+<table>
+<thead>
+<tr>
+<th>管哪头</th>
+<th>怎么管</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>输出侧</strong></td>
+<td>让它别啰嗦、用结构化输出、设最大长度</td>
+</tr>
+<tr>
+<td><strong>输入侧</strong></td>
+<td>别重复塞历史、精简工具清单、用<strong>前缀缓存</strong>（命中的输入单价能低到十分之一左右）</td>
+</tr>
+</tbody>
+</table>
+<p>输入侧那半边的展开，在 <strong>阶段 1 附录 · KV Cache</strong> 那一节。</p>
+<ol>
+<li><strong>容量</strong>：模型一次能「看到」的 token 总量有上限，这个上限叫<strong>上下文窗口</strong>。比如 128K 的窗口，大约能装 10 万个汉字。</li>
+</ol>
+<p><strong>一句话：Token 是 AI 的视力上限，也是它的计价器。</strong></p>
+<hr>
+<h2>0.3 上下文窗口：为什么聊久了它就「失忆」</h2>
+<p>上下文窗口 = 一次对话里，模型能同时摆在眼前的文字总量上限。</p>
+<p>超出上限时，最常见的处理是<strong>丢掉最早的内容</strong>。所以：</p>
+<blockquote>
+<p>「聊了半小时，它把开头忘了」——不是它记性差，是<strong>开头已经被挤出窗口了</strong>。</p>
+</blockquote>
+<p>打个比方：上下文窗口像一张办公桌的桌面。桌面就那么大，新文件不断往上放，放满了，最早上桌的那几张就掉到地上了。</p>
+<p><strong>推论</strong>：任何依赖「记得之前聊过什么」的功能，本质上都是在跟这张桌子的面积打架。<br>
+这就是为什么需要 <strong>RAG（把相关资料现查现塞）</strong>和 <strong>记忆文件（把关键结论写到硬盘上）</strong>。</p>
+<hr>
+<h2>0.4 幻觉：它为什么能理直气壮地编</h2>
+<p>根因回到 0.1：<strong>它在生成「最顺的下一句」，而不是「核对过事实的一句」。</strong></p>
+<p>常见的三种幻觉，面试里一定会被问到：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>表现</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>事实性幻觉</td>
+<td>编数字、编结论</td>
+<td>「该政策 2023 年 3 月修订」——其实是 2021 年</td>
+</tr>
+<tr>
+<td>引用性幻觉</td>
+<td>编书名、编链接、编页码</td>
+<td>「见《XX 白皮书》第 47 页」——这本书不存在</td>
+</tr>
+<tr>
+<td>接口性幻觉</td>
+<td>编 API、编参数名</td>
+<td>写出一个根本不存在的函数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键结论（要背）：降低幻觉的正确手段是「给它材料」，不是「求它别瞎编」。</strong></p>
+<hr>
+<h2>0.5 解决一个 AI 问题，只有四个动作（本阶段最重要的一张图）</h2>
+<p>所有 AI 工程手段，归纳起来只有四层：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>手段</th>
+<th>大白话</th>
+<th>什么时候用</th>
+<th>成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>Prompt 工程</strong></td>
+<td>把话说清楚</td>
+<td>永远先试这个</td>
+<td>最低</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>RAG（检索增强）</strong></td>
+<td>先查资料，再回答</td>
+<td>需要模型知道私有的、最新的知识</td>
+<td>中</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>Agent + 工具调用</strong></td>
+<td>让它动手干活</td>
+<td>需要它「做事」，而不只是「说话」</td>
+<td>中高</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>微调（Fine-tune）</strong></td>
+<td>改造它的脑子</td>
+<td>输出风格/格式要求极稳定，且调用量很大</td>
+<td>最高</td>
+</tr>
+</tbody>
+</table>
+<h3>选择铁律（背下来，面试常考）</h3>
+<blockquote>
+<p><strong>能用 Prompt 解决的，不上 RAG；<br>
+能用 RAG 解决的，不上 Agent；<br>
+能用 Agent 解决的，绝对不上微调。</strong></p>
+</blockquote>
+<p>理由：每往下一层，都更贵、更慢、更难维护、更难排查。</p>
+<p><strong>最容易踩的坑</strong>：以为微调能让模型「记住我的业务数据」。<br>
+<strong>错。微调改变的是「风格和表达习惯」，不是「知识」。</strong> 想让模型知道私有知识，用 RAG。</p>
+<h3>另一个视角：Agent 的构成公式（行业通用语言）</h3>
+<p>四层手段回答的是「<strong>一个需求该用哪一层</strong>」。行业里还有另一个视角，<br>
+回答的是「<strong>一个 Agent 是由什么拼起来的</strong>」：</p>
+<blockquote>
+<p><strong>Agent = LLM + 上下文 + 工具</strong></p>
+</blockquote>
+<p>翻译成大白话就是<strong>大脑 + 眼睛 + 手脚</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">组件</th>
+<th style="text-align: center;">比喻</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><strong>LLM</strong></td>
+<td style="text-align: center;">🧠 大脑</td>
+<td>理解、推理、决策</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>上下文</strong></td>
+<td style="text-align: center;">👁️ 眼睛</td>
+<td>它每个决策点能看到的<strong>全部</strong>信息：系统提示、工具清单、历史对话、检索到的资料、工具返回结果</td>
+</tr>
+<tr>
+<td style="text-align: center;"><strong>工具</strong></td>
+<td style="text-align: center;">🤲 手脚</td>
+<td>感知环境、改变外部世界</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么这个公式值得记</strong>：</p>
+<ol>
+<li>
+<p><strong>面试官可能用这套词。</strong> 「你的 Agent 上下文怎么管的」——如果你只答「提示词」就窄了，<br>
+   上下文包含的东西多得多（这一点阶段 1 的附录会展开）。</p>
+</li>
+<li>
+<p><strong>它能帮你定位问题。</strong> Agent 表现不好，按这个公式三选一排查：<br>
+   是<strong>大脑</strong>不行（模型选错了）？<strong>眼睛</strong>没看到关键信息（上下文没给够）？<br>
+   还是<strong>手脚</strong>不够用（缺工具）？</p>
+</li>
+<li>
+<p><strong>它是阶段 3 的伏笔。</strong> 生产环境下这个公式会变成<br>
+<code>Agent = Model + Harness</code>，Harness 就是「模型之外、Agent 之内」的那层工程代码——<br>
+   阶段 3 会讲清它包含什么。</p>
+</li>
+</ol>
+<p><strong>两个视角的关系</strong>（别搞混）：</p>
+<ul>
+<li><strong>四层手段</strong> = 横向的「选型」——用 Prompt 还是 RAG 还是 Agent 还是微调</li>
+<li><strong>构成公式</strong> = 纵向的「解剖」——定下来用 Agent 之后，它内部由什么组成</li>
+</ul>
+<hr>
+<h2>0.6 为什么「不训练模型」也能做 AI 产品</h2>
+<p>世界上 99% 的 AI 应用工程师，一辈子没有训练过一个模型。</p>
+<ul>
+<li>训练一个基座模型：几千万美金、几千张显卡、几百人团队。这是极少数公司的事。</li>
+<li>使用模型做出产品：需要的是会<strong>拆问题、设计输入输出、验证结果、控制成本</strong>。</li>
+</ul>
+<p><strong>AI 应用工程师 = 系统设计者 + 结果验证者，不是模型训练者。</strong></p>
+<p>而在 AI 应用这条路上，已经有不少人在这张地图上干过三层了，只是当时还没有名字：</p>
+<table>
+<thead>
+<tr>
+<th>典型做法</th>
+<th>落在哪一层</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>百万行 Excel 批量处理</td>
+<td>第 3 层（工具调用）</td>
+<td>关键点：<strong>没让 AI 读表，让 AI 写代码去算表</strong></td>
+</tr>
+<tr>
+<td>账单助手（TF-IDF RAG）</td>
+<td>第 2 层</td>
+<td>先检索出相关账单，再让模型基于账单回答</td>
+</tr>
+<tr>
+<td>手机远程控制台（Agent）</td>
+<td>第 3 层</td>
+<td>自然语言 → 动作指令 → 本机执行</td>
+</tr>
+<tr>
+<td>生成式图片批量换色</td>
+<td>第 1 + 3 层</td>
+<td>描述需求 + 调用图像处理工具</td>
+</tr>
+<tr>
+<td>技能方法论封装</td>
+<td>第 1 层</td>
+<td>本质是 Prompt 与流程的工程化封装</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这张表就是简历骨架。</strong> 不是「不懂技术的门外汉」，而是「已经独立完成过四层中三层的 AI 应用实践者」。</p>
+<hr>
+<h2>0.7 三个必须刻进脑子的边界（面试防身用）</h2>
+<ol>
+<li><strong>模型不执行，它只输出文字。</strong><br>
+   是外层程序读了它的文字，然后去执行。<br>
+   → 所以「AI 控制电脑」不是模型在控制，是模型输出了一段指令，外面有个程序照着做。</li>
+</ol>
+<p><strong>补一句前提</strong>（2026-09-22 补，阶段 3 的伏笔）：<br>
+   模型能输出什么指令，是<strong>你事先定好的</strong>——它只能在<strong>你给它的那几个工具</strong>里挑，<br>
+   而且还要把<strong>参数填对</strong>（比如文件夹路径）。<br>
+   所以「模型不执行」不只是个技术事实，它还是一条<strong>安全边界</strong>：<strong>模型碰不到你没给它的能力</strong>。<br>
+   阶段 3 讲的「权限最小化」，就建立在这上面。</p>
+<ol>
+<li>
+<p><strong>模型没有记忆，记忆是外层存的。</strong><br>
+   → 所谓「AI 记得我」，是每次把历史记录重新塞给它。</p>
+</li>
+<li>
+<p><strong>模型不知道自己错了。</strong><br>
+   → 验证只能靠外部手段：跑测试、对账、用第二个模型交叉检查。</p>
+</li>
+</ol>
+<hr>
+<h2>0.8 术语对照表（面试必用，第一次出现必须给中文）</h2>
+<table>
+<thead>
+<tr>
+<th>英文</th>
+<th>中文</th>
+<th>一句话解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM</td>
+<td>大语言模型</td>
+<td>那台接话机器</td>
+</tr>
+<tr>
+<td>Prompt</td>
+<td>提示词</td>
+<td>你对它说的话</td>
+</tr>
+<tr>
+<td>Token</td>
+<td>词元</td>
+<td>计费和计量的最小单位</td>
+</tr>
+<tr>
+<td>Context Window</td>
+<td>上下文窗口</td>
+<td>一次能看的字量上限</td>
+</tr>
+<tr>
+<td>Hallucination</td>
+<td>幻觉</td>
+<td>理直气壮地编</td>
+</tr>
+<tr>
+<td>RAG</td>
+<td>检索增强生成</td>
+<td>先查资料，再回答</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>向量化</td>
+<td>把文字变成一串数字，用来看「意思像不像」（TF-IDF 就是一种简化的相关度算法）</td>
+</tr>
+<tr>
+<td>Fine-tuning</td>
+<td>微调</td>
+<td>拿自己的数据再训一下模型</td>
+</tr>
+<tr>
+<td>Temperature</td>
+<td>温度</td>
+<td>0 = 每次都说最稳的词（查数据、写代码用）；1 = 更放飞（写文案用）</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>智能体</td>
+<td>会自己决定用哪个工具、干几步的 AI</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>本阶段要带走的三句话</h2>
+<ol>
+<li><strong>它是接话机器，不是查资料机器。</strong> 要它说对，就得给它材料。</li>
+<li><strong>四层手段有铁律：Prompt → RAG → Agent → 微调，能往上就不往下。</strong></li>
+<li><strong>核心能力是「拆问题 + 验证结果」，不是训模型。</strong></li>
+</ol>
+<hr>
+<p>学完请去做同目录下的 <code>测验.md</code>，10 题，8 分及格。</p>
+</div>
+</body>
+</html>
