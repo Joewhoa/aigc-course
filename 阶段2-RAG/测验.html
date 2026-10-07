@@ -11,12 +11,26 @@
     --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
   }
   @media (prefers-color-scheme:dark){
-    :root{
+    :root:not([data-theme="light"]){
       --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
       --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
       --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
     }
   }
+  /* 手动指定深色（覆盖系统设置） */
+  :root[data-theme="dark"]{
+    --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
+    --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
+    --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+  }
+  .theme-btn{
+    position:fixed;top:12px;right:14px;z-index:99;
+    width:36px;height:36px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--fg);
+    font-size:16px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.14);
+  }
+  .theme-btn:hover{border-color:var(--accent);}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--fg);
     font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
@@ -65,17 +79,9 @@
 <div class="wrap">
 <header>
   <h1>阶段 2 测验：RAG（检索增强生成）</h1>
-  <div class="meta">日期：2026-09-22 ｜ <strong>2026-09-23 重编（按规则 13c：讲义改了题库必须跟）</strong><br>满分 12 分 ｜ <strong>及格线 9.6 分（80%）</strong><br>规则：不及格不进阶段 3。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。<br>📌 <strong>本版相对 09-22 版的变化</strong>（讲义当时补了 2.6 / 2.7 / 2.8 三节全新内容，<br>而旧题库一道都没考——已按规则 13c 补上）：<br><ul>
-<li><strong>新增 Q7</strong>（考 2.6 记忆 ≠ 知识库）、<strong>Q8</strong>（考 2.7 Agentic RAG）、<strong>Q9</strong>（考 2.8 知识更新）</li>
-</ul><br><ul>
-<li><strong>新增 Q10</strong>（考 2.2 离线/在线 ＋ 2.5 算力分工——09-23 定稿新补的两处）</li>
-</ul><br><ul>
-<li>原 Q7–Q10 顺延为 Q11–Q14</li>
-</ul><br><ul>
-<li>每题在答案 JSON 里都标了「考点：x.y」，便于机器查缺</li>
-</ul></div>
+  <div class="meta">满分 14 分 ｜ <strong>及格线 11.2 分（80%）</strong><br>规则：不及格不进阶段 3。同一概念错 2 次，退回重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。<br>📌 <strong>本卷覆盖范围</strong>：2.1 – 2.10 全部小节，每题在答案里都标了「考点：x.y」。</div>
 </header>
-<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制下来，交给你的教练批改（或对照参考要点自评）。</div>
+<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制后发给教练 Agent 批改。</div>
 <div class="bar">
   <button onclick="checkChoice()">检查选择题</button>
   <button class="ghost" onclick="resetAll()">清空重做</button>
@@ -84,7 +90,7 @@
 <h2 style="font-size:18px;margin:32px 0 4px">一、选择题（每题 1 分，共 6 分）</h2>
 <div class="item" id="q-q1">
   <div class="qhead">Q1</div>
-  <div class="qtext">RAG 存在的根本原因是什么？</div>
+  <div class="qtext">【考 2.1】RAG 存在的根本原因是什么？</div>
   <label class="opt"><input type="radio" name="q1" value="A"><span>A. 让模型变得更聪明</span></label>
   <label class="opt"><input type="radio" name="q1" value="B"><span>B. 让回答速度更快</span></label>
   <label class="opt"><input type="radio" name="q1" value="C"><span>C. 资料太多，塞不进上下文窗口</span></label>
@@ -93,7 +99,7 @@
 </div>
 <div class="item" id="q-q2">
   <div class="qhead">Q2</div>
-  <div class="qtext">向量化（Embedding）最关键的特性是什么？</div>
+  <div class="qtext">【考 2.3】向量化（Embedding）最关键的特性是什么？</div>
   <label class="opt"><input type="radio" name="q2" value="A"><span>A. 把长文字压缩成更短的文字</span></label>
   <label class="opt"><input type="radio" name="q2" value="B"><span>B. 把中文翻译成英文</span></label>
   <label class="opt"><input type="radio" name="q2" value="C"><span>C. 给文字加密，防止泄露</span></label>
@@ -102,7 +108,7 @@
 </div>
 <div class="item" id="q-q3">
   <div class="qhead">Q3</div>
-  <div class="qtext">账单助手用 TF-IDF 做检索。如果用户问「报账怎么还没通过」，而账单里写的是「报销审批未完成」，TF-IDF 最可能出现什么？</div>
+  <div class="qtext">【考 2.3】账单核对项目用 TF-IDF 做检索。如果用户问「报账怎么还没通过」，而账单里写的是「报销审批未完成」，TF-IDF 最可能出现什么？</div>
   <label class="opt"><input type="radio" name="q3" value="A"><span>A. 完全正常，结果一样准</span></label>
   <label class="opt"><input type="radio" name="q3" value="B"><span>B. 因为词不完全一样，可能检索不到那条</span></label>
   <label class="opt"><input type="radio" name="q3" value="C"><span>C. 结果反而更准确</span></label>
@@ -111,7 +117,7 @@
 </div>
 <div class="item" id="q-q4">
   <div class="qhead">Q4</div>
-  <div class="qtext">RAG 已经把正确的资料检索出来交给模型了，模型还是编了一个答案。最直接的原因和最有效的对策是？</div>
+  <div class="qtext">【考 2.4】RAG 已经把正确的资料检索出来交给模型了，模型还是编了一个答案。最直接的原因和最有效的对策是？</div>
   <label class="opt"><input type="radio" name="q4" value="A"><span>A. 提示词里没要求「只根据资料回答，资料未提及就说未提及」→ 补上这条约束</span></label>
   <label class="opt"><input type="radio" name="q4" value="B"><span>B. 模型太小 → 换一个更大的模型</span></label>
   <label class="opt"><input type="radio" name="q4" value="C"><span>C. 向量库太慢 → 换一个更快的向量库</span></label>
@@ -136,12 +142,10 @@
   <label class="opt"><input type="radio" name="q6" value="D"><span>D. 模型会拒绝回答</span></label>
   <div class="fb" id="fb-q6"></div>
 </div>
-<h2 style="font-size:18px;margin:40px 0 4px">二、简答题（每题 1 分，共 6 分｜答到要点就给分）</h2>
+<h2 style="font-size:18px;margin:40px 0 4px">二、简答题（每题 1 分，共 8 分｜答到要点就给分）</h2>
 <div class="item" id="q-q7">
   <div class="qhead">Q7</div>
-  <div class="qtext"><p>【考 2.6】面试官问：「<strong>你的 Agent 怎么做记忆？</strong>」</p>
-<p>有个候选人回答：「<strong>用 RAG 就行。</strong>」<br>
-请你指出他<strong>答偏在哪</strong>，并说清「知识库」和「用户记忆」的<strong>根本区别</strong>是什么。</p></div>
+  <div class="qtext">【考 2.2】用<strong>五步</strong>说清 RAG 的完整流程，每步一句话。</div>
   <textarea id="a7" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h7')">查看参考要点</button>
   <div class="hint" id="h7"><b>考点：2.6 —— 这道题是面试高频，必须答对。</b><br><br><b>答偏在哪：</b><br>
@@ -157,8 +161,11 @@
 </div>
 <div class="item" id="q-q8">
   <div class="qhead">Q8</div>
-  <div class="qtext"><p>【考 2.7】有个同事说：「Agentic RAG 就是更高级的 RAG，效果更好，所以我们直接上它。」</p>
-<p>请说明：<strong>Agentic RAG 到底改变了什么？</strong> 并在什么情况下你<strong>不会</strong>推荐用它、为什么。</p></div>
+  <div class="qtext"><p>【考 2.2 + 2.5】两个小问，各答一句：</p>
+<ol>
+<li>你的 RAG 系统<strong>回答很慢</strong>。面试官问你怎么排查——<strong>你先看哪一步</strong>？为什么？</li>
+<li>账单核对项目要判断「<strong>两笔金额加起来是否相等</strong>」。这件事该<strong>交给模型</strong>还是<strong>交给代码</strong>？为什么？</li>
+</ol></div>
   <textarea id="a8" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h8')">查看参考要点</button>
   <div class="hint" id="h8"><b>考点：2.7 —— 要点是「改变了什么」＋「什么时候不用」。</b><br><br>
@@ -174,8 +181,9 @@
 </div>
 <div class="item" id="q-q9">
   <div class="qhead">Q9</div>
-  <div class="qtext"><p>【考 2.8】客户问你：「<strong>我们的员工手册每季度更新一次，怎么保证 AI 答的不是过时的内容？</strong>」</p>
-<p>请给出你的方案。（提示：想想「文件改了」和「检索到新内容」中间还差什么）</p></div>
+  <div class="qtext">【考 2.3】账单核对项目用 TF-IDF 检索。<br>
+请说明：<strong>为什么在这个场景下，TF-IDF 是够用的？</strong><br>
+（提示：想想账单里的内容有什么特点）</div>
   <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
   <div class="hint" id="h9"><b>考点：2.8 —— 这题是阶段 7「员工手册每季度更新」的题眼。</b><br><br>
@@ -192,11 +200,8 @@
 </div>
 <div class="item" id="q-q10">
   <div class="qhead">Q10</div>
-  <div class="qtext"><p>【考 2.2 + 2.5】两个小问，各答一句：</p>
-<ol>
-<li>你的 RAG 系统<strong>回答很慢</strong>。面试官问你怎么排查——<strong>你先看哪一步</strong>？为什么？</li>
-<li>账单助手要判断「<strong>两笔金额加起来是否相等</strong>」。这件事该<strong>交给模型</strong>还是<strong>交给代码</strong>？为什么？</li>
-</ol></div>
+  <div class="qtext">【考 2.4】RAG 有四种常见失效模式：<strong>检索没找到 / 检索错了 / 找到了但不看 / 找到太多</strong>。<br>
+请挑其中<strong>两种</strong>，各说出「表现是什么」和「怎么应对」。</div>
   <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
   <div class="hint" id="h10"><b>考点：2.2（离线/在线）＋ 2.5（算力分工）—— 两小问各 0.5 分。</b><br><br>
@@ -213,7 +218,9 @@
 </div>
 <div class="item" id="q-q11">
   <div class="qhead">Q11</div>
-  <div class="qtext">【考 2.2】用<strong>五步</strong>说清 RAG 的完整流程，每步一句话。</div>
+  <div class="qtext"><p>【考 2.6】面试官问：「<strong>你的 Agent 怎么做记忆？</strong>」</p>
+<p>有个候选人回答：「<strong>用 RAG 就行。</strong>」<br>
+请你指出他<strong>答偏在哪</strong>，并说清「知识库」和「用户记忆」的<strong>根本区别</strong>是什么。</p></div>
   <textarea id="a11" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h11')">查看参考要点</button>
   <div class="hint" id="h11"><b>考点：2.2。要点（五步，缺一步扣分）：</b><br>
@@ -227,9 +234,8 @@
 </div>
 <div class="item" id="q-q12">
   <div class="qhead">Q12</div>
-  <div class="qtext">【考 2.3】账单助手用 TF-IDF 检索。<br>
-请说明：<strong>为什么在这个场景下，TF-IDF 是够用的？</strong><br>
-（提示：想想账单里的内容有什么特点）</div>
+  <div class="qtext"><p>【考 2.7】有个同事说：「Agentic RAG 就是更高级的 RAG，效果更好，所以我们直接上它。」</p>
+<p>请说明：<strong>Agentic RAG 到底改变了什么？</strong> 并在什么情况下你<strong>不会</strong>推荐用它、为什么。</p></div>
   <textarea id="a12" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h12')">查看参考要点</button>
   <div class="hint" id="h12"><b>考点：2.3。要点（三层，缺一层扣分）：</b><br>
@@ -241,8 +247,8 @@
 </div>
 <div class="item" id="q-q13">
   <div class="qhead">Q13</div>
-  <div class="qtext">【考 2.4】RAG 有四种常见失效模式：<strong>检索没找到 / 检索错了 / 找到了但不看 / 找到太多</strong>。<br>
-请挑其中<strong>两种</strong>，各说出「表现是什么」和「怎么应对」。</div>
+  <div class="qtext"><p>【考 2.8】客户问你：「<strong>我们的员工手册每季度更新一次，怎么保证 AI 答的不是过时的内容？</strong>」</p>
+<p>请给出你的方案。（提示：想想「文件改了」和「检索到新内容」中间还差什么）</p></div>
   <textarea id="a13" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h13')">查看参考要点</button>
   <div class="hint" id="h13"><b>考点：2.4。参考答案（任两种成立即可）：</b><br>
@@ -262,7 +268,7 @@
 <ol>
 <li><strong>成段说</strong>，不要分点符号。就像当面回答一样。</li>
 <li><strong>分开说清两边</strong>：RAG 管什么、微调管什么——各自的适用场景都要提到。</li>
-<li>⚠️ <strong>结尾必须有一句收口总结</strong>。（前两轮都栽在这——不是不知道，是答的时候想不起来用。这次写完回头检查一遍有没有这句。）</li>
+<li>⚠️ <strong>结尾必须有一句收口总结</strong>。（这是最容易漏的一条——不是不知道，是答的时候想不起来用。写完回头检查一遍有没有这句。）</li>
 </ol></div>
   <textarea id="a14" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h14')">查看参考要点</button>
@@ -281,13 +287,39 @@
   <button onclick="buildSheet()">生成答卷</button>
   <button class="ghost" onclick="copySheet()">复制到剪贴板</button>
 </div>
-<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制发给我批改。"></textarea>
+<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制后发给教练 Agent 批改。"></textarea>
 <p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
 <footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
   文件：<code>阶段2-RAG/测验.md</code>
 </footer>
 </div>
 <script>
+(function(){
+  var K='aigc-theme', r=document.documentElement, saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  function mount(){
+    if(document.querySelector('.theme-btn')) return;
+    var b=document.createElement('button');
+    b.className='theme-btn'; b.type='button';
+    b.title='切换深色 / 浅色'; b.setAttribute('aria-label','切换深色或浅色主题');
+    function icon(){ b.textContent = cur()==='dark' ? '\u2600' : '\u263E'; }
+    b.onclick=function(){ window.__toggleTheme(); icon(); };
+    icon(); document.body.appendChild(b);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mount);
+  else mount();
+})();
 var KEY = {"q1": "C", "q2": "D", "q3": "B", "q4": "A", "q5": "D", "q6": "B"};
 var WHY = {"q1": "考点：2.1。考 RAG 的存在理由。资料塞得进上下文就用 Prompt，塞不进才轮到 RAG——这是阶段 0 五问表第 2 问的直接应用。RAG 不会让模型变聪明，只是把资料在提问时递过去。", "q2": "考点：2.3。考向量化的核心特性。它把文字变成数字，而关键在于「意思相近的文字，数字也相近」——这样才算得出语义相似度。压缩、翻译、加密都不是它的功能。", "q3": "考点：2.3。考 TF-IDF 的局限。它靠字面词重叠算相似度，「报账 / 报销」「没通过 / 未完成」词都不一样，很可能检索不到。这正是语义向量要解决的问题。", "q4": "考点：2.4。考第三种失效模式「找到了但不看」。资料给到不等于它会用——不明确要求，它照样掺自己的记忆。对策是用阶段 1 的约束写法：只依据资料 + 给替代动作「资料未提及」。", "q5": "考点：2.5。考 RAG 的能力边界。RAG 解决「知不知道」，不解决「算得对不对」。判断两列金额相加是否相等属于确定性计算，必须交给代码——这是五问表第 1 问。", "q6": "考点：2.2。考切块的 trade-off。切太小会把一句话切断，检索到的片段意思不完整，模型看不懂；切太大则片段里一半是废话，浪费 token。"};
 var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
@@ -339,7 +371,7 @@ function copySheet(){
   var t = document.getElementById('sheet');
   if(!t.value) buildSheet();
   t.select();
-  try{ document.execCommand('copy'); alert('已复制，粘贴发给你的教练即可。'); }
+  try{ document.execCommand('copy'); alert('已复制，请粘贴发给教练 Agent。'); }
   catch(e){ alert('复制失败，请手动选中文本复制。'); }
 }
 function resetAll(){

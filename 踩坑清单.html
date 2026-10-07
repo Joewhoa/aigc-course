@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>踩坑清单</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
+}
+.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
+h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a:hover{border-bottom-color:var(--accent);}
+strong{color:var(--strong);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>踩坑清单</h1>
+<blockquote>
+<p>本清单汇总编写与使用本课程过程中<strong>实际遇到过的两类问题</strong>：<br>
+<strong>第一类</strong>是学习 AI 应用技术本身会踩的坑；<strong>第二类</strong>是编写和维护这类教材时踩的坑。</p>
+<p>两类分开列，因为<strong>修法完全不同</strong>：第一类靠理解机制，第二类靠检查机制。</p>
+</blockquote>
+<hr>
+<h2>第一类：技术本身的坑</h2>
+<blockquote>
+<p>这一类不靠「记住结论」解决，靠「知道为什么会这样」。</p>
+</blockquote>
+<h3>阶段 1 · Prompt 工程</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加了「不要编造」它照样编</td>
+<td>只给了禁止项，没给替代动作</td>
+<td>改成「<strong>资料未提及就回答『资料未提及』</strong>」——给它一个可执行的替代出口</td>
+</tr>
+<tr>
+<td>每次输出字段名都不一样</td>
+<td>没给完整结构示例</td>
+<td>给出<strong>完整的输出样例</strong>（不是描述字段，是给一整条范例）</td>
+</tr>
+<tr>
+<td>明明写了约束，模型还是没遵守</td>
+<td>约束放在了提示词开头</td>
+<td><strong>最关键的约束放结尾</strong>——离生成位置最近，影响最直接</td>
+</tr>
+<tr>
+<td>十条规则写下去，它还是不懂「礼貌」</td>
+<td>规则本身不可判定</td>
+<td><strong>换成给三个例子</strong>——不可判定的标准用示例表达</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 2 · RAG</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户问法与原文用词不同，就检索不到</td>
+<td>纯关键词检索不认同义</td>
+<td><strong>混合检索</strong>（关键词 ＋ 向量），或对用户输入先做一次同义改写</td>
+</tr>
+<tr>
+<td>改了文档，检索结果还是旧的</td>
+<td><strong>只改文件没重建索引</strong></td>
+<td>文档更新与索引重建必须绑定成一步</td>
+</tr>
+<tr>
+<td>找到 20 段全塞进上下文，答案反而变差</td>
+<td>噪音淹没了信号</td>
+<td><strong>限制 top-k</strong>（通常 3–5 段）</td>
+</tr>
+<tr>
+<td>检索内容递过去了，模型还是自己编</td>
+<td>没有给约束和替代动作</td>
+<td>补「<strong>只依据给定资料回答</strong>」＋「资料未提及就明说」</td>
+</tr>
+<tr>
+<td>以为微调能让模型「记住业务数据」</td>
+<td><strong>微调改风格与行为，不注入知识</strong></td>
+<td>要注入知识用 RAG；要改行为与格式才用微调</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 3 · Agent 与工具调用</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工具选错、参数填错</td>
+<td><strong>工具描述写的是「我是什么」而不是「什么时候该选我」</strong></td>
+<td>描述里写清<strong>适用条件</strong> ＋ 给真实调用例子</td>
+</tr>
+<tr>
+<td>模型反复调用同一个失败工具</td>
+<td>工具失败后没给替代路径</td>
+<td>错误信息要<strong>可执行</strong>（告诉它接下来能怎么做）</td>
+</tr>
+<tr>
+<td>上下文越来越贵、越来越慢</td>
+<td><strong>轨迹只增不减</strong></td>
+<td><strong>上下文压缩</strong> ＋ <strong>轮次上限</strong></td>
+</tr>
+<tr>
+<td>以为换更强的模型能解决「老是选错工具」</td>
+<td>选错是<strong>描述问题</strong>，不是能力问题</td>
+<td>先改工具描述，再考虑换模型</td>
+</tr>
+<tr>
+<td>Agent 说做完了，其实没做完</td>
+<td><strong>「完成」只是一句宣称，不是证明</strong></td>
+<td>要执行结果、截图、测试这类<strong>独立证据</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 4 · 多 Agent</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多个 Agent 犯了同一个错</td>
+<td><strong>同质趋同</strong>——它们的「独立」是假的（同一模型、同一上下文）</td>
+<td><strong>有意引入差异</strong>：换模型、换上下文、换视角</td>
+</tr>
+<tr>
+<td>A 把 B 的操作当成蓄意阻挠</td>
+<td>目标互斥时从趋同变成对抗</td>
+<td><strong>预先定义</strong>目标优先级、资源所有权、权限边界</td>
+</tr>
+<tr>
+<td>信息每转述一次就失真一次</td>
+<td>转述链条越长失真越大</td>
+<td><strong>交叉验证</strong>：让某个 Agent 不看前序思考，只拿原始证据重新判断</td>
+</tr>
+<tr>
+<td>活干到一半就停了，却报告「已完成」</td>
+<td><strong>过早终止</strong>：偷懒式假完成 / 过早放弃 / 悄悄换标准</td>
+<td>用<strong>独立验证器</strong>核对，不看它的自我宣称</td>
+</tr>
+<tr>
+<td>并发改同一个文件，逻辑互相矛盾</td>
+<td>文件层不冲突，但<strong>语义冲突</strong>更隐蔽</td>
+<td>用<strong>乐观锁</strong>；无法自动解决时<strong>暂停交人工</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 5 · 工程化</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>以为开了 venv 就安全了</td>
+<td><strong>venv 只隔离包依赖</strong>，对文件系统、网络、进程没有任何约束</td>
+<td>venv 管依赖，<strong>隔离要靠容器或 microVM</strong></td>
+</tr>
+<tr>
+<td>Dockerfile 里 <code>ENV</code> 写了真实密钥</td>
+<td><strong><code>ENV</code> 会明文写进镜像层</strong>，<code>docker history</code> 直接能看到</td>
+<td>密钥<strong>构建时用 <code>-e</code> 传参</strong>，或干脆不落文件</td>
+</tr>
+<tr>
+<td>「先 <code>COPY . .</code> 再 <code>rm</code> 掉密钥文件」以为干净了</td>
+<td><strong>层不可变</strong>，删掉只是在上面加一层「标记它没了」</td>
+<td>密钥只能<strong>从一开始就不 COPY 进去</strong>（<code>.dockerignore</code> 挡）</td>
+</tr>
+<tr>
+<td>每次改代码都要重新构建很久</td>
+<td>分层顺序错，缓存全废</td>
+<td><strong>依赖先装、代码后拷</strong>——依赖层不变就能复用缓存</td>
+</tr>
+<tr>
+<td>以为「容器就是轻量虚拟机」</td>
+<td><strong>容器共享宿主机内核</strong>，虚拟机自带内核</td>
+<td>按<strong>被绕过难度</strong>选隔离档：进程级 / 容器 / microVM</td>
+</tr>
+<tr>
+<td>用 <code>latest</code> 基础镜像，今天和明天行为不一样</td>
+<td>标签会漂</td>
+<td><strong>写死版本号</strong></td>
+</tr>
+<tr>
+<td>构建报 <code>502 Bad Gateway</code></td>
+<td>环境里注入了不通的代理地址</td>
+<td>清空 <code>HTTP_PROXY</code> / <code>HTTPS_PROXY</code> / <code>http_proxy</code> / <code>https_proxy</code> / <code>ALL_PROXY</code></td>
+</tr>
+<tr>
+<td>拉镜像超时</td>
+<td><strong>IPv6 不通</strong>（IPv4 实测正常）</td>
+<td>从国内镜像源预拉基础镜像</td>
+</tr>
+<tr>
+<td>「改了之后好了一点」其实是随机波动</td>
+<td>小幅度差异落在噪声范围内</td>
+<td><strong>重复评测 ＋ 配对分析</strong>，确认超出噪声才算改进</td>
+</tr>
+<tr>
+<td>LLM 应用上线后变差却没人发现</td>
+<td><strong>最常见的退化是「不报错、但答得变差」</strong></td>
+<td>灰度期<strong>同时盯效果、错误率、延迟</strong>三项</td>
+</tr>
+<tr>
+<td>改了提示词后想回滚，回不去</td>
+<td>没记版本对应</td>
+<td><strong>模型版本 ＋ 提示词版本 ＋ 工具版本</strong>三者对应记录</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 6 · 垂直应用</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>没有 API 就想上 Computer Use</td>
+<td>跳过了判断顺序</td>
+<td><strong>第一步永远先问「这个系统有没有 API」</strong>——API 更快更稳可验证</td>
+</tr>
+<tr>
+<td>流程很简单却上了框架</td>
+<td>没走选型判断</td>
+<td>流程简单、需求还在快速变时<strong>直接调 API</strong></td>
+</tr>
+<tr>
+<td>框架出问题时定位不到</td>
+<td>每层抽象都是调试盲区</td>
+<td>问一句：<strong>换个框架要改多少？改得多就是被绑住了</strong></td>
+</tr>
+<tr>
+<td>低代码平台搭的东西上线后没人管质量</td>
+<td><strong>业务方能自己改 ＝ 没人管变更</strong></td>
+<td>必须配<strong>版本记录 ＋ 变更评审</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 7 · 求职实战</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>被要求写代码时慌了</td>
+<td>没准备应对方式</td>
+<td><strong>先反问「这道题要验什么」</strong>——把话题从手速转到判断力</td>
+</tr>
+<tr>
+<td>讲项目像流水账</td>
+<td>只讲「做了什么」</td>
+<td>重点讲 <strong>A 段</strong>：<strong>为什么这么选</strong></td>
+</tr>
+<tr>
+<td>回答和面试官的说法对不上</td>
+<td>教材通行说法与自己学的说法同名不同义</td>
+<td><strong>主动桥接</strong>：「您说的四步是主循环，我这边拆得更细……」</td>
+</tr>
+<tr>
+<td>搜「大模型岗位」全是 K8s</td>
+<td>招聘量集中在 infra 岗</td>
+<td>搜<strong>大模型应用 / LLM 应用 / Agent 开发 / RAG</strong></td>
+</tr>
+<tr>
+<td>把「资深要求」当「入行门槛」</td>
+<td>招聘话术常把两者混写</td>
+<td><strong>「精通 X」＋「有大规模生产经验」是招资深，不是入门门槛</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>第二类：编写与维护教材的坑</h2>
+<blockquote>
+<p>这一类不靠理解，靠<strong>检查</strong>。每一条都对应一个可自动化的检查动作。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>规避方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>答案泄露</strong>：选择题正确选项被加粗</td>
+<td>为了批改时一眼看到答案，但<strong>同一份文件是给读者看的</strong></td>
+<td>写完必查：选项行是否以 <code>**</code> 开头。加粗是给读者看的强调，不是给批改者的标记</td>
+</tr>
+<tr>
+<td><strong>HTML 内嵌判分键</strong></td>
+<td>为了离线能判分，把答案写进 JS</td>
+<td>权衡取舍：内嵌则「查看源代码」可见</td>
+</tr>
+<tr>
+<td><strong>章节跳号</strong>：插入新节时把后面节号顶掉</td>
+<td>手工改节号</td>
+<td><strong>改节号后必跑覆盖检查</strong>，看讲义节号与题库声明是否对齐</td>
+</tr>
+<tr>
+<td><strong>讲义与题库脱节</strong>：新补的内容没有对应题目</td>
+<td>只顾加内容，没回头逐节对覆盖表</td>
+<td><strong>每改一次讲义，回头过一遍覆盖表</strong></td>
+</tr>
+<tr>
+<td><strong>检查脚本假阴性</strong>：注入测试用例时锚点写错，注入失败却报「通过」</td>
+<td>注入用的字符串和文件里的实际内容不一致</td>
+<td><strong>验证一个检查脚本，必须先证明它「能失败」</strong>；注入时加断言确认锚点存在</td>
+</tr>
+<tr>
+<td><strong>脱敏规则与检查模式不同源</strong>：检查报 N 处，处理脚本改 0 个</td>
+<td>两边各写一套正则</td>
+<td><strong>两套模式必须同源</strong>，并在检查模式里加自检：能命中的样本，处理规则必须能消掉</td>
+</tr>
+<tr>
+<td><strong>正则删改把句子改坏</strong></td>
+<td>通配式删除吃掉了不该吃的部分</td>
+<td><strong>删完必须扫「破损句」</strong>：空括号、连续标点、残留加粗符号</td>
+</tr>
+<tr>
+<td><strong>标点后多空格</strong></td>
+<td>删除操作留下空格</td>
+<td>收尾统一清理</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>这份清单怎么维护</h2>
+<p><strong>技术类坑</strong>在讲义里就地标注（读者学到那儿就能看到），本清单是<strong>索引</strong>。<br>
+<strong>教材类坑</strong>是经验沉淀，新遇到就往上加——<strong>加的时候请写清「现象 / 原因 / 规避」三段</strong>，<br>
+只写「以后注意」没有用，因为下次会想不起来具体注意什么。</p>
+<hr>
+<p><em>本清单随课程内容同步更新</em></p>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -8,15 +8,38 @@
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
   --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
 }
 .wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
 h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
 h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
@@ -43,14 +66,14 @@ ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
 a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
 a:hover{border-bottom-color:var(--accent);}
-strong{color:#000;}
+strong{color:var(--strong);}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>阶段 3 讲义：Agent + 工具调用</h1>
 <blockquote>
-<p>日期：2026-09-22<br>
+<p>日期：<br>
 本阶段目标：讲清 Agent 是什么、它怎么动手、以及怎么管住它。<br>
 如果做过「用自然语言远程控制设备 / 电脑」类的项目，这一阶段会把它拆开看。<br>
 阅读重点：<strong>3.2 六步机制</strong> 和 <strong>3.4 四道防线 + 三层护栏</strong>。</p>
@@ -322,6 +345,49 @@ Agent 只能通过两个口子和它打交道：</p>
 <p>「任何涉及关闭或重启进程的操作，都必须先提交审批让用户确认，<strong>不得擅自重启</strong>」</p>
 </blockquote>
 <p>这就是标准的「高风险动作要确认」——<strong>因为重启是不可逆的、会中断服务的。</strong></p>
+<h3>⚠️ 四道防线管不了的一种情况：工具失败了怎么办</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么避免</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型反复调用同一个失败的工具，试到轮次耗尽</td>
+<td><strong>错误信息不可执行</strong>——只告诉它「失败了」，没告诉它「接下来能做什么」</td>
+<td>错误信息里必须写清<strong>替代路径</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>举个对比</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>❌ 不可执行的错误</th>
+<th>✅ 可执行的错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Error: file not found</code></td>
+<td><code>文件 /data/a.csv 不存在。可用文件：a.csv（当前目录）、b.csv（上级目录）。请改用其中一个重试。</code></td>
+</tr>
+<tr>
+<td><code>Error: 403 Forbidden</code></td>
+<td><code>没有读 /admin 的权限。可读范围：/public、/data。需要更高权限请向管理员申请。</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>区别在哪</strong>：左边只说了「出事了」，模型只能猜或原地重试；<br>
+右边告诉它<strong>还能做什么</strong>——<strong>它才能自己绕过去。</strong></p>
+<blockquote>
+<p><strong>这条是四道防线的补充，不是并列</strong>：四道防线管的是「<strong>该不该做</strong>」，<br>
+这一条管的是「<strong>做失败了怎么恢复</strong>」。缺了它，Agent 会在死胡同里反复撞墙，<br>
+直到撞满轮次上限（防线 4）才停——<strong>烧掉的全是真金白银</strong>。</p>
+</blockquote>
 <h3>面试里这四条很吃香</h3>
 <p>多数人只会说「我做了个 Agent」，不会说「我怎么管住它」。<br>
 能讲清这四道防线，说明做过真实的东西，而不只是跑过 demo。</p>
@@ -816,7 +882,44 @@ WorkBuddy 的技能（Skills）就是这套——<strong>少量技能索引常�
 </li>
 </ol>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>，10 题，8 分及格。</p>
+<p>学完请去做同目录下的 <code>测验.md</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
+<hr>
+<blockquote>
+<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 3」——<br>
+每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+</blockquote>
 </div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
 </body>
 </html>

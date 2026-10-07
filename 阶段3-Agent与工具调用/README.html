@@ -8,15 +8,38 @@
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
   --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
 }
 .wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
 h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
 h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
@@ -43,7 +66,7 @@ ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
 a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
 a:hover{border-bottom-color:var(--accent);}
-strong{color:#000;}
+strong{color:var(--strong);}
 </style>
 </head>
 <body>
@@ -99,14 +122,14 @@ strong{color:#000;}
 <p><strong>教材依据</strong>：李博杰书第 1 章（Agent 机制 / ReAct / Harness / 编排模式 / 护栏）<br>
 ＋ 第 4 章（工具分类 / 工具设计 / MCP 与生态）。<br>
 逐节对照记录见 <code>核验与参考/课程设计-教材依据核验.md</code> 的「核验 ③」。</p>
-<p><strong>本次开课前的教材核验</strong>（2026-09-23）就地补了 4 处：3.1 补「环境 / 观察空间·动作空间」、<br>
+<p><strong>本次开课前的教材核验</strong>就地补了 4 处：3.1 补「环境 / 观察空间·动作空间」、<br>
 3.2 补「静态前缀 + 轨迹」、3.4 补「三层护栏」、3.6 补「任务拆解」一行注。</p>
 </blockquote>
 <h2>文件</h2>
 <ul>
 <li><code>讲义.md</code> / <code>讲义.html</code> —— 正文</li>
 <li><code>测验.md</code> / <code>测验.html</code> —— <strong>14 题（选择 6 ＋ 简答 8），11.2 分及格</strong> ＋ 配套 <code>测验-答案与解析.json</code></li>
-<li><code>补充讲义-三问-2026-09-23.md</code> —— 三处讲不透的地方（参数校验 / 数据层护栏 / 「确认失败」）<strong>补讲</strong></li>
+<li><code>补充讲义-三问-.md</code> —— 三处讲不透的地方（参数校验 / 数据层护栏 / 「确认失败」）<strong>补讲</strong></li>
 </ul>
 <h2>过关标准</h2>
 <ul>
@@ -120,5 +143,37 @@ strong{color:#000;}
 <p><strong>模型只出请求，执行永远在外层程序。</strong> 这个主语不能错。</p>
 </blockquote>
 </div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
 </body>
 </html>

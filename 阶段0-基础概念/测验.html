@@ -11,12 +11,26 @@
     --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
   }
   @media (prefers-color-scheme:dark){
-    :root{
+    :root:not([data-theme="light"]){
       --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
       --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
       --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
     }
   }
+  /* 手动指定深色（覆盖系统设置） */
+  :root[data-theme="dark"]{
+    --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
+    --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
+    --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+  }
+  .theme-btn{
+    position:fixed;top:12px;right:14px;z-index:99;
+    width:36px;height:36px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--fg);
+    font-size:16px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.14);
+  }
+  .theme-btn:hover{border-color:var(--accent);}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--fg);
     font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
@@ -65,9 +79,9 @@
 <div class="wrap">
 <header>
   <h1>阶段 0 测验：基础概念</h1>
-  <div class="meta">日期：2026-09-21 ｜ 满分 10 分 ｜ <strong>及格线 8 分（80%）</strong><br>规则：不及格不进阶段 1。答错的题会记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。</div>
+  <div class="meta">满分 10 分 ｜ <strong>及格线 8 分（80%）</strong><br>规则：不及格不进阶段 1。答错的题会记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，不用长篇。</div>
 </header>
-<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制下来，交给你的教练批改（或对照参考要点自评）。</div>
+<div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制后发给教练 Agent 批改。</div>
 <div class="bar">
   <button onclick="checkChoice()">检查选择题</button>
   <button class="ghost" onclick="resetAll()">清空重做</button>
@@ -185,13 +199,39 @@
   <button onclick="buildSheet()">生成答卷</button>
   <button class="ghost" onclick="copySheet()">复制到剪贴板</button>
 </div>
-<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制发给我批改。"></textarea>
+<textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制后发给教练 Agent 批改。"></textarea>
 <p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
 <footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
   文件：<code>阶段0-基础概念/测验.md</code>
 </footer>
 </div>
 <script>
+(function(){
+  var K='aigc-theme', r=document.documentElement, saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  function mount(){
+    if(document.querySelector('.theme-btn')) return;
+    var b=document.createElement('button');
+    b.className='theme-btn'; b.type='button';
+    b.title='切换深色 / 浅色'; b.setAttribute('aria-label','切换深色或浅色主题');
+    function icon(){ b.textContent = cur()==='dark' ? '\u2600' : '\u263E'; }
+    b.onclick=function(){ window.__toggleTheme(); icon(); };
+    icon(); document.body.appendChild(b);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mount);
+  else mount();
+})();
 var KEY = {"q1": "B", "q2": "B", "q3": "C", "q4": "B", "q5": "B", "q6": "B"};
 var WHY = {"q1": "考 Token 与上下文窗口。120 万行 × 20 列 × 5 token ≈ 1.2 亿 token，而典型上下文窗口只有 128K——差约 1000 倍。正确做法是本地用代码算出结果，只把汇总结果给模型看。", "q2": "考幻觉的根因。它的产出机制是「挑最顺的下一句」，而不是「先核对事实再输出」。书名、页码、链接正是引用性幻觉的重灾区。", "q3": "考 RAG 的必要性，以及模型不做确定性计算。去掉检索，它就退化成「凭印象报数」，错得还很流畅。对账这类任务必须用代码算，不能交给模型估。", "q4": "考四层手段的选择逻辑。A 用 RAG（数据频繁变动）；C 用工具调用；D 用 Prompt。B 是「格式极稳定 + 高频调用」，量大时微调可以用小模型替代「大模型 + 长提示」，更省 token 也更稳。", "q5": "考上下文的本质。模型是无状态的，所谓「记忆」全靠外层每次把历史重新塞进去。跨过窗口上限就会丢掉最早的内容。", "q6": "考模型的能力边界。它只输出文字，真正的执行发生在外部程序里。凡是「用自然语言控制设备」的项目，都是这个结构。"};
 var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
@@ -243,7 +283,7 @@ function copySheet(){
   var t = document.getElementById('sheet');
   if(!t.value) buildSheet();
   t.select();
-  try{ document.execCommand('copy'); alert('已复制，粘贴发给你的教练即可。'); }
+  try{ document.execCommand('copy'); alert('已复制，请粘贴发给教练 Agent。'); }
   catch(e){ alert('复制失败，请手动选中文本复制。'); }
 }
 function resetAll(){

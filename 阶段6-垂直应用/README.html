@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段 6 · 垂直应用</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
+}
+.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
+h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a:hover{border-bottom-color:var(--accent);}
+strong{color:var(--strong);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>阶段 6 · 垂直应用</h1>
+<p><strong>核心问题</strong>：真实行业里这些技术怎么落地？</p>
+<h2>本阶段学什么</h2>
+<table>
+<thead>
+<tr>
+<th>节</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.1</td>
+<td>先说清「垂直应用」是什么</td>
+</tr>
+<tr>
+<td>6.2</td>
+<td>为什么「行业理解」比「技术炫技」重要（★ 含<strong>行业趋势：从「能做事」到「可靠地做事」</strong>）</td>
+</tr>
+<tr>
+<td>6.3</td>
+<td><strong>协议标准：MCP / A2A</strong>（★ 含<strong>A2A 的实质：Agent Card 与分工</strong>）</td>
+</tr>
+<tr>
+<td>6.4</td>
+<td>行业落地的一般路径（五步）</td>
+</tr>
+<tr>
+<td>6.5</td>
+<td><strong>三种落地范式</strong>（★ 含<strong>选手段的三步递进</strong>）</td>
+</tr>
+<tr>
+<td>6.6</td>
+<td>一次完整的行业落地推演：智能客服（用到前五阶段全部内容）</td>
+</tr>
+<tr>
+<td>6.7</td>
+<td><strong>Computer Use</strong>（★ 含<strong>「先问有没有 API」决策准则</strong>）</td>
+</tr>
+<tr>
+<td><strong>6.8</strong></td>
+<td>⭐ <strong>框架了解</strong> —— LangChain / LlamaIndex 到底要不要用（本阶段新增）<br>　★ 另含：<strong>同一个场景四种搭法</strong> ＋ <strong>低代码平台怎么跑</strong>（接回 ReAct）＋ <strong>它的致命短板</strong> ＋ <strong>你的验收三看</strong></td>
+</tr>
+<tr>
+<td>6.9</td>
+<td>面试会怎么问</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>** 按教材核验 ⑥ 补充<strong>（李博杰 ch1 / ch5 / ch6 / ch10 ＋ 微软课 02 / 15）：<br>
+</strong>原 8 节 → 现 9 节**（新增 6.8 框架了解）；就地补 5 处<br>
+（6.2 行业趋势结论、6.3 A2A 实质、6.5 手段三步递进、6.7 「先问有没有 API」、6.3 NLWeb 出处标注）。<br>
+逐条对照见 <code>核验与参考/课程设计-教材依据核验.md</code> 核验 ⑥。</p>
+</blockquote>
+<h2>文件</h2>
+<ul>
+<li><code>讲义.md</code> / <code>讲义.html</code> —— 正文（<strong>9 节</strong>）</li>
+<li><code>测验.md</code> / <code>测验.html</code> —— <strong>14 题（选择 6 ＋ 简答 8），11.2 分及格</strong> ＋ 配套 <code>测验-答案与解析.json</code></li>
+</ul>
+<h2>过关标准</h2>
+<ul>
+<li>测验 ≥ 11.2 分（80%）</li>
+<li>能把做过的项目归位到三种范式里</li>
+<li><strong>能说清「选手段的三步递进」，并解释「Agent 不是更高级，是更不可控」</strong></li>
+<li><strong>能说清 A2A 与 MCP 的分工（MCP 接工具 / A2A 接 Agent）</strong></li>
+<li><strong>能说清「先问有没有 API」——为什么 API 优先于 Computer Use</strong></li>
+<li><strong>能说清框架的取舍：什么情况值得上、什么情况直接调 API 更好</strong></li>
+</ul>
+<h2>本阶段最该记住的三句</h2>
+<blockquote>
+<p><strong>行业正从「能做事」转向「可靠地做事」</strong>——竞争力在<strong>工程</strong>，不在调模型（这正是阶段 3–5 的内容）。</p>
+<p><strong>手段有顺序</strong>：先提示词 → 再工作流 → 最后自主 Agent；<strong>Agent 不是更高级，是更不可控。</strong></p>
+<p><strong>框架是工具，不是信仰。</strong> <strong>直接的 API 调用优于复杂框架</strong>——<strong>因为每层抽象都是一个调试盲区。</strong></p>
+</blockquote>
+<hr>
+<h2>✅ 开课待补已并入（ 结清）</h2>
+<blockquote>
+<p>来源： 卖课话术核查（详见<br>
+<code>教练手册/待补内容--卖课话术核查.md</code>）。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>原待补</th>
+<th>落点</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>主流框架了解</strong>（LangChain / LlamaIndex）</td>
+<td>→ <strong>6.9 框架了解</strong></td>
+<td>✅ 已并入</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这一节的口径（重要）</strong>：</p>
+<ul>
+<li>✅ <strong>只讲「它解决什么问题、什么时候值得用、什么时候不划算」</strong></li>
+<li>✅ <strong>不教调 API、不要求写 LangChain 代码</strong></li>
+<li>✅ <strong>考核形式是「判断取舍」</strong>（Q6 / Q12 / Q13），<strong>不是「会不会用」</strong></li>
+<li>📖 <strong>教材依据</strong>：<strong>李博杰书的立场是 skeptical（讲取舍）</strong>，原话「<strong>直接的 API 调用优于复杂的框架</strong>」<br>
+  「<strong>每多一层抽象都会成为以后调试时新的盲区</strong>」「<strong>学会某个具体框架的用法并不重要</strong>」——<br>
+<strong>本节取这个立场</strong>（微软课 02 的立场是 supportive / 教用法，<strong>不取</strong>）。</li>
+</ul>
+<p><strong>仍然坚持的原则</strong>：<strong>不补「手写框架代码」</strong>——本课程的分工是「代码由 AI 写、他负责判断与验收」。</p>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>

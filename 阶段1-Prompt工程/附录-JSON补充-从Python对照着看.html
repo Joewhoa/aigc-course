@@ -8,15 +8,38 @@
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
   --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
 }
 .wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
 h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
 h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
@@ -43,14 +66,14 @@ ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
 a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
 a:hover{border-bottom-color:var(--accent);}
-strong{color:#000;}
+strong{color:var(--strong);}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>附录 · JSON 补充：从 Python 对照着看</h1>
 <blockquote>
-<p><strong>为什么有这一节</strong>（2026-09-23 补）：学员读完《附录 · JSON 最小必读》后反馈——<br>
+<p><strong>为什么有这一节</strong>：学员读完《附录 · JSON 最小必读》后反馈——<br>
 「我个人感觉跟 Python 的数组类似，这方面多来一点参考资料我看齐全一点，现在只有一点模糊概念」。</p>
 <p><strong>这个直觉对了一半，而且错的那一半正好是最要紧的一半</strong>（下节就说）。<br>
 这一节不重复基础，专门做一件事：<strong>把 JSON 放在 Python 旁边逐条对照</strong>。</p>
@@ -233,7 +256,7 @@ Python 写 <code>True</code>，JSON 必须写 <code>true</code>；Python 写 <co
 </table>
 <blockquote>
 <p>📌 <strong>看到 <code>JSONDecodeError</code> 就知道</strong>：不是逻辑错，是<strong>格式没写对</strong>。<br>
-这三个词是验收时的信号灯 —— 出现即打回，不用往下查逻辑。</p>
+这三个词是验收时的信号灯 —— 出现即退回，不用往下查逻辑。</p>
 </blockquote>
 <hr>
 <h2>四、那为什么非要用 JSON，直接用 Python 的写法不行吗</h2>
@@ -331,9 +354,9 @@ Python 写 <code>True</code>，JSON 必须写 <code>true</code>；Python 写 <co
 <hr>
 <h2>六、你自己手上就有两个真例子（不用去别处找）</h2>
 <p>学格式最有效的方式是看<strong>你已经见过的东西</strong>。这两个都在你机器上：</p>
-<h3>例子 1：<code>dsh-roam/package.json</code> —— 你自己项目的配置</h3>
+<h3>例子 1：<code>远程控制项目/package.json</code> —— 你自己项目的配置</h3>
 <pre><code class="language-json">{
-  &quot;name&quot;: &quot;dsh-roam&quot;,
+  &quot;name&quot;: &quot;远程控制项目&quot;,
   &quot;version&quot;: &quot;0.1.0&quot;,
   &quot;private&quot;: true,
   &quot;engines&quot;: {
@@ -359,8 +382,8 @@ Python 写 <code>True</code>，JSON 必须写 <code>true</code>；Python 写 <co
 <td>一个<strong>对象</strong> = 一整份信息（这个项目的配置）</td>
 </tr>
 <tr>
-<td><code>"name": "dsh-roam"</code></td>
-<td>键 <code>"name"</code> → 值 <code>"dsh-roam"</code>（字符串）</td>
+<td><code>"name": "远程控制项目"</code></td>
+<td>键 <code>"name"</code> → 值 <code>"远程控制项目"</code>（字符串）</td>
 </tr>
 <tr>
 <td><code>"private": true</code></td>
@@ -432,7 +455,7 @@ Python 写 <code>True</code>，JSON 必须写 <code>true</code>；Python 写 <co
 <p>下面两份<strong>都故意埋了错</strong>，用的是上面那两个你熟悉的例子。<strong>先别看答案</strong>。</p>
 <h3>演练 A：<code>package.json</code> 的 AI 版本</h3>
 <pre><code class="language-json">{
-  'name': 'dsh-roam',
+  'name': '远程控制项目',
   &quot;private&quot;: True,
   &quot;scripts&quot;: {
     &quot;start&quot;: &quot;node src/index.js&quot;,
@@ -557,5 +580,37 @@ JSON <strong>不要求键的顺序</strong>，只要求语法正确。这点和"
 </table>
 <p>两份一起看，概念和对照就齐了。</p>
 </div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
 </body>
 </html>

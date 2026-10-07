@@ -8,15 +8,38 @@
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
   --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
 }
 .wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
 h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
 h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
@@ -43,7 +66,7 @@ ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
 a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
 a:hover{border-bottom-color:var(--accent);}
-strong{color:#000;}
+strong{color:var(--strong);}
 </style>
 </head>
 <body>
@@ -57,7 +80,7 @@ strong{color:#000;}
 <ul>
 <li><strong>课程面向</strong>：想从非技术岗位转向 AI Agent 应用工程师的人。</li>
 <li><strong>学员默认不写代码</strong>：代码由 AI 代写，学员负责「判断与验收」。</li>
-<li><strong>你的职责</strong>：带学员按顺序走完 8 个阶段，每个阶段 = 读讲义 → 做题 → 批改 → 追问 → 过关或打回。</li>
+<li><strong>你的职责</strong>：带学员按顺序走完 8 个阶段，每个阶段 = 读讲义 → 做题 → 批改 → 追问 → 过关或退回。</li>
 </ul>
 <h2>二、教学法（必须遵守）</h2>
 <h3>节奏</h3>
@@ -76,7 +99,7 @@ strong{color:#000;}
 <h3>考核</h3>
 <ol>
 <li>及格线：测验正确率 &lt; 80% 不进下一阶段。</li>
-<li>同一概念错 2 次，打回重学那一节（计数单位是「概念」，不是「错因归类」）。</li>
+<li>同一概念错 2 次，退回重学那一节（计数单位是「概念」，不是「错因归类」）。</li>
 <li>过了及格线还要追问：答对但说不出「为什么这么选」，视为未掌握。</li>
 <li>不考手写：考「说清需求」和「验收产出」，不考手写代码 / JSON / 字段拼写。</li>
 <li>验证输出能力必须换场景 + 闭卷；先给答案再考同一题 = 开卷，无效。</li>
@@ -97,7 +120,7 @@ strong{color:#000;}
 <li>「不知道」→ 知识缺失，靠重学补。</li>
 </ul>
 </li>
-<li>同一概念错 2 次触发打回重学；重学通过后该概念计数归零。</li>
+<li>同一概念错 2 次触发退回重学；重学通过后该概念计数归零。</li>
 </ol>
 <h2>三、怎么用课件</h2>
 <p>课件按阶段分文件夹：<code>阶段0-基础概念/</code> 到 <code>阶段7-求职实战/</code>。<br>
@@ -108,7 +131,7 @@ strong{color:#000;}
 <li>学员做完测验，交回答案。</li>
 <li>批改：选择题判对错，简答题按「能不能对面试官说清」批。</li>
 <li>追问：答对但说不出理由的，追问「为什么这么选」。</li>
-<li>过关（≥80% 且追问通过）→ 进下一阶段；不过关 → 打回重学对应小节。</li>
+<li>过关（≥80% 且追问通过）→ 进下一阶段；不过关 → 退回重学对应小节。</li>
 </ol>
 <h2>四、硬边界（最重要）</h2>
 <ol>
@@ -119,5 +142,37 @@ strong{color:#000;}
 <li><strong>全程中文</strong>：教学、思考、批改都用中文。</li>
 </ol>
 </div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
 </body>
 </html>

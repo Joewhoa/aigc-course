@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIGC 应用工程课程</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
+}
+.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
+h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a:hover{border-bottom-color:var(--accent);}
+strong{color:var(--strong);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>AIGC 应用工程课程</h1>
+<p>一套<strong>从 0 开始、带阶段测验</strong>的 AIGC 求职培训课程，面向想转行 <strong>AI Agent 应用工程师</strong>的人。</p>
+<blockquote>
+<p>本仓库是课程的<strong>通用知识部分</strong>（讲义 + 测验 + 总纲 + 踩坑清单 + 资源评估）。<br>
+个人学习记录（错题、批改、能力画像）属于隐私，不在本仓库。</p>
+</blockquote>
+<h2>这个课程解决什么问题</h2>
+<p>很多人在转行 AI 岗位时，<strong>动手能力已经有了，缺的是两样东西</strong>：</p>
+<ol>
+<li><strong>成体系的概念认知</strong> —— 能把做过的事用行业通用语言讲清楚</li>
+<li><strong>面试表达的完整度</strong> —— 答得对不够，要能说清「为什么这么选」</li>
+</ol>
+<p>所以这套课程不教写代码，是<strong>教认知 + 教表达</strong>。全程用大白话讲解，先讲「这是什么、干什么用」，再讲「怎么做」。</p>
+<h2>课程结构</h2>
+<p>分 8 个阶段，每阶段 = <strong>大白话讲义 + 真实场景例子 + 测验</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>名称</th>
+<th>目录</th>
+<th>讲义</th>
+<th>测验</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>基础概念</td>
+<td><a href="阶段0-基础概念/"><code>阶段0-基础概念/</code></a></td>
+<td>8 节</td>
+<td>10 题</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Prompt 工程</td>
+<td><a href="阶段1-Prompt工程/"><code>阶段1-Prompt工程/</code></a></td>
+<td>7 节 ＋ 3 附录</td>
+<td>10 题</td>
+</tr>
+<tr>
+<td>2</td>
+<td>RAG（检索增强）</td>
+<td><a href="阶段2-RAG/"><code>阶段2-RAG/</code></a></td>
+<td>9 节 ＋ 补充讲义</td>
+<td>14 题</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Agent ＋ 工具调用</td>
+<td><a href="阶段3-Agent与工具调用/"><code>阶段3-Agent与工具调用/</code></a></td>
+<td>8 节 ＋ 补充讲义</td>
+<td>14 题</td>
+</tr>
+<tr>
+<td>4</td>
+<td>多 Agent 协作</td>
+<td><a href="阶段4-多Agent/"><code>阶段4-多Agent/</code></a></td>
+<td>7 节</td>
+<td>14 题</td>
+</tr>
+<tr>
+<td>5</td>
+<td>工程化</td>
+<td><a href="阶段5-工程化/"><code>阶段5-工程化/</code></a></td>
+<td><strong>11 节</strong></td>
+<td><strong>20 题</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td>垂直应用</td>
+<td><a href="阶段6-垂直应用/"><code>阶段6-垂直应用/</code></a></td>
+<td>9 节</td>
+<td>14 题</td>
+</tr>
+<tr>
+<td>7</td>
+<td>求职实战</td>
+<td><a href="阶段7-求职实战/"><code>阶段7-求职实战/</code></a></td>
+<td>10 节</td>
+<td>5 题（模拟面试）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>规则</strong>：测验正确率 &lt; 80% 不进下一阶段；同一概念错 2 次，退回重学那一节。<br>
+<strong>追问答对但说不出「为什么这么选」，视为未掌握。</strong></p>
+<h2>目录导航</h2>
+<pre><code>aigc-course/
+├── README.md                      ← 本文件
+├── 00-课程总纲.md                  ← 课程总入口，路线图 + 知识点浓缩
+├── 踩坑清单.md                     ← 两类坑：技术本身的坑 ＋ 编写教材的坑
+├── 参考资源-评估.md                ← 对主流 AI 课程资源的实测评估
+│
+├── 阶段0-基础概念/                 ← README + 讲义 + 测验
+├── 阶段1-Prompt工程/               ← ＋ 3 个附录（JSON 最小必读 / JSON 补充 / 上下文工程）
+├── 阶段2-RAG/                      ← ＋ 微调操作补充讲义
+├── 阶段3-Agent与工具调用/          ← ＋ 三问补充讲义
+├── 阶段4-多Agent/
+├── 阶段5-工程化/                   ← 含容器化部署
+├── 阶段6-垂直应用/
+├── 阶段7-求职实战/
+└── coach/教练提示词.md             ← 可交给任意 AI 助手加载的教练提示词
+</code></pre>
+<p>每个 <code>.md</code> 都有对应的 <code>.html</code> 排版版。</p>
+<blockquote>
+<p><strong>💡 阅读小贴士</strong>：所有 <code>.html</code> 页面<strong>右上角有一个切换按钮</strong>（☀ / ☾），<br>
+可在浅色与深色之间切换，<strong>选择会被记住</strong>。<br>
+默认跟随系统的深色模式设置。</p>
+</blockquote>
+<h2>参考资源</h2>
+<p>本课程设计参考了以下公开课程，详见 <code>参考资源-评估.md</code>：</p>
+<ul>
+<li><strong>microsoft/ai-agents-for-beginners</strong>（MIT）—— 首选参考</li>
+<li><strong>datawhalechina/hello-agents</strong> —— 原理补充</li>
+<li><strong>huggingface/agents-course</strong>（Apache-2.0）—— 框架实操</li>
+</ul>
+<p>主参考书籍：《深入理解 AI Agent：设计原理与工程实践》（李博杰 著）</p>
+<h2>关于「不教写代码」</h2>
+<p>这套课程的定位是<strong>「设计 ＋ 判断 ＋ 验收」</strong>，不是「手写实现」。</p>
+<p>代码由 AI 实现，你负责三件事：<strong>定义「做完」是什么样</strong>、<strong>让 AI 按条件实现</strong>、<strong>独立核对结果</strong>。<br>
+这套分工的依据是：<strong>同一个模型在同一个上下文里很难发现自己的盲区</strong>，所以验收必须靠外部证据。</p>
+<p><strong>声明式配置是例外</strong> —— Dockerfile、YAML、JSON Schema 这类东西没有逻辑分支、<br>
+AI 生成可靠、人能读懂，<strong>值得学写法</strong>（见阶段 5）。</p>
+<h2>许可证</h2>
+<p>MIT（详见 <code>LICENSE</code>）</p>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>

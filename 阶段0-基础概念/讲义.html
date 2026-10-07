@@ -8,15 +8,38 @@
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
   --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
 }
 .wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
 h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
 h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
@@ -43,14 +66,14 @@ ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
 a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
 a:hover{border-bottom-color:var(--accent);}
-strong{color:#000;}
+strong{color:var(--strong);}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>阶段 0 讲义：把地基认清楚</h1>
 <blockquote>
-<p>日期：2026-09-21<br>
+<p>日期：<br>
 本阶段目标：把已经干过的事，装进一张统一的地图里，并拿到一套能顶住面试追问的底层认知。<br>
 阅读方式：分 8 节，每节不长。看不懂的节直接说，不要硬扛。</p>
 </blockquote>
@@ -101,7 +124,7 @@ strong{color:#000;}
    注意，输入和输出<strong>分开计价</strong>，而且<strong>输出通常贵好几倍</strong>。<br>
    公开报价里常见 <strong>2~6 倍</strong>（4 倍左右最常见）；也有厂商输入输出同价。</li>
 </ol>
-<p><strong>为什么输出更贵</strong>（2026-09-22 补：原先只写了结论，没写原因）：</p>
+<p><strong>为什么输出更贵</strong>（原先只写了结论，没写原因）：</p>
 <ul>
 <li>
 <p><strong>输入可以一次读完</strong>：你发过去 1000 个 token，模型做<strong>一次前向计算</strong>就把它们全部读进去了。<br>
@@ -315,7 +338,7 @@ strong{color:#000;}
 <td>关键点：<strong>没让 AI 读表，让 AI 写代码去算表</strong></td>
 </tr>
 <tr>
-<td>账单助手（TF-IDF RAG）</td>
+<td>账单核对项目（TF-IDF RAG）</td>
 <td>第 2 层</td>
 <td>先检索出相关账单，再让模型基于账单回答</td>
 </tr>
@@ -325,7 +348,7 @@ strong{color:#000;}
 <td>自然语言 → 动作指令 → 本机执行</td>
 </tr>
 <tr>
-<td>生成式图片批量换色</td>
+<td>图片批量换色</td>
 <td>第 1 + 3 层</td>
 <td>描述需求 + 调用图像处理工具</td>
 </tr>
@@ -344,7 +367,7 @@ strong{color:#000;}
    是外层程序读了它的文字，然后去执行。<br>
    → 所以「AI 控制电脑」不是模型在控制，是模型输出了一段指令，外面有个程序照着做。</li>
 </ol>
-<p><strong>补一句前提</strong>（2026-09-22 补，阶段 3 的伏笔）：<br>
+<p><strong>补一句前提</strong>（ 补，阶段 3 的伏笔）：<br>
    模型能输出什么指令，是<strong>你事先定好的</strong>——它只能在<strong>你给它的那几个工具</strong>里挑，<br>
    而且还要把<strong>参数填对</strong>（比如文件夹路径）。<br>
    所以「模型不执行」不只是个技术事实，它还是一条<strong>安全边界</strong>：<strong>模型碰不到你没给它的能力</strong>。<br>
@@ -431,6 +454,43 @@ strong{color:#000;}
 </ol>
 <hr>
 <p>学完请去做同目录下的 <code>测验.md</code>，10 题，8 分及格。</p>
+<hr>
+<blockquote>
+<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 0」——<br>
+每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+</blockquote>
 </div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
 </body>
 </html>

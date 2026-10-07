@@ -8,15 +8,38 @@
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
   --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5;
+  --th:#efece5; --strong:#000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+  --th:#2e2d2b; --strong:#f5f2ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
+    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
+    --th:#2e2d2b; --strong:#f5f2ec;
+  }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   line-height:1.75; font-size:16px;
+  transition:background .2s,color .2s;
 }
 .wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
 h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
 h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
@@ -43,14 +66,14 @@ ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
 a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
 a:hover{border-bottom-color:var(--accent);}
-strong{color:#000;}
+strong{color:var(--strong);}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>阶段 2 讲义：RAG（检索增强生成）</h1>
 <blockquote>
-<p>日期：2026-09-22（<strong>2026-09-23 按教材补 2.8 ＋ 补齐三处挖坑</strong>）<br>
+<p>日期：（<strong> 按教材补 2.8 ＋ 补齐三处挖坑</strong>）<br>
 本阶段目标：说清 RAG 的完整流程，能判断什么时候该用、什么时候不该用，以及它会怎么失效。<br>
 如果你已经用 TF-IDF 做过检索类的小工具，这一阶段就是把那件事讲成体系。<br>
 阅读重点：<strong>2.2 五步流程</strong> 和 <strong>2.4 四种失效模式</strong>。</p>
@@ -63,10 +86,10 @@ strong{color:#000;}
 <li>读到 🧩 标记的地方，<strong>先自己想一想再看下面的答案</strong>。</li>
 <li>读完 → 打开同目录 <code>阶段2-RAG\测验.html</code> 做题 → 生成答卷，交给你的教练批改。</li>
 <li>测验按 9.6 分及格线计分，并会追问「<strong>为什么这么选</strong>」（答对说不出理由也算没过）。</li>
-<li>不合格的小节会打回重学，同一概念错 2 次就重学那一节。</li>
+<li>不合格的小节会退回重学，同一概念错 2 次就重学那一节。</li>
 </ol>
 <blockquote>
-<p>这份讲义里出现的每个面试题，都在 <code>测验.md</code> 或 2.9 节里有对应位置——<br>
+<p>这份讲义里出现的每个面试题，都在 <code>测验.md</code> 或 2.10 节里有对应位置——<br>
 不需要额外找资料。<strong>读完这一份就够了。</strong></p>
 </blockquote>
 <hr>
@@ -496,7 +519,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <p><strong>答案是「确定的」，交给代码；答案是「模糊的」，交给模型。</strong><br>
 <strong>RAG 只负责把模型需要的那几段资料递过去，不改变这条分工。</strong></p>
 </blockquote>
-<p>所以「账单助手」这类系统真实的做法是：<strong>RAG 负责找依据 → 代码负责算数 → 模型负责把结果说成人话</strong>。<br>
+<p>所以「账单核对项目」这类系统真实的做法是：<strong>RAG 负责找依据 → 代码负责算数 → 模型负责把结果说成人话</strong>。<br>
 面试里能主动说出这条边界，是明显的加分项。</p>
 <hr>
 <h2>2.6 「用户记忆」和「知识库」不是一回事（★ 重要区分）</h2>
@@ -714,7 +737,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <p><strong>⚠️ 别一上来就上 Agentic RAG</strong>：它比普通 RAG <strong>贵</strong>（多几轮调用）、<strong>慢</strong>。<br>
 又是同一条铁律——<strong>能用简单方案就别上复杂的。</strong></p>
 <hr>
-<h2>2.8 知识怎么更新（★ 2026-09-23 按教材补）</h2>
+<h2>2.8 知识怎么更新（★  按教材补）</h2>
 <p>前面七节讲的是「<strong>怎么建</strong>」一个知识库。但建好只是开始——<strong>真实的知识库会一直收到新信息。</strong></p>
 <p>书的原话：</p>
 <blockquote>
@@ -851,7 +874,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </blockquote>
 <p><strong>检索必须按调用者的权限过滤</strong>——一旦敏感内容进了模型的上下文，就很难保证它不泄露到回答里。<br>
 多租户还要保证<strong>各租户的向量索引互相隔离</strong>，避免「串味」。</p>
-<h3>⭐ 重建期间，线上服务不能停（2026-09-23 补）</h3>
+<h3>⭐ 重建期间，线上服务不能停</h3>
 <p>前面说了「改文件必须重建索引」。但这里有个<strong>现实问题</strong>没人提：</p>
 <blockquote>
 <p><strong>重建索引要跑 40 分钟。这 40 分钟里，用户还能不能问？</strong></p>
@@ -888,7 +911,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 前者说明你<strong>考虑过线上可用性</strong>，后者只是背了流程。</p>
 <p><strong>收口句</strong>：<strong>索引是可重建的派生物，所以可以让新旧两套同时存在</strong>——<br>
 这正是「索引不是真相、只是个能随时重做的副本」这条原则带来的好处。</p>
-<h4>更准的一层说法：索引是「指向」（2026-09-23 补）</h4>
+<h4>更准的一层说法：索引是「指向」</h4>
 <p>上面那句还停留在讲<strong>索引的性质</strong>。深一层要问：<strong>为什么它可以随便重做？</strong></p>
 <p>因为——<strong>真相是"已审核入库的那份数据"，索引只是"指向它的一个指针"。</strong></p>
 <table>
@@ -931,7 +954,109 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <li><strong>收口句</strong>：<strong>索引是可重建的派生物，已审核的知识才是真相来源</strong></li>
 </ol>
 <hr>
-<h2>2.9 面试会怎么问</h2>
+<h2>2.9 微调：它到底在改什么（⚠️ 最常见的误解就在这一节）</h2>
+<p><strong>先说结论</strong>：<strong>微调不是「往模型脑子里塞知识」。</strong> 这是这个领域最普遍、也最贵的误解——<br>
+<strong>塞了知识却用了微调，等于花了十倍的钱，得到一个会过期的答案库。</strong></p>
+<h3>微调改的是「行为」，不是「知识」</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>改的是什么</th>
+<th>打个比方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RAG</strong></td>
+<td>给模型<strong>一份可以随时换的手册</strong></td>
+<td>上班前发一本最新规章手册</td>
+</tr>
+<tr>
+<td><strong>微调</strong></td>
+<td>改模型<strong>长期的行为习惯</strong></td>
+<td>让它去上个岗培训，学成某种岗位的说话与做事方式</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键区别在「可更新性」</strong>：</p>
+<ul>
+<li><strong>RAG 的知识可以随时替换</strong> —— 手册改一页，明天就是新的</li>
+<li><strong>微调的行为改一次就是固定的</strong> —— 要改行为，<strong>得重新训练一遍</strong></li>
+</ul>
+<h3>所以什么时候该用哪个</h3>
+<table>
+<thead>
+<tr>
+<th>你的需求</th>
+<th>该用</th>
+<th>为什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「答案必须反映最新制度」</td>
+<td><strong>RAG</strong></td>
+<td>内容会变，微调追不上</td>
+</tr>
+<tr>
+<td>「答案必须引用具体条款原文」</td>
+<td><strong>RAG</strong></td>
+<td>微调学不出原文，会编</td>
+</tr>
+<tr>
+<td>「输出格式必须绝对稳定」</td>
+<td><strong>微调</strong></td>
+<td>格式是行为问题，不是知识问题</td>
+</tr>
+<tr>
+<td>「语气必须符合品牌规范」</td>
+<td><strong>微调</strong></td>
+<td>语气是长期行为，RAG 做不到</td>
+</tr>
+<tr>
+<td>「业务量极大且格式已固定」</td>
+<td><strong>微调</strong>（可省大量 token）</td>
+<td>稳定的模式走微调更省成本</td>
+</tr>
+</tbody>
+</table>
+<h3>⚠️ 三种典型误用</h3>
+<table>
+<thead>
+<tr>
+<th>❌ 常见误用</th>
+<th>为什么不成立</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「我们有 800 页产品手册，用微调让它记住」</td>
+<td><strong>微调学不进 800 页文档的细节</strong>，它会记住大概的「感觉」，检索具体条款时照样编</td>
+</tr>
+<tr>
+<td>「数据每次都变，所以每次变更都微调一次」</td>
+<td><strong>训练成本远高于重建索引</strong>，且知识更新还得等重训完</td>
+</tr>
+<tr>
+<td>「微调 = RAG 的进阶版，效果更好」</td>
+<td><strong>两者解决不同问题</strong>，不存在替代关系</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话记住</strong>：<strong>要用会变的东西，用 RAG；要改稳定的东西，用微调。</strong></p>
+</blockquote>
+<h3>面试怎么讲这一段</h3>
+<blockquote>
+<p>「<strong>微调和 RAG 不是替代关系</strong>——RAG 给的是<strong>可随时替换的知识</strong>，<br>
+微调改的是<strong>长期的行为模式</strong>。所以要<strong>内容会变、要求引用原文</strong>的场景，我用 RAG；<br>
+要<strong>格式绝对稳定、语气统一</strong>的场景，我才考虑微调。<br>
+<strong>把微调当知识库用，是这个领域最贵的一个误解</strong>——它学不进具体内容，<br>
+而且内容一变就得重新训练。」</p>
+</blockquote>
+<hr>
+<h2>2.10 面试会怎么问</h2>
 <table>
 <thead>
 <tr>
@@ -1065,11 +1190,48 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </table>
 <p><strong>这八个问题，测验里都会以某种形式出现。</strong> 答得上来，8 分就稳了。</p>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>，12 题，9.6 分及格。</p>
+<p>学完请去做同目录下的 <code>测验.md</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
 <blockquote>
 <p>更省事的做法：直接双击打开 <code>阶段2-RAG\测验.html</code>——选择题点选即判分，<br>
-写完点「生成答卷」，交给你的教练批改。</p>
+写完点「生成答卷」，提交给教练批改。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 2」——<br>
+每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
 </blockquote>
 </div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
 </body>
 </html>
