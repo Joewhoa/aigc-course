@@ -73,7 +73,7 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 4 讲义：多 Agent 协作</h1>
 <blockquote>
-<p>按教材核验补 6 处（见 <code>核验与参考/课程设计-教材依据核验.md</code> 核验 ④）</p>
+<p>按教材核验补 6 处</p>
 </blockquote>
 <p><strong>本阶段目标</strong>：搞清「一件事太复杂，怎么拆给多个角色分工」，以及单 Agent 搞不定复杂任务时该补哪些机制。</p>
 <p><strong>阅读重点</strong>（三节，按重要性排）：</p>
@@ -131,7 +131,7 @@ strong{color:var(--strong);}
 </tr>
 <tr>
 <td><strong>一个 Agent 挂了，整件事就停摆</strong></td>
-<td><strong>容错性</strong>：某个 Agent 失败时，其他 Agent 可以继续跑（这条来自微软课 <code>08-multi-agent</code>）</td>
+<td><strong>容错性</strong>：某个 Agent 失败时，其他 Agent 可以继续跑（这条来自公开课 <code>08-multi-agent</code>）</td>
 </tr>
 </tbody>
 </table>
@@ -195,7 +195,7 @@ strong{color:var(--strong);}
 <p><strong>看出来了吗</strong>——<strong>多 Agent 的价值不在于「人多」，在于「信息增量」。</strong><br>
 如果只是把同一份信息换个 Agent 再说一遍，<strong>那只是在烧钱。</strong></p>
 <h3>成本必须覆盖得住</h3>
-<p>书里这段话值得原样记住（<strong>李博杰书 <code>chapter10</code>「多 Agent 何时真正优于单 Agent」节末</strong>）：</p>
+<p>书里这段话值得原样记住（<strong>教材 <code>chapter10</code>「多 Agent 何时真正优于单 Agent」节末</strong>）：</p>
 <blockquote>
 <p>「<strong>多 Agent 的并行探索与反复迭代都要消耗大量 token。这意味着多 Agent 带来的收益必须足够大，<br>
 能够覆盖数倍乃至一个数量级的额外开销，否则一个调校得当的单 Agent 往往是更划算的选择。</strong>」</p>
@@ -285,7 +285,7 @@ strong{color:var(--strong);}
 <blockquote>
 <p>「Kimi、Anthropic 的多 Agent 研究系统、Manus 的 Wide Research，都属这一类——<br>
 <strong>一个主 Agent 动态创建上百个子 Agent 并行执行。</strong>」<br>
-（出自<strong>李博杰书 <code>chapter10</code>「去中心化模式」引文框</strong>）</p>
+（出自<strong>教材 <code>chapter10</code>「去中心化模式」引文框</strong>）</p>
 </blockquote>
 <p><strong>为什么是这种</strong>：管理者模式<strong>天然支持异构</strong>（不同子 Agent 可以用不同模型、跑在不同机器上），<br>
 扩展性好。<strong>代价是主管容易成单点瓶颈</strong>，所以要<strong>把最强的模型给主管</strong>。</p>
@@ -737,7 +737,7 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 </table>
 <p><strong>面试要点</strong>：能说清「规划是为了防止长任务里迷路，但计划太死就失去了纠偏能力」，比背名词有价值。</p>
 <h4>⭐ 进阶一点：光给「步骤上限」不够，要给「预算意识」</h4>
-<p>书里讲了一个<strong>反直觉的研究结论</strong>（李博杰书 <code>chapter10</code>「步骤预算与 Agent 性能」节）：</p>
+<p>书里讲了一个<strong>反直觉的研究结论</strong>（教材 <code>chapter10</code>「步骤预算与 Agent 性能」节）：</p>
 <blockquote>
 <p>「<strong>单纯增加 Agent 可用的步骤数并不能保证性能提升。</strong><br>
 标准的 Agent 缺乏「预算意识」——即使有 300 步的预算，它们仍然倾向于<strong>执行浅层搜索，很快就「饱和」了</strong>。」</p>
@@ -754,7 +754,7 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 <h3>补丁二：记忆机制（Memory）</h3>
 <p><strong>问题</strong>：阶段 0 讲过，模型没有记忆，上下文窗口一满就忘最早的事。</p>
 <p><strong>解法</strong>：给 Agent 配一套「记忆系统」。</p>
-<p><strong>⭐ 这里要先把术语对齐</strong>（李博杰书 <code>chapter3</code>「记忆的层次结构」）——<br>
+<p><strong>⭐ 这里要先把术语对齐</strong>（教材 <code>chapter3</code>「记忆的层次结构」）——<br>
 书里的<strong>「记忆层次」</strong>（回答「<strong>存在哪里</strong>」）是这三层：</p>
 <table>
 <thead>
@@ -856,7 +856,7 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 让它换个角度重看自己的输出，<strong>有机会</strong>发现问题。</p>
 <p><strong>代价</strong>：多一轮甚至多轮调用，成本上升。</p>
 <h4>🔴 但「自己查自己」经常是无效的——这里有个反直觉的研究结论</h4>
-<p>书里引了一篇 ICLR 2024 的研究（李博杰书 <code>chapter10</code>「提议者-审核者范式」节）：</p>
+<p>书里引了一篇 ICLR 2024 的研究（教材 <code>chapter10</code>「提议者-审核者范式」节）：</p>
 <blockquote>
 <p>让 GPT-4 <strong>在没有外部反馈的情况下</strong>审查并修正自己的回答，<strong>准确率反而下降</strong>——<br>
 <strong>模型把正确答案改错的次数，比把错误答案改对的次数更多。</strong></p>

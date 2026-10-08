@@ -73,7 +73,7 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 5 讲义：工程化</h1>
 <blockquote>
-<p>** 按教材核验补 3 节 ＋ 6 处<strong>（见 <code>核验与参考/课程设计-教材依据核验.md</code> 核验 ⑤）<br>
+<p>** 按教材核验补 3 节 ＋ 6 处<strong><br>
 ｜ ** 按新增 5.10 容器化</strong>（含 Dockerfile 写法；教材依据见 ch4 隔离三档）<br>
 ｜ ** 按实践反馈补 5.10<strong>：容器 vs 虚拟机 / <code>.dockerignore</code> 系统理解 / 分层机制 / 真实踩坑<br>
 本阶段目标：讲清「做出来了」和「能上线」之间差什么。这是把 demo 变成产品的那一层。<br>
@@ -794,7 +794,7 @@ strong{color:var(--strong);}
       ↓ 是
    继续往下走
 </code></pre>
-<p><strong>教材里对应的概念</strong>（李博杰书）：</p>
+<p><strong>教材里对应的概念</strong>（教材）：</p>
 <ul>
 <li>第 1 章验证层：「自动判断操作结果的对错；<strong>只看数据（如工具返回的 JSON 字段），而不看模型自由生成的文本</strong>」</li>
 <li>第 5 章：「代码化校验在操作前设置<strong>最后一道防线</strong>……作为<strong>守门员</strong>」</li>
@@ -1269,7 +1269,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <strong>它是防密钥泄露的第一道闸</strong>；没有它，<code>COPY . .</code> 就是个风险动作。</p>
 <h3>隔离强度：⚠️「用了 Docker 就安全」是误解</h3>
 <p>这一条接着 5.5（安全）和 5.8（venv 不是沙盒）——<strong>三者是一条线</strong>。</p>
-<p><strong>教材（李博杰书 ch4）按隔离强度从低到高给了三档</strong>：</p>
+<p><strong>教材（教材 ch4）按隔离强度从低到高给了三档</strong>：</p>
 <table>
 <thead>
 <tr>

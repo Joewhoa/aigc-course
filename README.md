@@ -62,11 +62,11 @@ aigc-course/
 
 本课程设计参考了以下公开课程，详见 `参考资源-评估.md`：
 
-- **microsoft/ai-agents-for-beginners**（MIT）—— 首选参考
+- **公开课**（MIT）—— 首选参考
 - **datawhalechina/hello-agents** —— 原理补充
 - **huggingface/agents-course**（Apache-2.0）—— 框架实操
 
-主参考书籍：《深入理解 AI Agent：设计原理与工程实践》（李博杰 著）
+主参考书籍：参考教材
 
 ## 关于「不教写代码」
 

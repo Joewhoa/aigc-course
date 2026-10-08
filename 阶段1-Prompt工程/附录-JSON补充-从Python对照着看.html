@@ -77,8 +77,8 @@ strong{color:var(--strong);}
 「我个人感觉跟 Python 的数组类似，这方面多来一点参考资料我看齐全一点，现在只有一点模糊概念」。</p>
 <p><strong>这个直觉对了一半，而且错的那一半正好是最要紧的一半</strong>（下节就说）。<br>
 这一节不重复基础，专门做一件事：<strong>把 JSON 放在 Python 旁边逐条对照</strong>。</p>
-<p>依据教材：李博杰书 <code>chapter4.md:82</code>（JSON Schema 定义）、<code>:106</code>（工具描述格式）；<br>
-微软课 <code>04-tool-use/README.md:86</code>。</p>
+<p>依据教材：教材 <code>chapter4.md:82</code>（JSON Schema 定义）、<code>:106</code>（工具描述格式）；<br>
+公开课 <code>04-tool-use/README.md:86</code>。</p>
 </blockquote>
 <hr>
 <h2>一、先正面回答：你觉得像数组，对在哪、错在哪</h2>
@@ -291,10 +291,10 @@ Python 写 <code>True</code>，JSON 必须写 <code>true</code>；Python 写 <co
 你要求它「按 JSON 输出」，等于给它一套<strong>所有语言都认的通用格式</strong>——<br>
 这样无论是 Python、JS 还是别的程序来接，<strong>都能可靠地取出字段</strong>。</p>
 <blockquote>
-<p>教材（李博杰 <code>chapter4.md:106</code>）说得直接：<br>
+<p>教材（教材 <code>chapter4.md:106</code>）说得直接：<br>
 「每个工具通过 <strong>JSON Schema</strong> 定义输入参数的类型、约束和描述，<br>
 <strong>确保不同的客户端都能正确理解工具的使用方式</strong>。」</p>
-<p>微软课（<code>04-tool-use/README.md:86</code>）也是同一句话：<br>
+<p>公开课（<code>04-tool-use/README.md:86</code>）也是同一句话：<br>
 「接下来定义一个 <strong>JSON Schema</strong>，包含函数名称、功能描述以及函数参数的名称和说明。」</p>
 </blockquote>
 <p><strong>两边教材都把它当「通用接口」讲，不是当「一种编程语法」讲。</strong><br>
