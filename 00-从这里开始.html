@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>从这里开始 · AI 应用学习</title>
+<style>
+  :root{
+    --bg:#f7f6f3;--card:#ffffff;--text:#1f1e1c;--muted:#6b6862;
+    --accent:#0e7490;--accent2:#8a5109;--green:#15803d;
+    --line:#e5e2db;--code-bg:#f2efe9;--on-accent:#ffffff;
+  }
+  /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+  :root[data-theme="dark"]{
+    --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+    --accent:#22d3ee;--accent2:#d4a15f;--green:#34d399;
+    --line:#263449;--code-bg:#0e1524;--on-accent:#06121f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+      --accent:#22d3ee;--accent2:#d4a15f;--green:#34d399;
+      --line:#263449;--code-bg:#0e1524;--on-accent:#06121f;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.7;transition:background .2s,color .2s}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 24px}
+  h1{font-size:28px;margin:0 0 8px}
+  h2{font-size:20px;margin:32px 0 12px;color:var(--accent)}
+  .sub{color:var(--muted);margin-bottom:32px}
+  .card{background:var(--card);border-radius:12px;padding:18px 20px;margin-bottom:14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .num{display:inline-block;width:26px;height:26px;line-height:26px;text-align:center;background:var(--accent);color:var(--on-accent);border-radius:50%;font-weight:700;margin-right:10px;font-size:14px}
+  a{color:var(--accent);text-decoration:none;font-weight:600}
+  a:hover{text-decoration:underline}
+  .tip{background:var(--card);border-left:3px solid var(--green);padding:12px 16px;border-radius:0 10px 10px 0;margin-top:24px}
+  code{background:var(--code-bg);padding:2px 7px;border-radius:5px;font-size:14px}
+  ul{padding-left:22px}
+  li{margin:6px 0}
+  .muted{color:var(--muted)}
+  /* 主题切换按钮 */
+  .theme-btn{
+    position:fixed;top:14px;right:16px;z-index:99;
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    font-size:17px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
+  }
+  .theme-btn:hover{border-color:var(--accent);}
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>从这里开始 👋</h1>
+  <p class="sub">不会写代码，也能学 AI 应用。跟着下面 4 步走就行。</p>
+
+  <div class="card">
+    <span class="num">1</span><strong>先看课程总纲</strong>
+    <p class="muted" style="margin:8px 0 0">了解这门课一共学什么、分几个阶段、每个阶段的目标。</p>
+    <p style="margin:8px 0 0">👉 <a href="00-课程总纲.html">打开 00-课程总纲</a></p>
+  </div>
+
+  <div class="card">
+    <span class="num">2</span><strong>从「阶段0」开始，一阶段一阶段学</strong>
+    <p class="muted" style="margin:8px 0 0">每阶段顺序：<strong>讲义</strong>（学知识）→ <strong>测验</strong>（检验自己）→ 对答案。</p>
+    <p style="margin:8px 0 0">👉 从 <a href="阶段0-基础概念/阶段0本章导读.html">阶段0 开始</a></p>
+  </div>
+
+  <div class="card">
+    <span class="num">3</span><strong>卡住了？让 AI 教练带你</strong>
+    <p class="muted" style="margin:8px 0 0">把「教练提示词」复制给你常用的 AI（比如微信里的 AI、网页 AI），它就会按这套课的节奏带你学、给你出题、帮你批改。</p>
+    <p style="margin:8px 0 0">👉 推荐用复制版：<a href="coach/MD/教练提示词-复制版.md">教练提示词-复制版.md</a>（全选复制即可）</p>
+    <p style="margin:8px 0 0">也可以看网页版：<a href="coach/教练提示词.html">教练提示词.html</a></p>
+  </div>
+
+  <div class="card">
+    <span class="num">4</span><strong>卡住的地方，教练会帮你记</strong>
+    <p class="muted" style="margin:8px 0 0">Scout 会边教边记，你随时能翻。<b>课程进度</b>看你走到哪了，<b>学员画像</b>看它怎么理解你，<b>错题本</b>看你卡过什么。都有 HTML 和 Markdown 两个版本。</p>
+    <p style="margin:8px 0 0">👉 <a href="课程进度.html">课程进度</a>· <a href="学员画像.html">学员画像</a>· <a href="学员错题本.html">学员错题本</a></p>
+  </div>
+
+  <h2>目录速览</h2>
+  <ul>
+    <li><strong>阶段 0</strong> — 基础概念（先搞懂 AI 应用是什么）</li>
+    <li><strong>阶段 1</strong> — Prompt 工程（怎么跟 AI 好好说话）</li>
+    <li><strong>阶段 2</strong> — RAG（让 AI 用上你的资料）</li>
+    <li><strong>阶段 3</strong> — Agent 与工具调用（让 AI 会干活）</li>
+    <li><strong>阶段 4</strong> — 多 Agent 协作</li>
+    <li><strong>阶段 5</strong> — 工程化（把想法做成能用的东西）</li>
+    <li><strong>阶段 6</strong> — 垂直应用（落地的场景）</li>
+    <li><strong>阶段 7</strong> — 求职实战（把学的讲成能被记住的）</li>
+  </ul>
+
+  <div class="tip">
+    <strong>💡 一句话建议</strong>：不用贪多，一天学一小节就够。重点是<b>每阶段都做完测验</b>——那是检验你有没有真懂的方式。
+  </div>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+
+
+
+
+</body>
+</html>

@@ -3,67 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>阶段 6 测验：垂直应用 · AIGC 求职培训</title>
+<title>阶段 6 测验：垂直应用 · AIGC 应用工程课程</title>
 <style>
   :root{
-    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
-    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
-    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+    --bg:#f7f6f3;--card:#ffffff;--text:#1f1e1c;--muted:#6b6862;
+    --line:#e5e2db;--accent:#0e7490;--code-bg:#f2efe9;--th:#efece5;
+    --accent-bg:#eaf4f8;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#146c34;--ok-bg:#e8f5ec;--bad:#a32d2d;--bad-bg:#fbeceb;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+      --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+      --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+      --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+      --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
     }
   }
   /* 手动指定深色（覆盖系统设置） */
   :root[data-theme="dark"]{
-    --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-    --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-    --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+    --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+    --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+    --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
   }
   .theme-btn{
-    position:fixed;top:12px;right:14px;z-index:99;
-    width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--line);background:var(--card);color:var(--fg);
-    font-size:16px;cursor:pointer;line-height:1;
-    box-shadow:0 1px 4px rgba(0,0,0,.14);
+    position:fixed;top:14px;right:16px;z-index:99;
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    font-size:17px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
   }
   .theme-btn:hover{border-color:var(--accent);}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  /* body 写成一行：与入口页一致，且每条声明都带分号（工具脚本按分号切取值） */
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.7;transition:background .2s,color .2s}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 24px 96px}
+  /* 表格：短单元格不能被压到换行（中文三个字会断成两行）。
+     markdown 的 |:--:| 会生成 inline text-align:center，浏览器据此收紧列宽，
+     所以给短列一个 min-width，让最长的「说明」列吃掉剩余空间。 */
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:0.92rem;
+    background:var(--card);table-layout:auto}
+  th{background:var(--th);text-align:left;padding:11px 13px;font-weight:600}
+  td{padding:10px 13px;border-top:1px solid var(--line);vertical-align:top}
+  th,td{min-width:5.5em}
+  td:first-child,th:first-child{white-space:nowrap}
+  table td:nth-child(1){min-width:6.5em}
   header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
-  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  h1{font-size:28px;font-weight:600;margin:0 0 10px}
   .meta{color:var(--muted);font-size:14px;line-height:1.9}
   .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
     padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
   button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
     border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
   button:hover{opacity:.85}
-  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--text)}
   .score{font-weight:600;font-size:15px;margin-left:auto}
   .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
   .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
   .qtext{margin:0 0 12px;font-weight:500}
   .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
-    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
-  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--text);font-weight:400}
+  .qtext code{background:var(--code-bg);padding:2px 6px;border-radius:4px;
     font-family:"SF Mono",Consolas,monospace;font-size:.88em}
   .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
     border:1px solid transparent;transition:background .12s}
   .opt:hover{background:var(--accent-bg)}
   .opt input{margin-right:9px;accent-color:var(--accent)}
-  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .opt code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.88em}
   .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
   .fb.show{display:block}
   .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
   .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
   .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
   textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
-    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+    border:1px solid var(--line);background:var(--bg);color:var(--text);resize:vertical;margin-top:6px}
   .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
     font-size:14.5px;line-height:1.8;display:none}
   .hint.show{display:block}
@@ -79,7 +92,7 @@
 <div class="wrap">
 <header>
   <h1>阶段 6 测验：垂直应用</h1>
-  <div class="meta">** 按规则 13c 重编（v2，14 题）**<br><strong>满分 14 分 ｜ 及格线 11.2 分（80%）</strong><br>规则：不及格不进阶段 7。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题<strong>写清楚要点即可，可以分点作答</strong>。<br>⚠️ <strong>每题都标了「考点：x.y」</strong>——那是它在讲义里的出处，答不出来回去看那一节。<br><strong>本卷不考</strong>：手写代码、框架 API 用法、论文名 / 文献引用、题面的排版形式。<br><strong>框架题考的是「判断取舍」，不是「会不会用」。</strong></div>
+  <div class="meta"><strong>满分 14 分 ｜ 及格线 11.2 分（80%）</strong><br>规则：不及格不进阶段 7。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题<strong>写清楚要点即可，可以分点作答</strong>。<br>⚠️ <strong>每题都标了「考点：x.y」</strong>——那是它在讲义里的出处，答不出来回去看那一节。<br><strong>本卷不考</strong>：手写代码、框架 API 用法、论文名 / 文献引用、题面的排版形式。<br><strong>框架题考的是「判断取舍」，不是「会不会用」。</strong></div>
 </header>
 <div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制后发给教练 Agent 批改。</div>
 <div class="bar">
@@ -170,7 +183,7 @@
 </blockquote></div>
   <textarea id="a7" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h7')">查看参考要点</button>
-  <div class="hint" id="h7">考点：6.5。<b>① 三种范式（缺一扣分）：</b><br>· <b>知识问答类</b>：把文档做成能对话的助手（客服、内部制度、产品手册）—— 技术栈 <b>RAG（阶段 2）</b><br>· <b>流程自动化类</b>：把重复的多步操作交出去（报表、数据清洗、审批流）—— <b>Agent + 工具调用（阶段 3）</b><br>· <b>内容生成类</b>：批量产出文案 / 图片 / 代码（营销、设计）—— <b>Prompt 工程（阶段 1）+ 工具</b><br><b>② 两个场景的设计重点：</b><br>· <b>客服</b>：<b>答错的代价大</b> → 约束边界，<b>宁可说不知道</b>；涉及退款这类不可逆操作要 <b>高风险确认</b><br>· <b>营销文案</b>：<b>太无聊就失败</b> → <b>温度调高、允许发散</b><br><b>核心认知</b>：<b>同一套技术、五种做法——不是技术不同，是取舍不同</b>；区别在于<b>「哪些环节绝对不能出错」</b>。</div>
+  <div class="hint" id="h7">考点：6.5。<b>① 三种范式（缺一扣分）</b><br>· <b>知识问答类</b>：把文档做成能对话的助手（客服、内部制度、产品手册）—— 技术栈 <b>RAG</b><br>· <b>流程自动化类</b>：把重复的多步操作交出去（报表、数据清洗、审批流）—— <b>Agent + 工具调用</b><br>· <b>内容生成类</b>：批量产出文案 / 图片 / 代码（营销、设计）—— <b>Prompt 工程+ 工具</b><br><b>② 两个场景的设计重点</b><br>· <b>客服</b><b>答错的代价大</b> → 约束边界<b>宁可说不知道</b>；涉及退款这类不可逆操作要 <b>高风险确认</b><br>· <b>营销文案</b><b>太无聊就失败</b> → <b>温度调高、允许发散</b><br><b>核心认知</b><b>同一套技术、五种做法——不是技术不同，是取舍不同</b>；区别在于<b>「哪些环节绝对不能出错」</b>。</div>
 </div>
 <div class="item" id="q-q8">
   <div class="qhead">Q8</div>
@@ -181,7 +194,7 @@
 </blockquote></div>
   <textarea id="a8" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h8')">查看参考要点</button>
-  <div class="hint" id="h8">考点：6.4。<b>① 五步（顺序必须对）：</b><br><b>找场景 → 定指标 → 选手段 → 小范围试 → 迭代</b><br>· ① <b>找场景</b>：别选「模型本身就能做」的题，<b>要选有私有数据 / 有具体流程的</b><br>· ② <b>定指标</b>：<b>老板要的是「省了多少人力」，不是「准确率 95%」</b><br>· ③ <b>选手段</b>：回到阶段 0 的五问表（Prompt / RAG / Agent / 微调）——<b>且有递进顺序（见 Q11）</b><br>· ④ <b>小范围试</b>：先在一个小场景验证，<b>别一上来全公司推</b><br>· ⑤ <b>迭代</b>：用阶段 5 的评测集 + 可观测性持续改进<br><b>② 最容易翻车：第 1 步和第 2 步。</b><br>理由：<b>技术都对，但选错场景或指标，项目就没有价值</b>（后面三步技术再对也救不回来）。</div>
+  <div class="hint" id="h8">考点：6.4。<b>① 五步（顺序必须对）</b><br><b>找场景 → 定指标 → 选手段 → 小范围试 → 迭代</b><br>· ① <b>找场景</b>：别选「模型本身就能做」的题<b>要选有私有数据 / 有具体流程的</b><br>· ② <b>定指标</b><b>老板要的是「省了多少人力」，不是「准确率 95%」</b><br>· ③ <b>选手段</b>：回到阶段 0 的五问表（Prompt / RAG / Agent / 微调）——<b>且有递进顺序</b><br>· ④ <b>小范围试</b>：先在一个小场景验证<b>别一上来全公司推</b><br>· ⑤ <b>迭代</b>：用阶段 5 的评测集 + 可观测性持续改进<br><b>② 最容易翻车：第 1 步和第 2 步。</b><br>理由<b>技术都对，但选错场景或指标，项目就没有价值</b>（后面三步技术再对也救不回来）。</div>
 </div>
 <div class="item" id="q-q9">
   <div class="qhead">Q9</div>
@@ -192,7 +205,7 @@
 </blockquote></div>
   <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
-  <div class="hint" id="h9">考点：6.3。<b>① MCP（要点，缺一扣分）：</b><br>· 全称 <b>Model Context Protocol</b>；解决<b>工具接入碎片化</b>（接口不统一，每接一个重写一遍）<br>· <b>类比：USB 接口</b>——以前每个设备插口不一样，现在统一标准口，谁都能插<br>· 一句话价值：<b>一次接好，到处能用</b>（工具能被复用）<br><b>② A2A 及分工（要点）：</b><br>· 全称 <b>Agent to Agent</b>；解决 <b>Agent 之间协作碎片化</b><br>· <b>关键机制：Agent Card（智能体名片）</b>——声明「我能做什么、需要你提供什么、我是谁」；<br>　外加 <b>任务生命周期</b>（拆成有状态的过程）、<b>不透明协作</b>（对方不需要知道我内部怎么实现）<br>· <b>分工口诀</b>：<b>MCP 让 Agent 会用工具，A2A 让 Agent 会找同行</b>——<b>一个接「物」，一个接「Agent」</b></div>
+  <div class="hint" id="h9">考点：6.3。<b>① MCP（要点，缺一扣分）</b><br>· 全称 <b>Model Context Protocol</b>；解决<b>工具接入碎片化</b>（接口不统一，每接一个重写一遍）<br>· <b>类比：USB 接口</b>——以前每个设备插口不一样，现在统一标准口，谁都能插<br>· 一句话价值<b>一次接好，到处能用</b>（工具能被复用）<br><b>② A2A 及分工（要点）</b><br>· 全称 <b>Agent to Agent</b>；解决 <b>Agent 之间协作碎片化</b><br>· <b>关键机制：Agent Card（智能体名片）</b>——声明「我能做什么、需要你提供什么、我是谁」；<br>　外加 <b>任务生命周期</b>（拆成有状态的过程）<b>不透明协作</b>（对方不需要知道我内部怎么实现）<br>· <b>分工口诀</b><b>MCP 让 Agent 会用工具，A2A 让 Agent 会找同行</b>——<b>一个接「物」，一个接「Agent」</b></div>
 </div>
 <div class="item" id="q-q10">
   <div class="qhead">Q10</div>
@@ -203,7 +216,7 @@
 </blockquote></div>
   <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
-  <div class="hint" id="h10">考点：6.7。<b>① 怎么工作 + 它是什么机制：</b><br>· 四步循环：<b>截屏（看）→ 决定（想）→ 操作（点/输）→ 再截屏（确认）</b><br>· <b>它就是阶段 3 的 ReAct 循环，只是「观察」从文字换成了截图</b>——<b>机制没变，换的是输入形式</b><br><b>② 为什么还要用 / 什么时候用（要点）：</b><br>· <b>因为大量系统真的没有 API</b>（老的内部系统、别人的产品、只有网页版的工具）<br>· <b>判断顺序（关键）</b>：<b>先问「有 API 吗」→ 有就用 API；没有再问「量大、重复、值得自动化吗」→ 是才上 CUA</b><br>· <b>配套必须有：高风险动作前人工确认</b>（它能点任何东西，包括「确认付款」）</div>
+  <div class="hint" id="h10">考点：6.7。<b>① 怎么工作 + 它是什么机制</b><br>· 四步循环<b>截屏（看）→ 决定（想）→ 操作（点/输）→ 再截屏（确认）</b><br>· <b>它就是阶段 3 的 ReAct 循环，只是「观察」从文字换成了截图</b>——<b>机制没变，换的是输入形式</b><br><b>② 为什么还要用 / 什么时候用（要点）</b><br>· <b>因为大量系统真的没有 API</b>（老的内部系统、别人的产品、只有网页版的工具）<br>· <b>判断顺序（关键）</b><b>先问「有 API 吗」→ 有就用 API；没有再问「量大、重复、值得自动化吗」→ 是才上 CUA</b><br>· <b>配套必须有：高风险动作前人工确认</b>（它能点任何东西，包括「确认付款」）</div>
 </div>
 <div class="item" id="q-q11">
   <div class="qhead">Q11</div>
@@ -214,7 +227,7 @@
 </blockquote></div>
   <textarea id="a11" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h11')">查看参考要点</button>
-  <div class="hint" id="h11">考点：6.5。<b>① 三步递进（顺序错即扣）：</b><br><b>先优化提示词 → 再考虑工作流 → 最后才引入自主 Agent</b><br>· 为什么是这个顺序：<b>按「可控性高 → 可控性低」排</b>。提示词最可控、成本最低；工作流步骤写死；Agent 自己决定，最不可控也最贵。<br><b>② 为什么「Agent 不是更高级，是更不可控」：</b><br>因为<b>它会多带一整套工程负担</b>——护栏（阶段 3）、输出校验（阶段 5）、可观测性、评测集、容错设计。<br><b>能用工作流解决的，就不要用 Agent。</b><br>面试话术：「我选手段是有顺序的，<b>Agent 不是更高级，是更不可控</b>——能用工作流解决的，我不用 Agent。」</div>
+  <div class="hint" id="h11">考点：6.5。<b>① 三步递进（顺序错即扣）</b><br><b>先优化提示词 → 再考虑工作流 → 最后才引入自主 Agent</b><br>· 为什么是这个顺序<b>按「可控性高 → 可控性低」排</b>。提示词最可控、成本最低；工作流步骤写死；Agent 自己决定，最不可控也最贵。<br><b>② 为什么「Agent 不是更高级，是更不可控」</b><br>因为<b>它会多带一整套工程负担</b>——护栏、输出校验、可观测性、评测集、容错设计。<br><b>能用工作流解决的，就不要用 Agent。</b><br>一句话完整表述：「我选手段是有顺序的<b>Agent 不是更高级，是更不可控</b>——能用工作流解决的，我不用 Agent。」</div>
 </div>
 <div class="item" id="q-q12">
   <div class="qhead">Q12</div>
@@ -225,29 +238,29 @@
 </blockquote></div>
   <textarea id="a12" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h12')">查看参考要点</button>
-  <div class="hint" id="h12">考点：6.8。<b>① 定位（只说定位，不必说 API）：</b><br>· <b>LangChain / LangGraph</b>：把模型、工具、记忆、流程<b>串成一条链 / 图</b> → 组件多、流程复杂、想可视化编排时<br>· <b>LlamaIndex</b>：专做<b>检索</b>那一块 → 痛点主要是「检索效果不好」时<br>· <b>Dify / n8n 等低代码平台</b>：<b>可视化拖拽</b>搭应用 → 想给业务方一个能自己改的东西<br>· <b>CrewAI 等多 Agent 编排框架</b>：现成封装<b>多 Agent 的角色分工</b> → 要做阶段 4 那套但不想自己搭<br><b>② 值得 / 不值得（要点）：</b><br><b>值得</b>：<b>① 组件多、流程长</b>（重复搭建成本已超过抽象成本）｜<b>② 需要可视化编排</b>｜<b>③ 团队要复用、一致写法</b><br><b>不值得</b>：<b>① 流程简单、组件很少</b>（比如就一个 RAG 问答）——<b>框架解决的痛你根本没有</b>｜<b>② 需求还在快速变</b>（抽象会限制你怎么改）｜<b>③ 出问题要查</b>（多一层抽象 = 多一个盲区）<br><b>教材立场</b>：「<b>直接的 API 调用优于复杂的框架</b>」「<b>每多一层抽象都会成为以后调试时新的盲区</b>」</div>
+  <div class="hint" id="h12">考点：6.8。<b>① 定位（只说定位，不必说 API）</b><br>· <b>LangChain / LangGraph</b>：把模型、工具、记忆、流程<b>串成一条链 / 图</b> → 组件多、流程复杂、想可视化编排时<br>· <b>LlamaIndex</b>：专做<b>检索</b>那一块 → 痛点主要是「检索效果不好」时<br>· <b>Dify / n8n 等低代码平台</b><b>可视化拖拽</b>搭应用 → 想给业务方一个能自己改的东西<br>· <b>CrewAI 等多 Agent 编排框架</b>：现成封装<b>多 Agent 的角色分工</b> → 要做阶段 4 那套但不想自己搭<br><b>② 值得 / 不值得（要点）</b><br><b>值得</b><b>① 组件多、流程长</b>（重复搭建成本已超过抽象成本）｜<b>② 需要可视化编排</b>｜<b>③ 团队要复用、一致写法</b><br><b>不值得</b><b>① 流程简单、组件很少</b>（比如就一个 RAG 问答）——<b>框架解决的痛你根本没有</b>｜<b>② 需求还在快速变</b>（抽象会限制你怎么改）｜<b>③ 出问题要查</b>（多一层抽象 = 多一个盲区）<br><b>这个立场的通用表述</b>：「<b>直接的 API 调用优于复杂的框架</b>」「<b>每多一层抽象都会成为以后调试时新的盲区</b>」</div>
 </div>
 <div class="item" id="q-q13">
   <div class="qhead">Q13</div>
-  <div class="qtext"><p>面试官问：「<strong>你看过一个用了框架的项目，你会先问它什么？</strong>」<br>
+  <div class="qtext"><p>「<strong>你看过一个用了框架的项目，你会先问它什么？</strong>」<br>
 请说出你的验收问题和理由。</p>
 <blockquote>
 <p>考点：6.9</p>
 </blockquote></div>
   <textarea id="a13" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h13')">查看参考要点</button>
-  <div class="hint" id="h13">考点：6.8。<b>核心是「先问它替我省了什么」，而不是先看它用了什么。</b><br>三个验收问题（要点）：<br>① <b>「它具体省掉了什么？」</b> —— <b>说不出具体好处 = 可能只是为了显得专业而上的</b>（框架滥用头号原因）<br>② <b>「出问题怎么排查？」</b> —— 要能<b>顺着直接看它调用了什么</b>，而不是猜框架内部逻辑<br>③ <b>「换个框架要改多少？」</b> —— 改得多 = <b>被框架绑住了</b>，这就是抽象层盲区的代价<br><b>⚠️ 反面例子（要点）</b>：如果对方的理由是「它生态好、社区活跃」——<b>这个理由不够</b>，<br>因为那说的是<b>框架本身</b>，不是<b>它对你这个项目解决了什么</b>。<br><b>加分</b>：能补一句教材原话「<b>学会某个具体框架的用法并不重要</b>，重要的是它能否用<b>尽可能少的抽象层</b>让你专注业务逻辑」。</div>
+  <div class="hint" id="h13">考点：6.8。<b>核心是「先问它替我省了什么」，而不是先看它用了什么。</b><br>三个验收问题（要点）<br>① <b>「它具体省掉了什么？」</b> —— <b>说不出具体好处 = 可能只是为了显得专业而上的</b>（框架滥用头号原因）<br>② <b>「出问题怎么排查？」</b> —— 要能<b>顺着直接看它调用了什么</b>，而不是猜框架内部逻辑<br>③ <b>「换个框架要改多少？」</b> —— 改得多 = <b>被框架绑住了</b>，这就是抽象层盲区的代价<br><b>⚠️ 反面例子（要点）</b>：如果对方的理由是「它生态好、社区活跃」——<b>这个理由不够</b><br>因为那说的是<b>框架本身</b>，不是<b>它对你这个项目解决了什么</b>。<br><b>加分</b>：能补一句资料里的说法「<b>学会某个具体框架的用法并不重要</b>，重要的是它能否用<b>尽可能少的抽象层</b>让你专注业务逻辑」。</div>
 </div>
 <div class="item" id="q-q14">
   <div class="qhead">Q14</div>
-  <div class="qtext"><p>面试官问：「<strong>你觉得未来 1–2 年 AI 的竞争力会往哪走？</strong>」<br>
+  <div class="qtext"><p>「<strong>你觉得未来 1–2 年 AI 的竞争力会往哪走？</strong>」<br>
 请给出回答，要体现出你对「行业趋势」的判断。</p>
 <blockquote>
 <p>考点：6.2 / <strong>6.9</strong></p>
 </blockquote></div>
   <textarea id="a14" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h14')">查看参考要点</button>
-  <div class="hint" id="h14">考点：6.2 / 6.9。<b>答案的落点（这是行业趋势判断，不是技术罗列）：</b><br>· <b>行业正在从「能做事」向「可靠地做事」转变</b>（教材-319）<br>· <b>模型能力已经够用了</b>——<b>决定差距的，是它能不能被稳稳当当地放进真实业务里</b><br>· 而决定「稳不稳」的，是 <b>Harness 工程</b>（<b>阶段 3 护栏 ＋ 阶段 5 可观测 ＋ 输出校验</b>）<br>· 结论：<b>竞争力会从「会调模型」转向「会做可靠性工程」</b><br><b>面试话术</b>：「<b>我觉得瓶颈不在模型，在工程</b>——模型已经够聪明了，<br>但把它放进真实业务里、让它<b>不出事</b>，这件事大部分团队还没做好。<br>所以我认为竞争力会从『会调模型』转向『<b>会做可靠性工程</b>』。」<br>（<b>要避免</b>：只答「模型会越来越强」——那是通用能力，不是行业判断）</div>
+  <div class="hint" id="h14">考点：6.2 / 6.9。<b>答案的落点（这是行业趋势判断，不是技术罗列）</b><br>· <b>行业正在从「能做事」向「可靠地做事」转变</b><br>· <b>模型能力已经够用了</b>——<b>决定差距的，是它能不能被稳稳当当地放进真实业务里</b><br>· 而决定「稳不稳」的，是 <b>Harness 工程</b>（<b>阶段 3 护栏 ＋ 阶段 5 可观测 ＋ 输出校验</b>）<br>· 结论<b>竞争力会从「会调模型」转向「会做可靠性工程」</b><br><b>一句话完整表述</b>：「<b>我觉得瓶颈不在模型，在工程</b>——模型已经够聪明了<br>但把它放进真实业务里、让它<b>不出事</b>，这件事大部分团队还没做好。<br>所以我认为竞争力会从『会调模型』转向『<b>会做可靠性工程</b>』。」<br>（<b>要避免</b>：只答「模型会越来越强」——那是通用能力，不是行业判断）</div>
 </div>
 <h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
 <div class="bar" style="position:static">
@@ -257,7 +270,7 @@
 <textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制后发给教练 Agent 批改。"></textarea>
 <p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
 <footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
-  文件：<code>阶段6-垂直应用/测验.md</code>
+  阶段6-垂直应用 · 阶段练习卷（答完点「生成答卷」，复制后发给教练 Agent 批改）
 </footer>
 </div>
 <script>
@@ -288,7 +301,7 @@
   else mount();
 })();
 var KEY = {"q1": "B", "q2": "B", "q3": "B", "q4": "B", "q5": "B", "q6": "B"};
-var WHY = {"q1": "考点：6.1。<b>垂直应用 = 把通用能力装进某个具体行业 / 场景，解决一个具体问题。</b><br>A「模型不一样」是错的——用的可以是同一个模型；C/D 与定义无关。<br><b>关键认知：同一套技术、不同行业做法不同，区别在「哪些环节绝对不能出错」。</b>", "q2": "考点：6.3。<b>MCP = 统一工具 / 数据源的接入接口</b>，解决<b>工具接入碎片化</b>（每个工具接口都不一样，每接一个就重写一遍适配）。<br>A/C/D 都不是它解决的问题。<br><b>类比（要点）</b>：像 <b>USB</b>——以前每个设备一个插口，现在统一标准口，谁都能插。<br><b>出处</b>：教材 / ch4。", "q3": "考点：6.3。<b>MCP 连「工具 / 数据」，A2A 连「另一个 Agent」</b>。<br>MCP 解决<b>工具接入碎片化</b>；A2A 解决 <b>Agent 之间协作碎片化</b>（各有各的接法，互相调不通）。<br><b>关键机制</b>：<b>Agent Card（智能体名片）</b>——对外声明「我能做什么、需要你提供什么」，类似 API 文档但对方是 Agent。<br>A「A2A 是升级版」错：<b>两者是不同层面的问题，不是版本关系</b>。<br>出处：教材:513-521。", "q4": "考点：6.7。<b>第一步先问「这个系统有没有 API / 数据接口」——有就优先用 API。</b><br>因为走 API <b>更快、更稳、更可验证</b>；走 CUA <b>页面一改版就失效、慢、易点错、难验证、风险高</b>。<br>C「电脑配置」/ D「能不能识别截图」都是次要的；A 无关。<br><b>CUA 是实在没 API 时的最后手段</b>——出处：公开课 15:11「了解何时计算机使用代理比仅用 API 自动化更合适」＋ 教材。", "q5": "考点：6.5。<b>教材给的顺序（教材-440）</b>：<br><b>① 先优化提示词 → ② 再考虑工作流 → ③ 最后才引入自主 Agent</b>。<br>因为<b>自主 Agent 不是更高级，是更不可控</b>——它会多带一整套工程负担（护栏、监控、评测、容错，见阶段 3–5）。<br>A 顺序完全反了；C「哪个技术最新」/ D「谁最熟」都不是判断依据（**不看你团队熟悉什么**）。", "q6": "考点：6.9。<b>教材立场（教材:345 / 教材）</b>：<br>· <b>「直接的 API 调用优于复杂的框架」</b><br>· <b>「每多一层抽象都会成为以后调试时新的盲区」</b><br>· <b>「学会某个具体框架的用法并不重要」</b><br>所以 B 对。<br>A「用了就专业」错（可能只是为显得专业而用）；C 与教材原话相反；<b>D 错在 教材</b>——LangChain 的价值是<b>「仅通过优化 Harness」</b>提升表现，<b>框架提升的是工程外壳，不是模型本身的推理能力</b>。"};
+var WHY = {"q1": "考点：6.1。<b>垂直应用 = 把通用能力装进某个具体行业 / 场景，解决一个具体问题。</b><br>A「模型不一样」是错的——用的可以是同一个模型；C/D 与定义无关。<br><b>关键认知：同一套技术、不同行业做法不同，区别在「哪些环节绝对不能出错」。</b>", "q2": "考点：6.3。<b>MCP = 统一工具 / 数据源的接入接口</b>，解决<b>工具接入碎片化</b>（每个工具接口都不一样，每接一个就重写一遍适配）。<br>A/C/D 都不是它解决的问题。<br><b>类比（要点）</b>：像 <b>USB</b>——以前每个设备一个插口，现在统一标准口，谁都能插。<br>。", "q3": "考点：6.3。<b>MCP 连「工具 / 数据」，A2A 连「另一个 Agent」</b>。<br>MCP 解决<b>工具接入碎片化</b>；A2A 解决 <b>Agent 之间协作碎片化</b>（各有各的接法，互相调不通）。<br><b>关键机制</b><b>Agent Card（智能体名片）</b>——对外声明「我能做什么、需要你提供什么」，类似 API 文档但对方是 Agent。<br>A「A2A 是升级版」错<b>两者是不同层面的问题，不是版本关系</b>。<br>。", "q4": "考点：6.7。<b>第一步先问「这个系统有没有 API / 数据接口」——有就优先用 API。</b><br>因为走 API <b>更快、更稳、更可验证</b>；走 CUA <b>页面一改版就失效、慢、易点错、难验证、风险高</b>。<br>C「电脑配置」/ D「能不能识别截图」都是次要的；A 无关。<br><b>CUA 是实在没 API 时的最后手段</b>——相关公开课「了解何时计算机使用代理比仅用 API 自动化更合适」。", "q5": "考点：6.5。<b>资料的顺序</b><br><b>① 先优化提示词 → ② 再考虑工作流 → ③ 最后才引入自主 Agent</b>。<br>因为<b>自主 Agent 不是更高级，是更不可控</b>——它会多带一整套工程负担。<br>A 顺序完全反了；C「哪个技术最新」/ D「谁最熟」都不是判断依据（<b>不看你团队熟悉什么</b>）。", "q6": "考点：6.9。<b>这个立场的通用表述</b><br>· <b>「直接的 API 调用优于复杂的框架」</b><br>· <b>「每多一层抽象都会成为以后调试时新的盲区」</b><br>· <b>「学会某个具体框架的用法并不重要」</b><br>所以 B 对。<br>A「用了就专业」错（可能只是为显得专业而用）；C 与资料里的说法相反；<b>D 错在 </b>——LangChain 的价值是<b>「仅通过优化 Harness」</b>提升表现<b>框架提升的是工程外壳，不是模型本身的推理能力</b>。"};
 var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
 var ESSAY = ["a7", "a8", "a9", "a10", "a11", "a12", "a13", "a14"];
 var ESSAY_NO = [7, 8, 9, 10, 11, 12, 13, 14];

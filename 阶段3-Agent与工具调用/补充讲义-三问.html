@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,9 +98,9 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 3 补充讲义 · 三个提问的完整回答</h1>
 <blockquote>
-<p>立 ｜ 出自：阶段 3 测验答卷里<strong>学员主动标注不懂</strong>的三处（Q9 / Q10 / Q12）</p>
-<p><strong>这份材料解决什么</strong>：讲义 3.4 / 3.5 里这几处<strong>内容有、但没讲透</strong>——学员标了不懂，<br>
-说明写法有问题，这里补讲。<strong>三处都是面试高频点</strong>，看完要能不看稿口述。</p>
+<p><strong>这份材料解决什么</strong>：讲义 3.4 / 3.5 里有几处<strong>内容有、但没讲透</strong>——<br>
+「参数校验到底防什么」「数据层护栏是什么」「跑一次确认失败要是直接通过了怎么办」。<br>
+<strong>三处都是最容易答漏的点</strong>，看完要能不看稿口述。</p>
 <p><strong>怎么用</strong>：先读这份，再回头看讲义 3.4（四道防线 + 三层护栏）和 3.5（测试驱动开发）。<br>
 讲义给的是框架，这份给的是「<strong>追问到第二层时怎么答</strong>」。</p>
 </blockquote>
@@ -84,29 +109,29 @@ strong{color:var(--strong);}
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>问题</th>
-<th style="text-align: center;">出自</th>
+<th>对应测验题</th>
 <th>一句话结论</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>参数校验到底在防什么？和「提示词里写清楚」差在哪？</td>
-<td style="text-align: center;">Q9</td>
+<td>Q9</td>
 <td><strong>提示词是建议，模型可以不听；参数校验是代码，不符合就直接拒</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>数据层护栏到底是什么？</td>
-<td style="text-align: center;">Q10</td>
+<td>Q10</td>
 <td><strong>上面两层在防「模型做错」，数据层防「做错了也改不动」</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>「跑一次确认失败」这步，模型一次成功了呢？</td>
-<td style="text-align: center;">Q12</td>
+<td>Q12</td>
 <td><strong>这步验的是测试本身有没有效，不是等模型出错</strong></td>
 </tr>
 </tbody>
@@ -118,7 +143,7 @@ strong{color:var(--strong);}
 <p>比如模型调「删文件」工具，参数填 <code>C:\Windows\System32</code>——这个参数<strong>格式完全合法</strong>，<br>
 程序不会报错，但<strong>意思是错的</strong>。参数校验就是<strong>在执行前把这类值挡掉</strong>。</p>
 <h3>1.2 为什么光靠提示词不够</h3>
-<p>这是最关键的一层，也是面试最容易被追问的一层。</p>
+<p>这是最关键的一层，也是最容易被追问的一层。</p>
 <table>
 <thead>
 <tr>
@@ -147,15 +172,15 @@ strong{color:var(--strong);}
 </table>
 <p><strong>一句话</strong>：提示词和参数校验<strong>不是同一层的东西</strong>。提示词在<strong>模型这一侧</strong>，参数校验在<strong>程序这一侧</strong>。<br>
 <strong>模型可以被说服、可以被骗、可以判断失误；代码不会。</strong></p>
-<h3>1.3 具体长什么样（拿你的项目举例）</h3>
-<p>假设换色脚本的工具参数里有个 <code>tolerance</code>（容差）：</p>
+<h3>1.3 具体长什么样（拿一个真实场景举例）</h3>
+<p>假设有个「批量处理图片素材」的工具，参数里有个 <code>tolerance</code>（容差）：</p>
 <pre><code>模型填了 tolerance = -1        → 负数容差没有意义
 模型填了 color = &quot;#GGGGGG&quot;     → 不是合法十六进制
 模型填了 path = &quot;C:\\Users&quot;    → 超出允许范围
 </code></pre>
 <p><strong>参数校验就是：执行前检查这三个值，任一个不合法就返回明确错误、不执行。</strong><br>
 模型收到错误会自己改（这也是为什么错误信息要写清楚，别只返回「invalid」）。</p>
-<h3>1.4 和另外三道防线的分工（面试最爱问这个）</h3>
+<h3>1.4 和另外三道防线的分工（最容易混这个）</h3>
 <table>
 <thead>
 <tr>
@@ -191,7 +216,7 @@ strong{color:var(--strong);}
 <p><strong>记忆钩子</strong>：权限管「<strong>有没有这个工具</strong>」，确认管「<strong>要不要做这个动作</strong>」，<br>
 校验管「<strong>这次调用填得对不对</strong>」，上限管「<strong>做了多少次</strong>」。四道<strong>各管一件事，不重叠</strong>。</p>
 </blockquote>
-<h3>1.5 面试话术（可直接背）</h3>
+<h3>1.5 一句话完整表述</h3>
 <blockquote>
 <p>「参数校验防的是『模型填了一个语法没错、语义错的值』。<br>
 <strong>提示词是建议，模型可以不听；参数校验是代码，不符合就直接拒。</strong><br>
@@ -296,22 +321,19 @@ Agent 拿到的账号<strong>物理上就读不到邮箱列</strong>。这不是
 <blockquote>
 <p><strong>上面两层在防「模型做错」，数据层防「做错了也改不动」。</strong></p>
 </blockquote>
-<h3>2.6 面试话术（可直接背）</h3>
+<h3>2.6 一句话完整表述</h3>
 <blockquote>
 <p>「护栏分三层，<strong>按被绕过的难度排</strong>。上下文层只管模型能看到什么，但<br>
 <strong>同一个上下文里的 Agent 判断不了自己有没有被注入</strong>，所以它只能降低成功率、给不了保证。<br>
 <strong>真正兜底的是数据层</strong>——行级权限、只读视图这些，是由数据库强制执行的，不依赖模型判断。<br>
 <strong>就算提示注入得手、模型完全被骗，越权操作还是会被数据层拒掉。</strong>」</p>
 </blockquote>
-<h3>2.7 为什么这段在面试里值钱</h3>
-<p>面试官问「怎么防止 Agent 做坏事」，<strong>大多数人只会答「加提示词约束」或「权限最小化」</strong>。<br>
+<h3>2.7 为什么这一段最该记住</h3>
+<p>被问「怎么防止 Agent 做坏事」，<strong>大多数人只会答「加提示词约束」或「权限最小化」</strong>。<br>
 你能说出「<strong>上下文层给不了保证，兜底在数据层</strong>」，是明显高一个层次的答案。</p>
-<blockquote>
-<p>出处：教材第 1 章「护栏与安全性」。这是通篇里的重点设计之一。</p>
-</blockquote>
 <hr>
 <h2>三、「跑一次确认失败」：这步验的是测试本身</h2>
-<h3>3.1 你的疑问（原话）</h3>
+<h3>3.1 一个常见疑问</h3>
 <blockquote>
 <p>「讲义提到确认失败这步，我不是很理解，<strong>假设模型一次成功验收通过呢？</strong>」</p>
 </blockquote>
@@ -321,43 +343,43 @@ Agent 拿到的账号<strong>物理上就读不到邮箱列</strong>。这不是
 </blockquote>
 <h3>3.2 为什么需要这一步</h3>
 <p>写测试最容易犯的错是<strong>测试写得太松，永远通过</strong>。</p>
-<p>比如你想验「换色脚本不误伤背景」，写了个测试：<strong>「输出文件存在」</strong>。<br>
+<p>比如你想验「批量处理图片素材时不误伤背景」，写了个测试：<strong>「输出文件存在」</strong>。<br>
 这个测试<strong>永远会通过</strong>——因为它根本没检查颜色，只检查了文件在不在。<br>
 <strong>这种测试比没有更危险</strong>：它让你以为你验证过了。</p>
 <h3>3.3 四步流程（这是完整答案）</h3>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">步骤</th>
+<th>步骤</th>
 <th>干什么</th>
 <th>判定</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><strong>写验收条件</strong></td>
 <td>例：「非目标像素的 RGB 必须与原图完全一致」</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>还没写实现时，跑一次</strong></td>
 <td><strong>必须失败</strong>（功能还没做，一定对不上）</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>如果第 2 步<strong>竟然通过了</strong></td>
 <td>🚨 <strong>说明这个测试是空的</strong>——要么没真检查，要么期望值抄错了</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td><strong>写实现，再跑</strong></td>
 <td>通过 = 真做对了</td>
 </tr>
 </tbody>
 </table>
 <p><strong>所以第 2 步的作用是给测试做体检</strong>，不是期待模型出错。</p>
-<h3>3.4 回答你的问题：模型一次就写对了呢？</h3>
+<h3>3.4 如果模型一次就写对了呢？</h3>
 <p><strong>完全不影响这个流程</strong>：</p>
 <ul>
 <li>第 2 步你<strong>根本没写实现</strong>——所以它<strong>必然失败</strong>。这一步<strong>测的不是模型，是测试本身</strong>。</li>
@@ -368,14 +390,13 @@ Agent 拿到的账号<strong>物理上就读不到邮箱列</strong>。这不是
 <p>就像验烟感器，你会先按一下「测试键」看它响不响——<strong>不是在等火灾，是在确认这个烟感器没坏。</strong><br>
 <strong>坏了的烟感器（空的测试）比没有更危险，因为它让你以为安全。</strong></p>
 </blockquote>
-<h3>3.5 顺带补上你 Q12 漏的两条</h3>
-<p>你的答案答到了「先定验收标准 → 执行 → 测到符合才算对」和「标准能用现成的就用现成的」，<br>
-<strong>漏了这两条</strong>（都是讲义 3.5 里的）：</p>
+<h3>3.5 顺带补上容易被漏的两条</h3>
+<p>回答「你怎么知道 AI 干对了」，很多人会答到「先定验收标准 → 执行 → 测到符合才算对」和「标准能用现成的就用现成的」，<strong>但漏了这两条</strong>（都是讲义 3.5 里的）：</p>
 <table>
 <thead>
 <tr>
 <th>漏的</th>
-<th>原话</th>
+<th>关键句</th>
 <th>为什么重要</th>
 </tr>
 </thead>
@@ -392,7 +413,7 @@ Agent 拿到的账号<strong>物理上就读不到邮箱列</strong>。这不是
 </tr>
 </tbody>
 </table>
-<h3>3.6 面试话术（可直接背）</h3>
+<h3>3.6 一句话完整表述</h3>
 <blockquote>
 <p>「先写测试、跑一次看它红——<strong>这一步是验证测试本身有效</strong>，不是在等 AI 出错。<br>
 如果没写实现它就绿了，说明这个测试是空的，得重写。<br>
@@ -403,60 +424,60 @@ Agent 拿到的账号<strong>物理上就读不到邮箱列</strong>。这不是
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>问题</th>
 <th>及格标准</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>参数校验和「在提示词里写清楚」有什么区别？</td>
 <td>说出「提示词是建议，校验是代码」</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>权限最小化和参数校验各管什么？</td>
 <td>「权限管有没有这个工具，校验管这次填得对不对」</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>上下文层已经拦了注入，为什么还要数据层？</td>
 <td>说出「同一个上下文里的 Agent 判断不了自己是否被注入」</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td>数据层为什么最硬？</td>
 <td>说出「它由数据库强制执行，不认识模型只认识账号」</td>
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
+<td>5</td>
 <td>执行层「模型没有能力」这句话为什么不够准？</td>
 <td>说出「是模型之外的机制在动作生效前拦，不是模型自觉」</td>
 </tr>
 <tr>
-<td style="text-align: center;">6</td>
+<td>6</td>
 <td>如果模型一次就写对了，「先跑一次确认失败」是不是多余的？</td>
 <td>说出「这步验的是测试本身，不是等模型出错」</td>
 </tr>
 <tr>
-<td style="text-align: center;">7</td>
+<td>7</td>
 <td>TDD 的顺序为什么不能反？</td>
 <td>说出「先实现再补测试 = 照着实现写测试 = 自己测自己」</td>
 </tr>
 <tr>
-<td style="text-align: center;">8</td>
+<td>8</td>
 <td>「不靠肉眼看」这句是干什么的？</td>
 <td>说出「量大人眼检查不过来，所以需要可自动跑的测试」</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>八题全能不看稿说出来 → 这三处（连带 Q12 漏的两条）就算补上了。<br>
+<p>八题全能不看稿说出来 → 这三处就算补上了。<br>
 <strong>说不出来的，说明还得再读一遍第二节和第三节。</strong></p>
 </blockquote>
 <hr>
-<p>_本课程 ｜ _</p>
+<p><em>本课程 · AIGC 应用工程</em></p>
 </div>
 
 <script>

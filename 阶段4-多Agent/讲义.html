@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,56 +50,78 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>阶段 4 讲义：多 Agent 协作</h1>
-<blockquote>
-<p>按教材核验补 6 处</p>
-</blockquote>
 <p><strong>本阶段目标</strong>：搞清「一件事太复杂，怎么拆给多个角色分工」，以及单 Agent 搞不定复杂任务时该补哪些机制。</p>
 <p><strong>阅读重点</strong>（三节，按重要性排）：</p>
 <ol>
 <li><strong>4.1</strong> —— ⭐ <strong>第一判断标准</strong>（什么时候<strong>不该</strong>用多 Agent）+ 「Agent 的故障是拜占庭式的」</li>
 <li><strong>4.3</strong> —— ⭐ <strong>数据平面 / 控制平面</strong>（东西放哪 + 怎么传话）—— 本阶段信息量最大的一节</li>
-<li><strong>4.5</strong> —— ⭐ 三个补丁，重点是<strong>有效反思的两条硬条件</strong>（这是你「验收协议」的理论依据）</li>
+<li><strong>4.5</strong> —— ⭐ 三个补丁，重点是<strong>有效反思的两条硬条件</strong>（这是一套验收协议的理论依据）</li>
 </ol>
 <hr>
 <h2>怎么用这份讲义</h2>
 <ul>
-<li><strong>读多久</strong>：全篇约 8 节，认真读一遍 <strong>40–50 分钟</strong>。</li>
+<li><strong>读多久</strong>：全篇 7 节，认真读一遍 <strong>40–50 分钟</strong>。</li>
 <li>
-<p><strong>什么顺序</strong>：<strong>按 4.1 → 4.8 顺序读</strong>。前后是有链条的——<br>
-  4.1 立判断标准 → 4.2 讲组织形态 → 4.3 讲连接方式 → 4.4 讲会怎么坏 → 4.5 讲怎么补 → 4.6 串一个完整例子。</p>
+<p><strong>什么顺序</strong>：<strong>按 4.1 → 4.7 顺序读</strong>。前后是有链条的——<br>
+  4.1 立判断标准 → 4.2 讲组织形态 → 4.3 讲连接方式 → 4.4 讲会怎么坏 → 4.5 讲怎么补 → 4.6 串一个完整例子 → 4.7 汇总自测怎么答。</p>
 </li>
 <li>
 <p><strong>哪里停下来自测</strong>：看到 🧩 停一下，合上讲义用自己的话答一遍，再往下读。</p>
 </li>
 <li>
-<p><strong>读完做什么</strong>：去做同目录的 <code>测验.md</code>（<strong>14 题，11.2 分及格</strong>），把答案回传给我。<br>
-<strong>做完务必回头扫一遍有没有漏答的要点</strong>——多数人的问题不是「不懂」，而是「漏答」。</p>
+<p><strong>读完做什么</strong>：去做同目录的 <code>测验</code>（<strong>14 题，11.2 分及格</strong>，80%）。<br>
+  做完<strong>务必回头扫一遍有没有漏答的要点</strong>——多数人的问题不是「不懂」，而是「漏答」。</p>
 </li>
 <li>
-<p><strong>卡住怎么办</strong>：<strong>任何一处看不懂，直接在对话里标出来</strong>——这不是麻烦我，<strong>是在帮我找讲义的漏洞</strong><br>
-  （你标过的三处，后来都成了阶段 3 的补充讲义）。</p>
+<p><strong>卡住怎么办</strong>：<strong>任何一处看不懂，直接标出来问教练</strong>。卡住的地方通常就是讲义的漏洞，<br>
+  提出来才能补上——<strong>讲义就是这样一节一节长出来的</strong>。</p>
 </li>
 </ul>
 <hr>
@@ -131,7 +153,7 @@ strong{color:var(--strong);}
 </tr>
 <tr>
 <td><strong>一个 Agent 挂了，整件事就停摆</strong></td>
-<td><strong>容错性</strong>：某个 Agent 失败时，其他 Agent 可以继续跑（这条来自公开课 <code>08-multi-agent</code>）</td>
+<td><strong>容错性</strong>：某个 Agent 失败时，其他 Agent 可以继续跑</td>
 </tr>
 </tbody>
 </table>
@@ -142,7 +164,7 @@ strong{color:var(--strong);}
 <h3>⭐ 一个必须先建立的认知：Agent 的故障是「拜占庭式」的</h3>
 <p><strong>这句话是本阶段所有「验证 / 审核 / 交叉验证」机制的根。</strong></p>
 <p>普通程序出错，通常是<strong>停机、报错、返回失败</strong>——你一眼就知道它坏了。</p>
-<p>但 <strong>Agent 不是</strong>。书里的原话是：</p>
+<p>但 <strong>Agent 不是</strong>。资料里的原话是：</p>
 <blockquote>
 <p>「<strong>Agent 的故障却天生是拜占庭式的——它很少径直停止运行，<br>
 而是继续给出看似可信的错误结论。</strong>」</p>
@@ -195,7 +217,7 @@ strong{color:var(--strong);}
 <p><strong>看出来了吗</strong>——<strong>多 Agent 的价值不在于「人多」，在于「信息增量」。</strong><br>
 如果只是把同一份信息换个 Agent 再说一遍，<strong>那只是在烧钱。</strong></p>
 <h3>成本必须覆盖得住</h3>
-<p>书里这段话值得原样记住（<strong>教材 <code>chapter10</code>「多 Agent 何时真正优于单 Agent」节末</strong>）：</p>
+<p>这段话值得原样记住（<strong>「多 Agent 何时真正优于单 Agent」</strong>）：</p>
 <blockquote>
 <p>「<strong>多 Agent 的并行探索与反复迭代都要消耗大量 token。这意味着多 Agent 带来的收益必须足够大，<br>
 能够覆盖数倍乃至一个数量级的额外开销，否则一个调校得当的单 Agent 往往是更划算的选择。</strong>」</p>
@@ -247,7 +269,7 @@ strong{color:var(--strong);}
 </tr>
 </tbody>
 </table>
-<h3>再往上抽象：两个维度的框架（面试可以这么讲）</h3>
+<h3>再往上抽象：两个维度的框架（可以这么讲）</h3>
 <p>上面三种拓扑只是「常见形态」。<strong>更本质的分法是用两个维度交叉：</strong></p>
 <p><strong>维度一：上下文是共享还是独立？</strong></p>
 <table>
@@ -280,17 +302,15 @@ strong{color:var(--strong);}
 <strong>对等</strong>（Peer，少量 Agent 按固定结构迭代，比如起草者+评论者）<br>
 ／ <strong>管理者</strong>（中心 Agent 规划调度，子 Agent 各管一块）<br>
 ／ <strong>去中心化</strong>（没有中心控制者，Agent 之间平级沟通）</p>
-<h3>书里指出的一个现实（很实用）</h3>
+<h3>一个很现实的观察</h3>
 <p><strong>主流商业产品用的是「规模化的管理者模式」</strong>（orchestrator-worker 星型拓扑）：</p>
 <blockquote>
-<p>「Kimi、Anthropic 的多 Agent 研究系统、Manus 的 Wide Research，都属这一类——<br>
-<strong>一个主 Agent 动态创建上百个子 Agent 并行执行。</strong>」<br>
-（出自<strong>教材 <code>chapter10</code>「去中心化模式」引文框</strong>）</p>
+<p><strong>一个主 Agent 动态创建上百个子 Agent 并行执行。</strong></p>
 </blockquote>
 <p><strong>为什么是这种</strong>：管理者模式<strong>天然支持异构</strong>（不同子 Agent 可以用不同模型、跑在不同机器上），<br>
 扩展性好。<strong>代价是主管容易成单点瓶颈</strong>，所以要<strong>把最强的模型给主管</strong>。</p>
 <p><strong>⚠️ 有个坑要记住</strong>：有些被称为「去中心化」「Agent 社会」的框架，<br>
-<strong>其实只是通信去中心化，控制流还是固定的</strong>（书里点了名）。<br>
+<strong>其实只是通信去中心化，控制流还是固定的</strong>。<br>
 <strong>判断真假看一点：控制流是不是真的没有中心。</strong></p>
 <h3>怎么选（回到第一判断标准）</h3>
 <table>
@@ -332,7 +352,7 @@ strong{color:var(--strong);}
 <hr>
 <h2>4.3 不共享上下文的协作：产物放哪 + 怎么传话</h2>
 <p>前面 4.2 讲的是「组织形态」。这一节讲的是<strong>不共享上下文时，Agent 之间到底靠什么连接</strong>。</p>
-<p>书里把它拆成两层，<strong>这是本阶段最该记住的一个框架</strong>：</p>
+<p>资料把它拆成两层，<strong>这是本阶段最该记住的一个框架</strong>：</p>
 <blockquote>
 <p><strong>产物交换（数据平面）＋ 消息传递 / 状态查询 / 执行终止 / 资源调度（控制平面）<br>
 ——这两层共同支撑起不共享上下文的多 Agent 系统。</strong></p>
@@ -362,10 +382,10 @@ strong{color:var(--strong);}
 <p>下面分开讲。<strong>注意顺序：先讲数据平面</strong>，因为它是更底层的那个——<strong>很多并发冲突的根在这儿，不在传话上。</strong></p>
 <h3>4.3.1 数据平面：Agent 的「虚拟文件系统」</h3>
 <p><strong>关键认知</strong>：Agent 眼里看到的文件系统，<strong>不是一块硬盘，而是几块来源不同、权限不同的存储拼装起来的</strong>。<br>
-书里管这叫<strong>虚拟文件系统</strong>：本地临时盘、持久对象存储、第三方云盘的 API、只读的系统资源包，<br>
+这套做法通常叫<strong>虚拟文件系统</strong>：本地临时盘、持久对象存储、第三方云盘的 API、只读的系统资源包，<br>
 <strong>被「挂载」到同一棵目录树下</strong>，Agent 用统一的读写接口访问，看不出底下是几套东西。</p>
 <p><strong>为什么要讲这个</strong>：因为这棵树上的区域是<strong>有权限差异</strong>的，<br>
-<strong>「相当一部分并发冲突与信息泄露，源于将本应隔离的区域混置」</strong>（书里原话）。</p>
+<strong>「相当一部分并发冲突与信息泄露，源于将本应隔离的区域混置」</strong>。</p>
 <p>一个成熟的多 Agent 系统，文件系统通常分<strong>四类区域</strong>：</p>
 <table>
 <thead>
@@ -424,7 +444,8 @@ strong{color:var(--strong);}
 <p><strong>Agent 之间传递产物，传的是「路径字符串」，不是把内容塞进上下文。</strong><br>
 （这就是「<strong>文件路径作为通用接口</strong>」——主 Agent 给子 Agent 一个路径，子 Agent 自己去读。）</p>
 </blockquote>
-<p><strong>你其实已经在用这个模式了</strong>：远程控制项目 里，harness 和模型之间传的不是文件内容，是<strong>文件路径</strong>；<br>
+<p><strong>这个模式你可能已经见过了</strong>：任何「让模型操作本机文件」的场景里，<br>
+harness 和模型之间传的不是文件内容，是<strong>文件路径</strong>；<br>
 模型说「读 <code>/tmp/x.json</code>」，harness 去读、把结果回传。<strong>这就是数据平面。</strong></p>
 <h3>4.3.2 控制平面：四件事</h3>
 <p>数据平面解决了「东西放哪」，协作还需要一条<strong>控制平面</strong>。它管四件事——<br>
@@ -465,19 +486,19 @@ Agent 少、拓扑固定 → <strong>点到点</strong>（A 直接发给 B）够
 Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</strong>（10 个 Agent 就是 45 条线）、<br>
 <strong>要求收发双方同时在线</strong>。这时候换成<strong>消息总线</strong>：Agent 把消息发到总线上，由总线按订阅关系转发，<br>
 <strong>发送方不用知道谁在收</strong>。</p>
-<p><strong>⭐ 消息要带「信封」（envelope）——这个细节面试能加分</strong>：</p>
+<p><strong>⭐ 消息要带「信封」（envelope）——这个细节最容易被忽略</strong>：</p>
 <pre><code>信封 = 发送者 ID + 目标（指定 Agent 或广播）
      + 消息类型（task_assigned / status_update / result / terminate）
      + JSON 负载
 </code></pre>
-<p>为什么非要统一格式？书里说得很直白：</p>
+<p>为什么非要统一格式？资料说得很直白：</p>
 <blockquote>
 <p><strong>「统一的信封格式保证接收方能够可靠地路由和解析消息，并使协作链路可追溯<br>
 ——这是多 Agent 系统调试的关键。」</strong></p>
 </blockquote>
 <p>（记住这句：<strong>多 Agent 最难的是调试</strong>，信封就是把「谁跟谁说了什么」变成可查的日志。）</p>
 <p><strong>② 状态查询：不要用「轮询」，要用「上报」。</strong><br>
-直觉做法是定义一个「查一下子 Agent 现在什么状态」的接口。<strong>但书里指出这个做法不实用</strong>——<br>
+直觉做法是定义一个「查一下子 Agent 现在什么状态」的接口。<strong>但这个做法不实用</strong>——<br>
 子 Agent 一旦创建就立刻开始跑，主 Agent 反复去问，纯属浪费。</p>
 <p><strong>更自然的做法有两种</strong>：</p>
 <ul>
@@ -493,7 +514,7 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 <p><strong>进度文件还有个白送的用处</strong>：<strong>检测卡死</strong>——如果 <code>progress.md</code> 超过 N 分钟没动过，<br>
 就判定这个子 Agent 没在干活，可以<strong>超时兜底</strong>，避免整个系统被一个卡住的 Agent 拖死。</p>
 <blockquote>
-<p>⚠️ <strong>书里特别提醒</strong>：不要用「<strong>轨迹持久化</strong>」（把子 Agent 的全部执行过程实时写文件）来传状态。<br>
+<p>⚠️ <strong>特别提醒</strong>：不要用「<strong>轨迹持久化</strong>」（把子 Agent 的全部执行过程实时写文件）来传状态。<br>
 因为<strong>轨迹动辄数万 token</strong>，主 Agent 读完还得自己提炼，<strong>又费时又费 token</strong>。<br>
 <strong>进度文件才是对的做法</strong>——它暴露的是<strong>提炼后的进度</strong>，不是全部内存。</p>
 </blockquote>
@@ -534,7 +555,7 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 <li><strong>限并发</strong>：设并发上限，避免几十个 Agent 同时把 API 配额打光</li>
 <li><strong>可抢占</strong>：并发满了但来了更紧急的任务，打断正在跑的子 Agent</li>
 </ul>
-<p><strong>书里给了一个很妙的对比</strong>：管理者 Agent 比操作系统的调度器<strong>多一样东西——它会推理</strong>。<br>
+<p>资料里给了一个很妙的对比：管理者 Agent 比操作系统的调度器<strong>多一样东西——它会推理</strong>。<br>
 所以它可以<strong>同时开几个子 Agent 跑同一个问题</strong>，看谁进展好就给谁更多资源，<br>
 看谁跑偏了就把它掐掉——<strong>像公司内部赛马一样</strong>。</p>
 <blockquote>
@@ -574,7 +595,7 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 </tr>
 </tbody>
 </table>
-<p><strong>回到 4.3 开头那段的老问题</strong>：讲义原来只有「传 JSON ✅ / 传自然语言 ⚠️」这一条。<br>
+<p><strong>回到 4.3 开头那条老问题</strong>：只说「传 JSON ✅ / 传自然语言 ⚠️」是不够的。<br>
 现在你知道了——<strong>那只是「工具调用参数」这一种机制内部的选择</strong>。<br>
 真正的选择是<strong>先选机制、再选格式</strong>：</p>
 <blockquote>
@@ -586,12 +607,13 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 是因为<strong>接收方是程序，转述会失真</strong>；这里讲「大产物用文件传路径」，<br>
 是因为<strong>塞进上下文会被 token 成本吃掉</strong>。<strong>都是在选「用什么介质最不容易坏、最便宜」。</strong></p>
 <blockquote>
-<p>🧩 <strong>自测点</strong>：你的 <code>远程控制项目</code> 项目里，harness 和模型之间传的是<strong>文件内容</strong>还是<strong>文件路径</strong>？<br>
+<p>🧩 <strong>自测点</strong>：如果你做过「让模型操作本机文件」这类项目，<br>
+harness 和模型之间传的是<strong>文件内容</strong>还是<strong>文件路径</strong>？<br>
 想一下为什么是这么设计的。——<strong>答案在 4.3.1 末尾</strong>（传路径 = 数据平面的做法，<br>
 内容不塞进上下文，就不会被 token 成本吃掉）。</p>
 </blockquote>
 <hr>
-<h2>4.4 多 Agent 的七种失败模式（★ 面试爱问）</h2>
+<h2>4.4 多 Agent 的七种失败模式（★ 最容易忽略）</h2>
 <p>多 Agent 不是「多个 Agent 就更强」。<strong>它有七种特有的翻车方式</strong>，<br>
 而且每一种都不是「模型不够聪明」造成的，是<strong>架构设计</strong>造成的。</p>
 <blockquote>
@@ -602,7 +624,7 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>失败模式</th>
 <th>表现</th>
 <th>怎么防</th>
@@ -610,43 +632,43 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><strong>并发冲突</strong></td>
 <td>两个 Agent 同时改一个东西：<strong>简单冲突</strong>是后写盖掉先写；<strong>语义冲突</strong>更隐蔽——文件层面没冲突，但逻辑矛盾（A 重编了图号，B 还在引用旧号）</td>
 <td>简单冲突用<strong>乐观锁</strong>（写之前检查版本号）；跨文件的语义冲突要<strong>高层校验</strong>；最常见场景（多个 Agent 改同一代码库）用<strong>工作副本隔离</strong>（各自独立分支，最后合并时解决冲突）。<strong>注意这几种机制作用的都是 4.3 的「共享空间」那一层</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>错误级联放大</strong></td>
 <td>像<strong>传话游戏</strong>——信息每转述一次就失真一次，一个 Agent 的小错被后面逐层放大</td>
 <td><strong>交叉验证</strong>：让某个 Agent <strong>不看前序的思考过程</strong>，只拿原始证据重新判断结论对不对</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td><strong>同质趋同</strong>（共因失效）</td>
 <td>多个<strong>同质</strong>的 Agent 独立犯同样的错（30 个 Agent 里 18 个建了同名分支）——<strong>因为它们的「独立」是假的</strong></td>
 <td>有意识<strong>引入差异</strong>（换模型、换上下文、换数据来源）；用命名空间/配额防它们同时冲击同一资源</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td><strong>互相扯皮</strong></td>
 <td>目标互斥时从趋同变成对抗——A 把 B 的操作当成蓄意阻挠，去终止对方的进程</td>
 <td><strong>预先定义</strong>目标优先级、资源所有权、权限边界；冲突无法按规则解决时<strong>暂停、交人工裁决</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
+<td>5</td>
 <td><strong>循环失控</strong></td>
 <td>停不下来。失控的 Agent 生成<strong>几千个子 Agent</strong>，猛烧 token</td>
 <td>给自主性强的 Agent <strong>用独立的 API key</strong>（花超了能单独掐掉）+ <strong>轮次上限</strong>（阶段 3 第 4 道防线）。<strong>对应 4.3 控制平面的「③ 执行终止 + ④ 资源调度」</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;"><strong>6</strong></td>
+<td><strong>6</strong></td>
 <td><strong>⚠️ 过早终止</strong>（与第 5 条<strong>正好相反</strong>）</td>
 <td><strong>活干到一半就停了。</strong>三种形态：① <strong>偷懒式假完成</strong>（只做一部分就宣称全做完）② <strong>过早放弃</strong>（一条路不通就宣布整件事办不成）③ <strong>假成功</strong>（以为办成了，实际闭环没走完）</td>
 <td>见下方专门说明——<strong>这是「验证器」的活，不是提示词能解决的</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;"><strong>7</strong></td>
+<td><strong>7</strong></td>
 <td><strong>理解债与认知投降</strong> ⭐</td>
 <td><strong>这不是 Agent 的失败，是人的失败</strong>：Agent 交付太快，人对系统的理解落在后面，出事看不懂（理解债）；工程师习惯了让它代劳，放弃独立审查（认知投降）</td>
 <td>没有技术手段能治——<strong>只能靠人</strong></td>
@@ -656,7 +678,7 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 <h3>⭐ 第 6 条值得单独说：为什么「过早终止」是全新的敌人</h3>
 <p><strong>它和第 5 条是一对</strong>：第 5 条是<strong>停不下来</strong>，第 6 条是<strong>停得太早</strong>。<br>
 而现实里<strong>第 6 条更常见、更隐蔽</strong>——因为它<strong>长得像成功</strong>。</p>
-<p>书里把三种形态的根源收成一句极精炼的话：</p>
+<p>三种形态的根源可以收成一句极精炼的话：</p>
 <blockquote>
 <p>「三种形态指向同一个根源：<strong>在验证之前，「完成」只是模型的一句宣称，不是证明。</strong>」</p>
 </blockquote>
@@ -669,34 +691,34 @@ Agent 一多，点到点会出两个问题：<strong>连接数按平方增长</s
 <li>你以为问题在「模型不够聪明」→ 所以你去换更强的模型、写更好的提示词</li>
 <li><strong>其实问题在「没人验证它是不是真做完了」</strong> → 所以你要做的是<strong>加一个验证环节</strong></li>
 </ul>
-<p><strong>为什么这条对你尤其重要</strong>：</p>
-<p>你不写代码，项目全是 Agent 交付的——<strong>「偷懒式假完成」正是你最可能踩的坑</strong>。<br>
+<p><strong>为什么这条值得特别注意</strong>：</p>
+<p><strong>不写代码、项目全靠 Agent 交付的人——「偷懒式假完成」正是最可能踩的坑</strong>。<br>
 Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选择相信</strong>。<br>
 <strong>而它说「完成」的时候，可能测试根本没跑、部署根本没试。</strong></p>
 <p><strong>这条的解法，就是 4.5 补丁三要讲的「有效反思」</strong>——先记住这个病，再看那个药。</p>
 <h3>⭐ 第 7 条值得单独说</h3>
 <p><strong>其他六种都能用工程技术解决，第七种不能。</strong></p>
-<p>书里引了 Karpathy 的一句话：</p>
+<p>资料里有句话说得特别准：</p>
 <blockquote>
 <p><strong>「你可以外包你的思考，但不能外包你的理解。」</strong></p>
 </blockquote>
-<p><strong>为什么这条要单独说给你听</strong>：</p>
-<p>你<strong>不写代码</strong>，所有项目都是 AI 实现的——<strong>这条路的风险正是第 7 条</strong>。</p>
+<p><strong>为什么这条要单独说</strong>：</p>
+<p><strong>不写代码、所有项目都由 AI 实现——这条路的风险正是第 7 条</strong>。</p>
 <p>但注意区分：</p>
 <ul>
 <li><strong>外包「写代码」</strong> ✅ 完全没问题，这是分工</li>
 <li><strong>外包「理解」</strong> ❌ 这才是危险——出问题你都不知道在问什么</li>
 </ul>
 <p><strong>所以这门课存在的意义，其实就是治第 7 条</strong>：<br>
-你不写代码，但你要<strong>理解架构、能判断方案、能验收结果</strong>。<br>
-书里那句话说得更直接：</p>
+你不用写代码，但你要<strong>理解架构、能判断方案、能验收结果</strong>。<br>
+资料里那句话说得更直接：</p>
 <blockquote>
 <p>「<strong>合格的技术管理者需要理解并指导系统架构</strong>，Agent 使用者的技术基本功很重要。」</p>
 </blockquote>
-<p><strong>面试里如果能把第 7 条说出来，是很有分量的</strong>——因为它证明你想过「用什么态度用 AI」，<br>
+<p><strong>这一条值得单独强调</strong>——因为它证明你想过「用什么态度用 AI」，<br>
 而不只是会调 API。</p>
 <h3>为什么这七条值得记住</h3>
-<p><strong>面试官问「多 Agent 有什么坑」</strong>：</p>
+<p><strong>「多 Agent 有什么坑」这个问题，答案分四层</strong>：</p>
 <ul>
 <li>只答「成本高」→ 入门</li>
 <li>能说出「<strong>错误级联</strong>和<strong>同质趋同</strong>」→ 说明真设计过</li>
@@ -705,7 +727,7 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 </ul>
 <hr>
 <h2>4.5 单 Agent 的三个补丁：规划 / 记忆 / 反思</h2>
-<p>即使不拆多 Agent，复杂的单 Agent 也需要三个机制撑着。这三个是行业公认的 Agent 核心能力，面试常问。</p>
+<p>即使不拆多 Agent，复杂的单 Agent 也需要三个机制撑着。这三个是行业公认的 Agent 核心能力，也是最容易考的三块。</p>
 <h3>补丁一：任务规划（Planning）</h3>
 <p><strong>问题</strong>：一个任务有 10 步，Agent 走一步看一步，容易迷路。</p>
 <p><strong>解法</strong>：先让它<strong>列出计划</strong>，再逐步执行。</p>
@@ -735,16 +757,16 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 </tr>
 </tbody>
 </table>
-<p><strong>面试要点</strong>：能说清「规划是为了防止长任务里迷路，但计划太死就失去了纠偏能力」，比背名词有价值。</p>
+<p><strong>关键要点</strong>：能说清「规划是为了防止长任务里迷路，但计划太死就失去了纠偏能力」，比背名词有价值。</p>
 <h4>⭐ 进阶一点：光给「步骤上限」不够，要给「预算意识」</h4>
-<p>书里讲了一个<strong>反直觉的研究结论</strong>（教材 <code>chapter10</code>「步骤预算与 Agent 性能」节）：</p>
+<p>资料里讲了一个<strong>反直觉的研究结论</strong>（<strong>「步骤预算与 Agent 性能」</strong>）：</p>
 <blockquote>
 <p>「<strong>单纯增加 Agent 可用的步骤数并不能保证性能提升。</strong><br>
 标准的 Agent 缺乏「预算意识」——即使有 300 步的预算，它们仍然倾向于<strong>执行浅层搜索，很快就「饱和」了</strong>。」</p>
 </blockquote>
 <p><strong>翻译成人话</strong>：给它更多步数，<strong>它不会用得更聪明</strong>，它会<strong>做一阵就停在那儿了</strong>。</p>
 <p><strong>所以关键不是「允许它走多少步」，而是让它「知道还剩多少步」</strong>——<br>
-<strong>前期广泛探索，后期聚焦最有希望的方向</strong>（书里管这叫<strong>预算感知机制</strong>）。</p>
+<strong>前期广泛探索，后期聚焦最有希望的方向</strong>（这叫<strong>预算感知机制</strong>）。</p>
 <p><strong>这条对多 Agent 的直接启示</strong>：<br>
 管理者 Agent <strong>不该只是把任务分发下去然后等结果</strong>，而应该<strong>按任务复杂度动态分配步骤预算</strong>——<br>
 <strong>简单的子任务给少、复杂的给足</strong>，并且<strong>引导子 Agent 先规划再干</strong>，而不是一头扎进去就写。</p>
@@ -754,8 +776,8 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 <h3>补丁二：记忆机制（Memory）</h3>
 <p><strong>问题</strong>：阶段 0 讲过，模型没有记忆，上下文窗口一满就忘最早的事。</p>
 <p><strong>解法</strong>：给 Agent 配一套「记忆系统」。</p>
-<p><strong>⭐ 这里要先把术语对齐</strong>（教材 <code>chapter3</code>「记忆的层次结构」）——<br>
-书里的<strong>「记忆层次」</strong>（回答「<strong>存在哪里</strong>」）是这三层：</p>
+<p><strong>⭐ 这里要先把术语对齐</strong>（<strong>「记忆的层次结构」</strong>）——<br>
+资料里的<strong>「记忆层次」</strong>（回答「<strong>存在哪里</strong>」）是这三层：</p>
 <table>
 <thead>
 <tr>
@@ -795,7 +817,7 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 <strong>别把「工作记忆」和「业务状态」混为一谈</strong>（前者是内存，后者是存档）。</p>
 </blockquote>
 <h4>⭐ 重要：记忆有「三套分类体系」，它们是正交的</h4>
-<p>书里专门用一张表把这件事讲清楚（表 3-1）——<strong>因为记忆这个词太容易混，必须分层看</strong>：</p>
+<p>资料专门用一张表把这件事讲清楚——<strong>因为记忆这个词太容易混，必须分层看</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -824,8 +846,8 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 </table>
 <p><strong>三套可以自由组合</strong>：比如「用户偏爱靠窗座位」是一条<strong>语义记忆</strong>，<br>
 用<strong>简单笔记格式</strong>存在<strong>用户长期记忆</strong>里。</p>
-<p><strong>面试里能说出「记忆要分三个维度看——存哪里、怎么存、存什么」，<br>
-比只会说「短期/长期」高一个层次</strong>，因为那说明你知道<strong>这不是一个单维问题</strong>。</p>
+<p><strong>能说出「记忆要分三个维度看——存哪里、怎么存、存什么」，<br>
+就比只会说「短期/长期」高一个层次</strong>，因为那说明你知道<strong>这不是一个单维问题</strong>。</p>
 <blockquote>
 <p><strong>和阶段 2 的接口</strong>：阶段 2 讲的<strong>用户记忆 vs 知识库</strong>，对应到这张表里就是<br>
 「用户长期记忆」这一层里的两种内容。<strong>别把两者当同一个东西。</strong></p>
@@ -856,16 +878,16 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 让它换个角度重看自己的输出，<strong>有机会</strong>发现问题。</p>
 <p><strong>代价</strong>：多一轮甚至多轮调用，成本上升。</p>
 <h4>🔴 但「自己查自己」经常是无效的——这里有个反直觉的研究结论</h4>
-<p>书里引了一篇 ICLR 2024 的研究（教材 <code>chapter10</code>「提议者-审核者范式」节）：</p>
+<p>资料里引了一篇 ICLR 2024 的研究（<strong>「提议者-审核者范式」</strong>）：</p>
 <blockquote>
 <p>让 GPT-4 <strong>在没有外部反馈的情况下</strong>审查并修正自己的回答，<strong>准确率反而下降</strong>——<br>
 <strong>模型把正确答案改错的次数，比把错误答案改对的次数更多。</strong></p>
 </blockquote>
 <p><strong>为什么会这样</strong>：因为「自己查自己」<strong>没有引入任何新信息</strong>——<br>
-它只是在<strong>同一个模型、同一份材料</strong>里又想了 一遍。<br>
+它只是在<strong>同一个模型、同一份材料</strong>里又想了想。<br>
 这正好回到 4.1 的<strong>第一判断标准</strong>：<strong>没有信息增量的协作，是无效的。</strong></p>
 <h4>⭐ 有效反思的两条硬条件（这是本节最该带走的）</h4>
-<p>书里给了「提议者—审核者」循环的<strong>最小不变量</strong>，两条：</p>
+<p>资料给了「提议者—审核者」循环的<strong>最小不变量</strong>，两条：</p>
 <p><strong>① 审核者必须读「独立证据」，而不是只复述提议者的解释。</strong></p>
 <blockquote>
 <p>「审核者读取<strong>独立证据</strong>，而不是只复述提议者的解释」</p>
@@ -885,19 +907,19 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 <p>审核者相当于<strong>质检员</strong>。质检员可以判定「这批货不合格」，<br>
 <strong>但不能自己把合格线往下调</strong>——那样他永远能判合格。</p>
 </blockquote>
-<h4>⭐ 为什么这两条对你特别重要</h4>
-<p><strong>这就是你「验收协议」的理论依据。</strong></p>
-<p>你之前自己总结过一套验收办法：<strong>不读每一行代码，但设计让它失败的场景，<br>
+<h4>⭐ 为什么这两条值得单独记住</h4>
+<p><strong>这两条不是抽象理论，本身就是一套可执行的验收协议。</strong></p>
+<p>一套能用的验收协议长这样：<br>
+<strong>不读每一行代码，但设计让它失败的场景，<br>
 并要求 AI 汇报时单独列出「没验的」「验不了的」</strong>——<br>
-<strong>这套办法的本质，就是在满足上面这两条</strong>：</p>
+<strong>这套办法，正好满足上面这两条</strong>：</p>
 <ul>
 <li>「设计会失败的场景」= <strong>要独立证据</strong>（不是听它说，是让它跑给你看）</li>
 <li>「单独列出没验的」= <strong>防止审核者自己降低标准</strong>（防假全绿）</li>
 </ul>
-<p><strong>换句话说：你已经凭直觉做对了，这一节是告诉你「为什么这么做是对的」。</strong><br>
-面试被问「你怎么验收 AI 的产出」时，把这两条说出来，就有理论支撑了。</p>
+<p>谈「怎么验收 AI 的产出」时，把这两条说出来，就有理论支撑了。</p>
 <blockquote>
-<p>🧩 <strong>自测点</strong>（这题最接近面试）：如果让同一个模型「自己审自己写的代码」，<br>
+<p>🧩 <strong>自测点</strong>（这题最容易暴露理解漏洞）：如果让同一个模型「自己审自己写的代码」，<br>
 你觉得能审出问题吗？为什么？——<strong>能审出的很有限</strong>：它没有拿到新信息（没跑测试、没看截图），<br>
 属于「同一份材料再想一遍」。<strong>这正是 4.1 第一判断标准的反例。</strong></p>
 </blockquote>
@@ -957,81 +979,84 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 <li>第 4、5 步是「反思」循环，可能要来回几轮，<strong>必须设上限</strong></li>
 </ul>
 <hr>
-<h2>4.7 面试会怎么问</h2>
+<h2>4.7 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「什么是多 Agent？」</td>
+<td>什么是多 Agent？</td>
 <td>「就是很多个 AI 一起干活」</td>
 <td>说<strong>拆解逻辑</strong>：把一个大循环拆成几个小而专的循环</td>
 </tr>
 <tr>
-<td>「<strong>什么时候不该用多 Agent</strong>？」</td>
+<td><strong>什么时候不该用多 Agent？</strong></td>
 <td>「Agent 越多越强」</td>
 <td>⭐ <strong>第一判断标准</strong>：协作有没有引入单 Agent 拿不到的新信息？没有就别拆——多出来的是几倍到十几倍的成本</td>
 </tr>
 <tr>
-<td>「多 Agent 有什么坑？」</td>
+<td>多 Agent 有什么坑？</td>
 <td>「成本高」</td>
 <td>⭐ 说<strong>七种失败模式</strong>，重点讲<strong>错误级联</strong>、<strong>同质趋同</strong>、<strong>过早终止</strong>；再加一句第 7 条是「人的问题」</td>
 </tr>
 <tr>
-<td>「多 Agent 怎么通信？」</td>
+<td>多 Agent 怎么通信？</td>
 <td>「它们自己聊」</td>
 <td>⭐ <strong>先说两层平面</strong>（数据平面放产物 / 控制平面管调度），再说<strong>三种机制</strong>：工具参数 / 共享文件 / 消息总线；消息要带<strong>信封</strong></td>
 </tr>
 <tr>
-<td>「Agent 之间怎么交换大文件？」</td>
+<td>Agent 之间怎么交换大文件？</td>
 <td>「发过去」</td>
 <td>⭐ <strong>传路径，不传内容</strong>——虚拟文件系统四类区域（专属工作区 / 共享空间 / 外部挂载 / 系统内置），<strong>共享空间才是并发冲突的高发地</strong></td>
 </tr>
 <tr>
-<td>「<strong>Agent 怎么记住之前的事</strong>？」</td>
+<td><strong>Agent 怎么记住之前的事？</strong></td>
 <td>「它有记忆功能」</td>
 <td>说<strong>记忆层次三层</strong>：轨迹 / 用户长期记忆 / 业务状态；再加一句<strong>记忆有三个维度</strong>（存哪里 / 怎么存 / 存什么）。注意<strong>「工作记忆」= 上下文窗口</strong>，别和业务状态混。<strong>并区分用户记忆和知识库</strong>（阶段 2）</td>
 </tr>
 <tr>
-<td>「Agent 做错了怎么办？」</td>
+<td>Agent 做错了怎么办？</td>
 <td>「让它重做」</td>
 <td>说<strong>反思机制</strong>，并且<strong>给出两条硬条件</strong>：审核者读<strong>独立证据</strong>（不是复述解释）、<strong>不能自己改验收标准</strong>。补一句「同模型互审不算独立证据」</td>
 </tr>
 <tr>
-<td>「Agent 说自己做完了，你怎么知道它是真做完了？」</td>
+<td>Agent 说自己做完了，你怎么知道它是真做完了？</td>
 <td>「看它报告」</td>
 <td>⭐ 说<strong>过早终止</strong>：<strong>「完成」只是一句宣称，不是证明</strong>；<strong>瓶颈在验证器不在模型</strong>——要拿执行结果/截图/工具验证这类<strong>独立证据</strong>来判</td>
 </tr>
 <tr>
-<td>「长任务 Agent 会迷路怎么办？」</td>
+<td>长任务 Agent 会迷路怎么办？</td>
 <td>「把提示词写详细」</td>
 <td>说<strong>规划</strong>：先列计划再执行；或边做边规划（ReAct）。<strong>进阶</strong>：光给步骤上限不够，要让它有<strong>预算意识</strong>（前期广探、后期聚焦）</td>
 </tr>
 <tr>
-<td>「多 Agent 一定更可靠吗？」</td>
+<td>多 Agent 一定更可靠吗？</td>
 <td>「人多力量大」</td>
 <td>⚠️ 说<strong>容错性确实更好</strong>，但<strong>Agent 的故障是拜占庭式的</strong>——它<strong>不停机，给看似可信的错结论</strong>。所以「多个 Agent」本身不带来可靠，<strong>带来可靠的是独立验证</strong></td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2>本阶段要带走的三句话</h2>
+<h2>本阶段要带走的四句话</h2>
 <ol>
 <li>
 <p><strong>多 Agent 是拆解，不是升级。</strong> ⭐ <strong>第一判断标准：协作有没有引入单 Agent 拿不到的新信息？</strong><br>
-   没有就别拆——多出来的是几倍到十几倍的 token 成本。<br>
+    没有就别拆——多出来的是几倍到十几倍的 token 成本。<br>
 <strong>再加一条前置认知：Agent 的故障是拜占庭式的</strong>——它不停机，给看似可信的错结论。</p>
 </li>
 <li>
 <p><strong>不共享上下文的协作 = 数据平面 + 控制平面。</strong><br>
-   数据平面管「<strong>东西放哪</strong>」（虚拟文件系统四类区域，<strong>共享空间是冲突高发地</strong>，大产物<strong>传路径不传内容</strong>）；<br>
-   控制平面管「<strong>谁在干什么、要不要停、给多少钱</strong>」（消息传递 / 状态查询 / 执行终止 / 资源调度）。<br>
-   两种维度看架构：上下文共享还是独立 × 对等/管理者/去中心化。</p>
+    数据平面管「<strong>东西放哪</strong>」（虚拟文件系统四类区域，<strong>共享空间是冲突高发地</strong>，大产物<strong>传路径不传内容</strong>）；<br>
+    控制平面管「<strong>谁在干什么、要不要停、给多少钱</strong>」（消息传递 / 状态查询 / 执行终止 / 资源调度）。<br>
+    两种维度看架构：上下文共享还是独立 × 对等/管理者/去中心化。</p>
 </li>
 <li>
 <p><strong>七种失败模式</strong>：并发冲突 / 错误级联 / 同质趋同 / 互相扯皮 / 循环失控 /<br>
@@ -1049,97 +1074,96 @@ Agent 报告「已完成」，你如果没有独立证据，就只能<strong>选
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>问题</th>
 <th>对应小节</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>决定「要不要用多 Agent」的<strong>唯一判据</strong>是什么？</td>
 <td>4.1</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>为什么「让模型重新读一遍自己的输出」通常无效甚至有害？</td>
 <td>4.1</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>「Agent 的故障是拜占庭式的」是什么意思？它导致了什么工程要求？</td>
 <td>4.1</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td>三种拓扑分别适合什么任务？</td>
 <td>4.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
+<td>5</td>
 <td>看架构的两个维度是什么？主流商业产品用哪种？</td>
 <td>4.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">6</td>
+<td>6</td>
 <td>不共享上下文的协作，<strong>两个平面</strong>各管什么？</td>
 <td>4.3</td>
 </tr>
 <tr>
-<td style="text-align: center;">7</td>
+<td>7</td>
 <td>虚拟文件系统的<strong>四类区域</strong>是什么？哪一类是并发冲突高发地？</td>
 <td>4.3.1</td>
 </tr>
 <tr>
-<td style="text-align: center;">8</td>
+<td>8</td>
 <td>大产物怎么在 Agent 之间传？为什么不直接发内容？</td>
 <td>4.3.1 / 4.3.3</td>
 </tr>
 <tr>
-<td style="text-align: center;">9</td>
+<td>9</td>
 <td>消息的<strong>信封</strong>里有什么？它为什么是多 Agent 调试的关键？</td>
 <td>4.3.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">10</td>
+<td>10</td>
 <td>主 Agent 想知道子 Agent 进展，<strong>不建议</strong>用哪种做法？为什么？</td>
 <td>4.3.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">11</td>
+<td>11</td>
 <td>终止的两种强度分别是什么？为什么取消要「向下级联」？</td>
 <td>4.3.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">12</td>
+<td>12</td>
 <td>七种失败模式里，哪一种是<strong>「人的问题、技术解决不了」</strong>？</td>
 <td>4.4</td>
 </tr>
 <tr>
-<td style="text-align: center;">13</td>
+<td>13</td>
 <td>「过早终止」的三种形态是什么？根因那一句是什么？</td>
 <td>4.4</td>
 </tr>
 <tr>
-<td style="text-align: center;">14</td>
+<td>14</td>
 <td>有效反思的<strong>两条硬条件</strong>是什么？</td>
 <td>4.5</td>
 </tr>
 <tr>
-<td style="text-align: center;">15</td>
+<td>15</td>
 <td>记忆的<strong>三套分类体系</strong>分别回答什么问题？「工作记忆」指的是什么？</td>
 <td>4.5</td>
 </tr>
 </tbody>
 </table>
 <p><strong>这 15 问全能不看稿答出来 → 本阶段的知识点就扎实了。</strong><br>
-（测验只考其中一部分，但<strong>这 15 问是面试会问的</strong>。）</p>
+（测验只考其中一部分，但<strong>这 15 问覆盖了本阶段最核心的考点</strong>。）</p>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
+<p>学完请去做同目录下的 <code>测验</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 4」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

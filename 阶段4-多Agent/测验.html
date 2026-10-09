@@ -3,67 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>阶段 4 测验：多 Agent 协作 · AIGC 求职培训</title>
+<title>阶段 4 测验：多 Agent 协作 · AIGC 应用工程课程</title>
 <style>
   :root{
-    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
-    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
-    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+    --bg:#f7f6f3;--card:#ffffff;--text:#1f1e1c;--muted:#6b6862;
+    --line:#e5e2db;--accent:#0e7490;--code-bg:#f2efe9;--th:#efece5;
+    --accent-bg:#eaf4f8;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#146c34;--ok-bg:#e8f5ec;--bad:#a32d2d;--bad-bg:#fbeceb;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+      --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+      --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+      --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+      --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
     }
   }
   /* 手动指定深色（覆盖系统设置） */
   :root[data-theme="dark"]{
-    --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-    --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-    --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+    --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+    --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+    --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
   }
   .theme-btn{
-    position:fixed;top:12px;right:14px;z-index:99;
-    width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--line);background:var(--card);color:var(--fg);
-    font-size:16px;cursor:pointer;line-height:1;
-    box-shadow:0 1px 4px rgba(0,0,0,.14);
+    position:fixed;top:14px;right:16px;z-index:99;
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    font-size:17px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
   }
   .theme-btn:hover{border-color:var(--accent);}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  /* body 写成一行：与入口页一致，且每条声明都带分号（工具脚本按分号切取值） */
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.7;transition:background .2s,color .2s}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 24px 96px}
+  /* 表格：短单元格不能被压到换行（中文三个字会断成两行）。
+     markdown 的 |:--:| 会生成 inline text-align:center，浏览器据此收紧列宽，
+     所以给短列一个 min-width，让最长的「说明」列吃掉剩余空间。 */
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:0.92rem;
+    background:var(--card);table-layout:auto}
+  th{background:var(--th);text-align:left;padding:11px 13px;font-weight:600}
+  td{padding:10px 13px;border-top:1px solid var(--line);vertical-align:top}
+  th,td{min-width:5.5em}
+  td:first-child,th:first-child{white-space:nowrap}
+  table td:nth-child(1){min-width:6.5em}
   header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
-  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  h1{font-size:28px;font-weight:600;margin:0 0 10px}
   .meta{color:var(--muted);font-size:14px;line-height:1.9}
   .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
     padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
   button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
     border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
   button:hover{opacity:.85}
-  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--text)}
   .score{font-weight:600;font-size:15px;margin-left:auto}
   .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
   .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
   .qtext{margin:0 0 12px;font-weight:500}
   .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
-    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
-  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--text);font-weight:400}
+  .qtext code{background:var(--code-bg);padding:2px 6px;border-radius:4px;
     font-family:"SF Mono",Consolas,monospace;font-size:.88em}
   .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
     border:1px solid transparent;transition:background .12s}
   .opt:hover{background:var(--accent-bg)}
   .opt input{margin-right:9px;accent-color:var(--accent)}
-  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .opt code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.88em}
   .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
   .fb.show{display:block}
   .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
   .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
   .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
   textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
-    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+    border:1px solid var(--line);background:var(--bg);color:var(--text);resize:vertical;margin-top:6px}
   .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
     font-size:14.5px;line-height:1.8;display:none}
   .hint.show{display:block}
@@ -79,7 +92,7 @@
 <div class="wrap">
 <header>
   <h1>阶段 4 测验：多 Agent 协作</h1>
-  <div class="meta">按规则 13c 重编（v2，14 题）<br><strong>满分 14 分 ｜ 及格线 11.2 分（80%）</strong><br>规则：不及格不进阶段 5。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，<strong>不用长篇，但要点别漏</strong>。<br>⚠️ <strong>每题都标了「考点：x.y」</strong>——那是它在讲义里的出处，答不出来回去看那一节。</div>
+  <div class="meta"><strong>满分 14 分 ｜ 及格线 11.2 分（80%）</strong><br>规则：不及格不进阶段 5。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题写清楚，<strong>不用长篇，但要点别漏</strong>。<br>⚠️ <strong>每题都标了「考点：x.y」</strong>——那是它在讲义里的出处，答不出来回去看那一节。</div>
 </header>
 <div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制后发给教练 Agent 批改。</div>
 <div class="bar">
@@ -150,7 +163,7 @@
 </div>
 <div class="item" id="q-q6">
   <div class="qhead">Q6</div>
-  <div class="qtext"><p>主 Agent 想知道子 Agent 的进展，<strong>书里明确说「不建议」</strong>的做法是哪个？</p>
+  <div class="qtext"><p>主 Agent 想知道子 Agent 的进展，<strong>讲义明确说「不建议」</strong>的做法是哪个？</p>
 <blockquote>
 <p>考点：4.3.2</p>
 </blockquote></div>
@@ -171,11 +184,7 @@
 </blockquote></div>
   <textarea id="a7" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h7')">查看参考要点</button>
-  <div class="hint" id="h7">考点：4.3。<b>要点：</b><br>
-    · <b>数据平面管「东西放哪」</b>：产物交换、文件系统布局（四类区域）<br>
-    · <b>控制平面管「谁在干什么、要不要停、给多少钱」</b>：消息传递 / 状态查询 / 执行终止 / 资源调度<br>
-    · 书里原句：「产物交换（数据平面）与消息传递、状态查询、执行终止、资源调度（控制平面）共同支撑起不共享上下文的多 Agent 系统」<br>
-    · <b>⚠️ 四件事缺一即漏项</b>：消息传递、状态查询、执行终止、资源与调度</div>
+  <div class="hint" id="h7">考点：4.3。<b>要点</b><br> · <b>数据平面管「东西放哪」</b>：产物交换、文件系统布局（四类区域）<br> · <b>控制平面管「谁在干什么、要不要停、给多少钱」</b>：消息传递 / 状态查询 / 执行终止 / 资源调度<br> · 资料里的说法：「产物交换（数据平面）与消息传递、状态查询、执行终止、资源调度（控制平面）共同支撑起不共享上下文的多 Agent 系统」<br> · <b>⚠️ 四件事缺一即漏项</b>：消息传递、状态查询、执行终止、资源与调度</div>
 </div>
 <div class="item" id="q-q8">
   <div class="qhead">Q8</div>
@@ -186,26 +195,18 @@
 </blockquote></div>
   <textarea id="a8" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h8')">查看参考要点</button>
-  <div class="hint" id="h8">考点：4.3.2。<b>要点：</b><br>
-    · <b>信封内容</b> = 发送者 ID + 目标（指定 Agent 或广播）+ 消息类型（task_assigned / status_update / result / terminate）+ JSON 负载<br>
-    · <b>作用</b>：保证接收方能够可靠地路由和解析消息<br>
-    · <b>关键句（必须答到这层）</b>：「使协作链路可追溯——这是多 Agent 系统调试的关键」<br>
-    · 只答「格式统一」不够，要答出「可追溯 / 可调试」</div>
+  <div class="hint" id="h8">考点：4.3.2。<b>要点</b><br> · <b>信封内容</b> = 发送者 ID + 目标（指定 Agent 或广播）+ 消息类型（task_assigned / status_update / result / terminate）+ JSON 负载<br> · <b>作用</b>：保证接收方能够可靠地路由和解析消息<br> · <b>关键句（必须答到这层）</b>：「使协作链路可追溯——这是多 Agent 系统调试的关键」<br> · 只答「格式统一」不够，要答出「可追溯 / 可调试」</div>
 </div>
 <div class="item" id="q-q9">
   <div class="qhead">Q9</div>
   <div class="qtext"><p>请说出<strong>「过早终止」的三种形态</strong>，以及它和「循环失控」是什么关系。<br>
-再写出书里总结的那句<strong>根因</strong>。</p>
+再写出讲义里那句<strong>根因</strong>。</p>
 <blockquote>
 <p>考点：4.4</p>
 </blockquote></div>
   <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
-  <div class="hint" id="h9">考点：4.4。<b>要点：</b><br>
-    · <b>三种形态</b>：① 偷懒式假完成 ② 过早放弃 ③ 假成功<br>
-    · <b>与循环失控的关系</b>：正好相反的两个方向（一个停不下来，一个停得太早）；而且<b>过早终止更常见、更隐蔽，因为它长得像成功</b><br>
-    · <b>根因原句</b>：「在验证之前，「完成」只是模型的一句宣称，不是证明」<br>
-    · <b>加分</b>：「循环的瓶颈在验证器，而不在模型」</div>
+  <div class="hint" id="h9">考点：4.4。<b>要点</b><br> · <b>三种形态</b>：① 偷懒式假完成 ② 过早放弃 ③ 假成功<br> · <b>与循环失控的关系</b>：正好相反的两个方向（一个停不下来，一个停得太早）；而且<b>过早终止更常见、更隐蔽，因为它长得像成功</b><br> · <b>根因原句</b>：「在验证之前，「完成」只是模型的一句宣称，不是证明」<br> · <b>加分</b>：「循环的瓶颈在验证器，而不在模型」</div>
 </div>
 <div class="item" id="q-q10">
   <div class="qhead">Q10</div>
@@ -216,12 +217,7 @@
 </blockquote></div>
   <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
-  <div class="hint" id="h10">考点：4.5。<b>要点：</b><br>
-    · <b>无效的原因</b>：没有引入新信息——同一模型、同一份材料再想一遍<br>
-    · <b>研究结论</b>：ICLR 2024《Large Language Models Cannot Self-Correct Reasoning Yet》——让 GPT-4 在没有外部反馈下审查并修正自己，<b>准确率反而下降，改错的次数比改对的多</b><br>
-    · <b>两条硬条件（缺一即漏项）</b>：<br>
-      &nbsp;&nbsp;① 审核者读取<b>独立证据</b>，而不是只复述提议者的解释<br>
-      &nbsp;&nbsp;② 审核者<b>不能修改测试、证据采集器或发布门槛</b>——否则「独立验证」会退化成自我批准</div>
+  <div class="hint" id="h10">考点：4.5。<b>要点</b><br> · <b>无效的原因</b>：没有引入新信息——同一模型、同一份材料再想一遍<br> · <b>研究结论</b>：——让 GPT-4 在没有外部反馈下审查并修正自己<b>准确率反而下降，改错的次数比改对的多</b><br> · <b>两条硬条件（缺一即漏项）</b><br> &nbsp;&nbsp;① 审核者读取<b>独立证据</b>，而不是只复述提议者的解释<br> &nbsp;&nbsp;② 审核者<b>不能修改测试、证据采集器或发布门槛</b>——否则「独立验证」会退化成自我批准</div>
 </div>
 <div class="item" id="q-q11">
   <div class="qhead">Q11</div>
@@ -232,10 +228,7 @@
 </blockquote></div>
   <textarea id="a11" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h11')">查看参考要点</button>
-  <div class="hint" id="h11">考点：4.5。<b>要点：</b><br>
-    · <b>记忆层次</b>（回答「存在哪里」）三层 = <b>轨迹</b>（当前会话的完整事件序列）/ <b>用户长期记忆</b>（跨会话的事实偏好）/ <b>业务状态</b>（任务进行到哪一步）<br>
-    · <b>另两套正交体系</b>：存储格式（回答「怎么存」）+ 认知类型（回答「存什么」：情景 / 语义 / 程序记忆）<br>
-    · <b>「工作记忆」</b>是认知科学的说法，<b>对应 Agent 的上下文窗口</b>——是处理当前任务的临时空间，不是「存到文件里的东西」，别和业务状态混</div>
+  <div class="hint" id="h11">考点：4.5。<b>要点</b><br> · <b>记忆层次</b>（回答「存在哪里」）三层 = <b>轨迹</b>（当前会话的完整事件序列）/ <b>用户长期记忆</b>（跨会话的事实偏好）/ <b>业务状态</b>（任务进行到哪一步）<br> · <b>另两套正交体系</b>：存储格式（回答「怎么存」）+ 认知类型（回答「存什么」：情景 / 语义 / 程序记忆）<br> · <b>「工作记忆」</b>是认知科学的说法<b>对应 Agent 的上下文窗口</b>——是处理当前任务的临时空间，不是「存到文件里的东西」，别和业务状态混</div>
 </div>
 <div class="item" id="q-q12">
   <div class="qhead">Q12</div>
@@ -246,31 +239,22 @@
 </blockquote></div>
   <textarea id="a12" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h12')">查看参考要点</button>
-  <div class="hint" id="h12">考点：4.4。<b>要点：</b><br>
-    · <b>第 7 条：理解债与认知投降</b><br>
-    · <b>两种表现</b>：理解债（Agent 交付太快，人对系统的理解落后，出事看不懂）+ 认知投降（习惯了让它代劳，放弃独立审查）<br>
-    · <b>为什么这门课治它</b>：不写代码、项目全由 AI 交付，这条路的风险正是这条；关键是区分<b>外包「写代码」（可以）vs 外包「理解」（危险）</b><br>
-    · <b>加分</b>：Karpathy 那句「你可以外包你的思考，但不能外包你的理解」</div>
+  <div class="hint" id="h12">考点：4.4。<b>要点</b><br> · <b>第 7 条：理解债与认知投降</b><br> · <b>两种表现</b>：理解债（Agent 交付太快，人对系统的理解落后，出事看不懂）+ 认知投降（习惯了让它代劳，放弃独立审查）<br> · <b>为什么这门课治它</b>：不写代码、项目全由 AI 交付，这条路的风险正是这条；关键是区分<b>外包「写代码」（可以）vs 外包「理解」（危险）</b><br> · <b>加分</b>：「你可以外包你的思考，但不能外包你的理解」</div>
 </div>
 <div class="item" id="q-q13">
   <div class="qhead">Q13</div>
-  <div class="qtext"><p>面试官问：「<strong>什么时候不该用多 Agent？</strong>」请给出回答，并说出<strong>判据</strong>和一个<strong>反例</strong>。</p>
+  <div class="qtext"><p>「<strong>什么时候不该用多 Agent？</strong>」请给出回答，并说出<strong>判据</strong>和一个<strong>反例</strong>。</p>
 <blockquote>
 <p>考点：4.1</p>
 </blockquote>
 <p><strong>要求：成段说，不要分点符号。</strong></p></div>
   <textarea id="a13" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h13')">查看参考要点</button>
-  <div class="hint" id="h13">考点：4.1。<b>成段作答，要点：</b><br>
-    · <b>判据</b>：协作有没有引入单个 Agent 生成时拿不到的新信息<br>
-    · <b>没有就别拆</b>——多出来的成本是几倍到十几倍（书里原话「收益必须足够大，能够覆盖数倍乃至一个数量级的额外开销」）<br>
-    · <b>反例（任一）</b>：让模型重新读自己的输出 / 两个同模型 Agent 辩论同一段材料（等计算量下与单 Agent 持平）<br>
-    · <b>加分</b>：对照正例——审核者用「测试执行结果 / 渲染截图 / 外部工具验证」，这些<b>引入了新信息</b>，所以有效<br>
-    · <b>收口句加分</b></div>
+  <div class="hint" id="h13">考点：4.1。<b>成段作答，要点</b><br> · <b>判据</b>：协作有没有引入单个 Agent 生成时拿不到的新信息<br> · <b>没有就别拆</b>——多出来的成本是几倍到十几倍（资料里的说法「收益必须足够大，能够覆盖数倍乃至一个数量级的额外开销」）<br> · <b>反例（任一）</b>：让模型重新读自己的输出 / 两个同模型 Agent 辩论同一段材料（等计算量下与单 Agent 持平）<br> · <b>加分</b>：对照正例——审核者用「测试执行结果 / 渲染截图 / 外部工具验证」，这些<b>引入了新信息</b>，所以有效<br> · <b>收口句加分</b></div>
 </div>
 <div class="item" id="q-q14">
   <div class="qhead">Q14</div>
-  <div class="qtext"><p>面试官问：「<strong>一个复杂的 Agent 任务，怎么保证它不迷路、不忘事、不跑偏？</strong>」<br>
+  <div class="qtext"><p>「<strong>一个复杂的 Agent 任务，怎么保证它不迷路、不忘事、不跑偏？</strong>」<br>
 请给出回答。<strong>结尾必须有一个收口句。</strong></p>
 <blockquote>
 <p>考点：4.5</p>
@@ -278,11 +262,7 @@
 <p><strong>要求：成段说，不要分点符号。</strong></p></div>
   <textarea id="a14" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h14')">查看参考要点</button>
-  <div class="hint" id="h14">考点：4.5。<b>成段作答，三个补丁各对应一个问题（缺一扣分）：</b><br>
-    · <b>不迷路 → 规划</b>：先列计划再执行，或边做边规划（ReAct）。<b>加分</b>：光给步骤上限不够，要让它有预算意识（前期广探、后期聚焦）<br>
-    · <b>不忘事 → 记忆</b>：轨迹 / 用户长期记忆 / 业务状态；本质是「存在外面，用时读回来」<br>
-    · <b>不跑偏 → 反思</b>：但必须是<b>有效反思</b>——读独立证据、不能自己改验收标准<br>
-    · <b>⚠️ 题面要求结尾有收口句</b>——能收成一句（如「三个补丁解决三类不同的失效，而其中最容易被忽略的是——验证必须独立于被验证者」）即达标</div>
+  <div class="hint" id="h14">考点：4.5。<b>成段作答，三个补丁各对应一个问题（缺一扣分）</b><br> · <b>不迷路 → 规划</b>：先列计划再执行，或边做边规划（ReAct）。<b>加分</b>：光给步骤上限不够，要让它有预算意识（前期广探、后期聚焦）<br> · <b>不忘事 → 记忆</b>：轨迹 / 用户长期记忆 / 业务状态；本质是「存在外面，用时读回来」<br> · <b>不跑偏 → 反思</b>：但必须是<b>有效反思</b>——读独立证据、不能自己改验收标准<br> · <b>⚠️ 题面要求结尾有收口句</b>——能收成一句（如「三个补丁解决三类不同的失效，而其中最容易被忽略的是——验证必须独立于被验证者」）即达标</div>
 </div>
 <h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
 <div class="bar" style="position:static">
@@ -292,7 +272,7 @@
 <textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制后发给教练 Agent 批改。"></textarea>
 <p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
 <footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
-  文件：<code>阶段4-多Agent/测验.md</code>
+  阶段4-多Agent · 阶段练习卷（答完点「生成答卷」，复制后发给教练 Agent 批改）
 </footer>
 </div>
 <script>
@@ -323,7 +303,7 @@
   else mount();
 })();
 var KEY = {"q1": "B", "q2": "B", "q3": "B", "q4": "B", "q5": "B", "q6": "C"};
-var WHY = {"q1": "考点：4.1。第一判断标准只有一条——<b>协作过程是否引入了单个 Agent 在生成时无法获得的新信息</b>。没有信息增量，多 Agent 就只是在烧钱（成本是几倍到十几倍）。A 错在「一定更强」；C 错在把「复杂」当充分条件——复杂但单 Agent 能干的，不该拆；D 与判断无关。", "q2": "考点：4.1。拜占庭式故障的定义就是「<b>不停机、给看似可信的错误结论</b>」。这是本阶段所有验证机制的根：正因为不会干脆报错，才必须靠独立证据验证。A 说反了（那是普通程序）；D 错——「同一模型自己审自己」已被 ICLR 2024 那篇研究证否（改错的比改对的多）。", "q3": "考点：4.2。<b>主管负责拆解 + 汇总，自己一般不干具体活</b>。它做的是调度，不是执行——这也解释了书里为什么说「要把最强的模型给主管」（它是单点瓶颈）。", "q4": "考点：4.3.1 / 4.3.3。大产物走<b>共享文件系统</b>，传的是<b>路径字符串</b>——这正是「文件路径作为通用接口」。理由是 A 会把上下文挤爆（token 成本），C 会在转述中失真。这也是数据平面的核心用法。", "q5": "考点：4.3.1。<b>多 Agent 共享空间</b>是唯一「用户可见 + 多方并发读写」的区域，所以是并发冲突高发地——乐观锁、工作副本隔离（worktree）都作用在这一层。A 是私有区（不需并发控制）；C 的并发由外部源负责；D 只读（不需控制）。", "q6": "考点：4.3.2。书里明确说<b>轨迹持久化不宜作为状态传递的主要方式</b>——「轨迹动辄数万 token，主 Agent 读完还得自行提炼，既费时又费 token」。<b>进度文件才是对的做法</b>（它暴露的是提炼后的进度，不是全部内存）。A/B/D 都是推荐做法。"};
+var WHY = {"q1": "考点：4.1。第一判断标准只有一条——<b>协作过程是否引入了单个 Agent 在生成时无法获得的新信息</b>。没有信息增量，多 Agent 就只是在烧钱（成本是几倍到十几倍）。A 错在「一定更强」；C 错在把「复杂」当充分条件——复杂但单 Agent 能干的，不该拆；D 与判断无关。", "q2": "考点：4.1。拜占庭式故障的定义就是「<b>不停机、给看似可信的错误结论</b>」。这是本阶段所有验证机制的根：正因为不会干脆报错，才必须靠独立证据验证。A 说反了（那是普通程序）；D 错——「同一模型自己审自己」已被 那篇研究证否（改错的比改对的多）。", "q3": "考点：4.2。<b>主管负责拆解 + 汇总，自己一般不干具体活</b>。它做的是调度，不是执行——这也解释了资料里为什么说「要把最强的模型给主管」（它是单点瓶颈）。", "q4": "考点：4.3.1 / 4.3.3。大产物走<b>共享文件系统</b>，传的是<b>路径字符串</b>——这正是「文件路径作为通用接口」。理由是 A 会把上下文挤爆（token 成本），C 会在转述中失真。这也是数据平面的核心用法。", "q5": "考点：4.3.1。<b>多 Agent 共享空间</b>是唯一「用户可见 + 多方并发读写」的区域，所以是并发冲突高发地——乐观锁、工作副本隔离（worktree）都作用在这一层。A 是私有区（不需并发控制）；C 的并发由外部源负责；D 只读（不需控制）。", "q6": "考点：4.3.2。资料里明确说<b>轨迹持久化不宜作为状态传递的主要方式</b>——「轨迹动辄数万 token，主 Agent 读完还得自行提炼，既费时又费 token」。<b>进度文件才是对的做法</b>（它暴露的是提炼后的进度，不是全部内存）。A/B/D 都是推荐做法。"};
 var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6"];
 var ESSAY = ["a7", "a8", "a9", "a10", "a11", "a12", "a13", "a14"];
 var ESSAY_NO = [7, 8, 9, 10, 11, 12, 13, 14];

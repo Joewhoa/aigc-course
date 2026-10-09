@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,8 +98,7 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 2 讲义：RAG（检索增强生成）</h1>
 <blockquote>
-<p>日期：（<strong> 按教材补 2.8 ＋ 补齐三处挖坑</strong>）<br>
-本阶段目标：说清 RAG 的完整流程，能判断什么时候该用、什么时候不该用，以及它会怎么失效。<br>
+<p>本阶段目标：说清 RAG 的完整流程，能判断什么时候该用、什么时候不该用，以及它会怎么失效。<br>
 如果你已经用 TF-IDF 做过检索类的小工具，这一阶段就是把那件事讲成体系。<br>
 阅读重点：<strong>2.2 五步流程</strong> 和 <strong>2.4 四种失效模式</strong>。</p>
 <p>🚩 <strong>先看这一句</strong>：RAG <strong>不是</strong>「让 AI 更聪明的技术」，它是<strong>一条把资料在提问那一刻递过去的流水线</strong>。<br>
@@ -82,14 +106,14 @@ strong{color:var(--strong);}
 </blockquote>
 <p><strong>怎么用这份讲义</strong></p>
 <ol>
-<li><strong>直接从头读到尾</strong>——9 节，大约 25 分钟。不用停下来等谁。</li>
+<li><strong>直接从头读到尾</strong>——10 节，大约 25 分钟。不用停下来等谁。</li>
 <li>读到 🧩 标记的地方，<strong>先自己想一想再看下面的答案</strong>。</li>
-<li>读完 → 打开同目录 <code>阶段2-RAG\测验.html</code> 做题 → 生成答卷，交给你的教练批改。</li>
-<li>测验按 9.6 分及格线计分，并会追问「<strong>为什么这么选</strong>」（答对说不出理由也算没过）。</li>
-<li>不合格的小节会退回重学，同一概念错 2 次就重学那一节。</li>
+<li>读完 → 打开同目录的 <code>测验.html</code> 做题 → 生成答卷，交给教练批改。</li>
+<li>测验按 11.2 分及格线计分，并会追问「<strong>为什么这么选</strong>」（答对说不出理由也算没过）。</li>
+<li>不合格的小节要退回重学，同一概念错 2 次就重学那一节。</li>
 </ol>
 <blockquote>
-<p>这份讲义里出现的每个面试题，都在 <code>测验.md</code> 或 2.10 节里有对应位置——<br>
+<p>这份讲义里出现的每个自测题，都在 <code>阶段2测验</code> 或 2.10 节里有对应位置——<br>
 不需要额外找资料。<strong>读完这一份就够了。</strong></p>
 </blockquote>
 <hr>
@@ -224,7 +248,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <p><strong>RAG 没有让模型变聪明。它只是在提问的那一刻，把相关资料一起递给模型。</strong></p>
 </blockquote>
 <h3>补充：工业级流水线比这五步多两步</h3>
-<p>上面五步是<strong>骨架</strong>，够你理解和面试。但真实系统通常更长，完整版是：</p>
+<p>上面五步是<strong>骨架</strong>，够理解和应用。但真实系统通常更长，完整版是：</p>
 <blockquote>
 <p><strong>分块 → 稠密/稀疏检索 → 融合 → 重排序 → 生成</strong></p>
 </blockquote>
@@ -279,8 +303,8 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </table>
 <p><strong>混合检索（Hybrid）</strong>：两路都跑，结果合并。<strong>这就是 2.4 节失效模式 1 的解法</strong>——<br>
 关键词那路保证「字面一定不丢」，语义那路保证「换个说法也能找到」。</p>
-<p><strong>你要记住的</strong>：<strong>面试说五步不算错</strong>（那是骨架），但如果你能补一句<br>
-「工业级还会加混合检索和重排序」，面试官会知道你不是只看了入门文章。</p>
+<p><strong>你要记住的</strong>：<strong>说五步不算错</strong>（那是骨架），但如果能补一句<br>
+「工业级还会加混合检索和重排序」，说明你不是只看了入门文章。</p>
 <h3>🧩 回到刚才那个问题：哪几步是「离线」的</h3>
 <table>
 <thead>
@@ -306,10 +330,10 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </tr>
 </tbody>
 </table>
-<p><strong>这条区分有实际用处</strong>，尤其在阶段 7 面试里：</p>
+<p><strong>这条区分有实际用处</strong>，两个典型问题都能靠它定位：</p>
 <ul>
-<li>面试官问「<strong>为什么你的回答慢</strong>」→ 大概率卡在<strong>在线</strong>那两步：检索返回太多、或塞进去的资料太长。</li>
-<li>面试官问「<strong>知识库更新要多久才生效</strong>」→ 那是<strong>离线</strong>那三步要重跑。<strong>只更新文件不重建索引，新内容检索不到。</strong><br>
+<li>「<strong>为什么回答慢</strong>」→ 大概率卡在<strong>在线</strong>那两步：检索返回太多、或塞进去的资料太长。</li>
+<li>「<strong>知识库更新要多久才生效</strong>」→ 那是<strong>离线</strong>那三步要重跑。<strong>只更新文件不重建索引，新内容检索不到。</strong><br>
   （这正是 2.8 要展开的问题。）</li>
 </ul>
 <p><strong>一句话记法</strong>：<strong>离线建索引，在线查索引。</strong> 出问题先判断自己卡在哪一边。</p>
@@ -390,7 +414,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </blockquote>
 <hr>
 <h2>2.4 RAG 会在哪里出错（四种失效模式）</h2>
-<p>这一段面试最爱问。</p>
+<p>这一段最容易考。</p>
 <table>
 <thead>
 <tr>
@@ -467,7 +491,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <hr>
 <h2>2.5 一条必须记住的边界：RAG 不解决「算得准」</h2>
 <p>RAG 解决的是「<strong>知不知道</strong>」，不解决「<strong>算得对不对</strong>」。</p>
-<p>以账单核对为例：</p>
+<p>以「财务对账」这类场景为例：</p>
 <table>
 <thead>
 <tr>
@@ -519,17 +543,17 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <p><strong>答案是「确定的」，交给代码；答案是「模糊的」，交给模型。</strong><br>
 <strong>RAG 只负责把模型需要的那几段资料递过去，不改变这条分工。</strong></p>
 </blockquote>
-<p>所以「账单核对项目」这类系统真实的做法是：<strong>RAG 负责找依据 → 代码负责算数 → 模型负责把结果说成人话</strong>。<br>
-面试里能主动说出这条边界，是明显的加分项。</p>
+<p>所以这类「财务对账」系统真实的做法是：<strong>RAG 负责找依据 → 代码负责算数 → 模型负责把结果说成人话</strong>。<br>
+能主动说出这条边界，说明你真理解 RAG 的适用范围。</p>
 <hr>
 <h2>2.6 「用户记忆」和「知识库」不是一回事（★ 重要区分）</h2>
-<p>前面五节讲的全是<strong>知识库</strong>。但面试官问「Agent 怎么做记忆」时，<br>
+<p>前面五节讲的全是<strong>知识库</strong>。但「Agent 怎么做记忆」这个问题，<br>
 <strong>只答 RAG 是答偏了</strong>——因为「记忆」和「知识库」是两个东西。</p>
 <h3>一句话说清区别</h3>
 <blockquote>
 <p><strong>知识库是「对所有人一样的公共知识」；用户记忆是「每个人不同的私人信息」。</strong></p>
 </blockquote>
-<p>书里的原话：「知识库为整个组织提供共享的统一知识，而用户记忆则为每个用户维护私人信息。<br>
+<p>资料里的原话：「知识库为整个组织提供共享的统一知识，而用户记忆则为每个用户维护私人信息。<br>
 <strong>这两个尺度有本质区别：知识库关注群体的公共知识，用户记忆关注个体差异。</strong>」</p>
 <table>
 <thead>
@@ -568,6 +592,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </tbody>
 </table>
 <h3>记忆其实有三层（别只想到「跨会话」）</h3>
+<p>按「<strong>存在哪里</strong>」分，记忆有三层：</p>
 <table>
 <thead>
 <tr>
@@ -594,8 +619,16 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </tr>
 </tbody>
 </table>
-<p><strong>这里有个容易混的点</strong>：轨迹是<strong>不可变的原始记录</strong>，工作记忆是它的<strong>动态子集</strong>。<br>
-好比：会议录像是轨迹，会议纪要摘要是工作记忆——录像是不能改的，摘要是随时更新的。</p>
+<blockquote>
+<p>⚠️ <strong>一个最容易搞混的词：工作记忆</strong><br>
+「工作记忆」是<strong>认知科学</strong>里的说法，它在这里对应的是 <strong>Agent 的上下文窗口</strong>——<br>
+是<strong>处理当前任务的临时空间</strong>，<strong>不是「存到文件里的东西」</strong>，所以<strong>不在上面这三层里</strong>。<br>
+<strong>别把「工作记忆」和「业务状态」混为一谈</strong>（前者是内存，后者是存档）。</p>
+<p>📎 它和「轨迹」的关系：<strong>轨迹是全部，工作记忆是从里面挑出来、这轮真正要用的部分</strong>。<br>
+好比：会议录像是轨迹，会议纪要摘要是工作记忆——录像是不能改的，摘要是随时更新的。<br>
+也正因为轨迹会越来越长、塞不进上下文窗口，<strong>每轮只挑出「这轮还用得上的」那部分带进模型</strong>——<br>
+<strong>这就是上下文压缩</strong>。阶段 4 会把记忆的三套分类体系再讲透一遍。</p>
+</blockquote>
 <h3>记忆怎么存：四种格式，按「重要性 × 数量」选</h3>
 <table>
 <thead>
@@ -737,14 +770,13 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <p><strong>⚠️ 别一上来就上 Agentic RAG</strong>：它比普通 RAG <strong>贵</strong>（多几轮调用）、<strong>慢</strong>。<br>
 又是同一条铁律——<strong>能用简单方案就别上复杂的。</strong></p>
 <hr>
-<h2>2.8 知识怎么更新（★  按教材补）</h2>
+<h2>2.8 知识怎么更新</h2>
 <p>前面七节讲的是「<strong>怎么建</strong>」一个知识库。但建好只是开始——<strong>真实的知识库会一直收到新信息。</strong></p>
-<p>书的原话：</p>
+<p>资料里的说法：</p>
 <blockquote>
 <p>「只更新不整理，内容会越积越乱；只做定期重写，新信息又无法及时生效。<br>
 因此，完整的更新机制必须同时包含两条路径：<strong>事件触发的增量更新</strong>，以及<strong>周期触发的全量整理</strong>。」</p>
 </blockquote>
-<p>（出自教材参考教材第 3 章「知识应该如何更新」）</p>
 <h3>两条路径，缺一不可</h3>
 <table>
 <thead>
@@ -771,10 +803,10 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <p>⚠️ <strong>别忘掉 2.2 那个「离线 / 在线」区分</strong>：<br>
 「文件更新了」≠「检索到新内容了」。<br>
 <strong>改完文件必须回到离线那三步：重新切块 → 重新向量化 → 重建索引。</strong><br>
-只改文件不重建索引，是新手最常踩、也最容易被面试官逮住的一个坑。</p>
+只改文件不重建索引，是新手最常踩的一个坑。</p>
 </blockquote>
 <h3>增量更新：把知识库当代码库</h3>
-<p>书里给的最稳妥答案是：</p>
+<p>资料里给的最稳妥答案是：</p>
 <blockquote>
 <p>「<strong>把知识库当成代码库，把每次知识变更当成一个 Pull Request（PR）</strong>。」</p>
 </blockquote>
@@ -782,35 +814,35 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">步</th>
+<th>步</th>
 <th>谁干</th>
 <th>干什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><strong>提议者</strong></td>
 <td>从新证据里发现新事实 / 冲突 / 过期内容 → <strong>在工作分支上提一个尽量小而完整的改动</strong>（<strong>不是</strong>把新对话直接追加到文件末尾）</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>审核者</strong></td>
 <td><strong>独立</strong>核对：每个新说法<strong>有没有证据支持</strong>？漏了限定条件吗？跟别的文件冲突吗？</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>迭代</td>
 <td>提议者按意见改，审核者回到<strong>原始证据</strong>复核；<strong>只有审核者明确批准才能合入</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td>合入后</td>
 <td>先跑检查，通过后<strong>增量重建受影响的分块与索引</strong></td>
 </tr>
 </tbody>
 </table>
-<p><strong>⚠️ 四个硬要求</strong>（书里点名）：</p>
+<p><strong>⚠️ 四个硬要求</strong>（资料里点名）：</p>
 <ul>
 <li><strong>提议者和审核者必须是 Agent，不是两次固定调用</strong>——它们得能自己去搜、去比、去跑检查</li>
 <li><strong>两个 Agent 用不同家族的模型</strong>（如 DeepSeek + Kimi）→ 降低「在同一处犯同类错」的概率</li>
@@ -821,7 +853,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <blockquote>
 <p><strong>索引是可重建的「派生物」；Git 里已审核的知识，才是真正的来源。</strong></p>
 </blockquote>
-<p>所以书里要求<strong>分三层</strong>：</p>
+<p>所以资料里要求<strong>分三层</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -855,7 +887,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <li><strong>去重、去旧、合并</strong> —— 删 / 并 / 重写语义重复、已被取代、过度碎片化的条目；重建索引页</li>
 <li>
 <p><strong>回到原始数据核查</strong> —— <strong>不能只在旧摘要之间互相改写</strong>；要逐段对照原始对话与文档，<br>
-   检查有没有<strong>漏掉否定词或时间条件</strong>、有没有<strong>把推测当成事实</strong></p>
+    检查有没有<strong>漏掉否定词或时间条件</strong>、有没有<strong>把推测当成事实</strong></p>
 </li>
 <li>
 <p><strong>冲突不强行收敛</strong> —— 两条矛盾记录，先追溯各自的原始来源，看是不是<strong>在不同时间 / 对象 / 条件下都成立</strong>；<br>
@@ -906,7 +938,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 </tr>
 </tbody>
 </table>
-<p><strong>说清这条的分量</strong>：面试官问「索引重建要多久、期间怎么办」时，<br>
+<p><strong>说清这条的分量</strong>：「索引重建要多久、期间怎么办」这个问题，<br>
 答「重建要 40 分钟，所以不可能停机做」<strong>比只答「重建索引」高一档</strong>——<br>
 前者说明你<strong>考虑过线上可用性</strong>，后者只是背了流程。</p>
 <p><strong>收口句</strong>：<strong>索引是可重建的派生物，所以可以让新旧两套同时存在</strong>——<br>
@@ -941,10 +973,10 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <li><strong>旧索引作废不会丢东西</strong> —— 丢掉的只是"一条指向新数据的路"，数据本身还在原地。</li>
 </ol>
 <blockquote>
-<p><strong>面试可以这么说</strong>（比只说「索引是可重建的派生物」更扎实）：<br>
+<p><strong>可以这么说</strong>（比只说「索引是可重建的派生物」更扎实）：<br>
 「<strong>真相是那份已审核的数据，索引只是指向它的指针——指针可以同时存在两条，换一条不影响数据本身。</strong>」</p>
 </blockquote>
-<h3>面试怎么用</h3>
+<h3>这一节怎么用</h3>
 <p>被问「<strong>手册每季度更新，你怎么保证答案不过时</strong>」，按这个顺序答：</p>
 <ol>
 <li><strong>两条路径</strong>：新政策进来走增量更新（当天生效）；每季度走一次全量整理</li>
@@ -1047,7 +1079,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <blockquote>
 <p><strong>一句话记住</strong>：<strong>要用会变的东西，用 RAG；要改稳定的东西，用微调。</strong></p>
 </blockquote>
-<h3>面试怎么讲这一段</h3>
+<h3>怎么把这一段讲给别人听</h3>
 <blockquote>
 <p>「<strong>微调和 RAG 不是替代关系</strong>——RAG 给的是<strong>可随时替换的知识</strong>，<br>
 微调改的是<strong>长期的行为模式</strong>。所以要<strong>内容会变、要求引用原文</strong>的场景，我用 RAG；<br>
@@ -1056,79 +1088,323 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 而且内容一变就得重新训练。」</p>
 </blockquote>
 <hr>
-<h2>2.10 面试会怎么问</h2>
+<h2>2.10 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「什么是 RAG？」</td>
-<td>「就是给 AI 加个知识库」</td>
+<td>什么是 RAG？</td>
+<td>就是给 AI 加个知识库</td>
 <td>说<strong>五步</strong>：切块 → 向量化 → 入库 → 检索 → 生成；可补一句工业级还有<strong>混合检索 + 重排序</strong></td>
 </tr>
 <tr>
-<td>「<strong>Agent 怎么做记忆</strong>？」</td>
-<td>「用 RAG」</td>
-<td>⭐ 先区分：<strong>知识库是群体公共知识，用户记忆是个体差异</strong>；再说记忆的三层</td>
+<td><strong>Agent 怎么做记忆</strong>？</td>
+<td>用 RAG</td>
+<td>⭐ 先区分：<strong>知识库是群体公共知识，用户记忆是个体差异</strong>；再说记忆按「存在哪里」分<strong>三层</strong>（轨迹 / 用户长期记忆 / 业务状态），并澄清<strong>「工作记忆」= 上下文窗口</strong>，别和业务状态混</td>
 </tr>
 <tr>
-<td>「<strong>Agentic RAG 是什么</strong>？」</td>
-<td>「更高级的 RAG」</td>
+<td><strong>Agentic RAG 是什么</strong>？</td>
+<td>更高级的 RAG</td>
 <td>把<strong>检索变成 Agent 的一个工具</strong>，交给 ReAct 循环，自己决定搜几次</td>
 </tr>
 <tr>
-<td>「<strong>你的 RAG 回答为什么这么慢</strong>？」</td>
-<td>「模型慢」</td>
+<td><strong>你的 RAG 回答为什么这么慢</strong>？</td>
+<td>模型慢</td>
 <td>先分<strong>离线 / 在线</strong>：建索引是离线的、不影响每次响应；<strong>慢只可能慢在在线那两步</strong>——检索返回太多（收窄 top-k）、或塞进上下文的资料太长</td>
 </tr>
 <tr>
-<td>「<strong>知识库更新了，多久能生效</strong>？」</td>
-<td>「存进去就生效了」</td>
+<td><strong>知识库更新了，多久能生效</strong>？</td>
+<td>存进去就生效了</td>
 <td>⚠️ <strong>改文件 ≠ 生效</strong>——必须<strong>重跑离线三步</strong>（重新切块 / 向量化 / 重建索引），否则检索不到新内容</td>
 </tr>
 <tr>
-<td>「<strong>手册每季度更新，怎么保证答案不过时</strong>？」</td>
-<td>「定期重建索引就行」</td>
+<td><strong>手册每季度更新，怎么保证答案不过时</strong>？</td>
+<td>定期重建索引就行</td>
 <td><strong>两条路径</strong>：增量更新（新政策当天生效）＋ 全量整理；<strong>变更走 PR 审核</strong>（提议者 / 审核者异源互审）；旧版打<strong>失效时间</strong>在检索层过滤；<strong>重建不停服务</strong>（双索引建完再切换）；收口：<strong>索引是可重建的派生物，已审核的知识才是真相来源</strong></td>
 </tr>
 <tr>
-<td>「<strong>索引重建期间服务怎么办</strong>？」</td>
-<td>「挑半夜重建」</td>
+<td><strong>索引重建期间服务怎么办</strong>？</td>
+<td>挑半夜重建</td>
 <td><strong>双索引切换</strong>——线上照旧用旧索引，旁边用新文档建新索引，建完一次性切过去。<strong>能答出这条说明你考虑过线上可用性</strong></td>
 </tr>
 <tr>
-<td>「RAG 和微调什么区别？」</td>
-<td>「RAG 便宜，微调贵」</td>
+<td>RAG 和微调什么区别？</td>
+<td>RAG 便宜，微调贵</td>
 <td>RAG 给的是<strong>知识</strong>（外挂手册）；微调改的是<strong>风格</strong>（说话习惯）</td>
 </tr>
 <tr>
-<td>「RAG 效果不好怎么排查？」</td>
-<td>「换个更好的模型」</td>
-<td>按<strong>四种失效模式</strong>逐个定位，先分清是「没找到」还是「找到了不用」</td>
+<td>RAG 效果不好怎么排查？</td>
+<td>换个更好的模型</td>
+<td>按<strong>四种失效模式</strong>逐个定位，先分清是「没找到」还是「找到了不用</td>
 </tr>
 <tr>
-<td>「怎么保证 RAG 不瞎编？」</td>
-<td>「用更准的向量模型」</td>
+<td>怎么保证 RAG 不瞎编？</td>
+<td>用更准的向量模型</td>
 <td>提示词里约束「只依据资料 + 资料未提及就明说」；要求它标注引用出处</td>
 </tr>
 <tr>
-<td>「文档怎么切块？」</td>
-<td>「切成 500 字一块」</td>
+<td>文档怎么切块？</td>
+<td>切成 500 字一块</td>
 <td>说清 <strong>trade-off</strong>：太大浪费 token、太小切断语义</td>
 </tr>
 </tbody>
 </table>
 <hr>
+<h2>2.11 实操：改一个参数，预测会发生什么</h2>
+<p>RAG 出问题时最忌讳「换个模型试试」——因为那是在<strong>碰运气</strong>。<br>
+真正有用的是：<strong>能说出「哪一步断了」，并知道该改哪个参数。</strong><br>
+这一节练的就是这个能力。<br>
+<strong>全部题目不需要你搭环境、不需要写代码，在这儿就能做完。</strong></p>
+<h3>实操 1 · 分清「没找到」和「找到了不用」（练 2.4）</h3>
+<p>同一个客服问答系统，测试时出现两类抱怨。请判断各属于<strong>哪种失效模式</strong>，并写出你会先查什么。</p>
+<blockquote>
+<p><strong>A</strong>｜用户问「出差住宿能报多少」，系统答「公司未规定出差住宿标准」。<br>
+<strong>B</strong>｜用户问「出差住宿能报多少」，系统答「住宿费据《差旅管理办法》第八条，<br>
+一线城市每人每晚不超过 600 元，二线城市 450 元，其他 350 元」——<br>
+<strong>但《差旅管理办法》里根本没这条，是模型自己编的。</strong></p>
+</blockquote>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>A 和 B 表面症状相同（答错），根因完全相反。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>属于</th>
+<th>怎么区分</th>
+<th>先查什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>检索没找到</strong>（失效模式 1）</td>
+<td>系统说「未规定」= <strong>它承认没找到</strong></td>
+<td>①这段制度<strong>在不在库里</strong>？<br>②切块是不是<strong>把标准条款切断了</strong>？<br>③用户用词（「出差住宿」）和原文（「差旅费住宿限额」）<strong>差多远</strong>？→ 混合检索</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>🔴 <strong>找到了但没用</strong>（失效模式 3/4）</td>
+<td>系统<strong>给了肯定的具体答案</strong> = 它以为自己找到了</td>
+<td>①它<strong>引用的是哪一段</strong>？→ 要求标注出处<br>②这段真的支持这个结论吗？<br>③提示词有没有约束「只依据资料 + 没提到就明说」？</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🎯 <strong>本题是本阶段最重要的一道题</strong>，因为它对应 2.10 那个高频问：<br>
+「<strong>RAG 效果不好怎么排查？</strong>」</p>
+<p><strong>标准答法不是「换个更好的模型」，而是：</strong><br>
+<strong>先分清是「没找到」还是「找到了不用」——两者的修法完全不同。</strong></p>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：把B 当成「A 的更严重版本」，<br>
+于是去调切块、加混合检索。<strong>方向完全错了</strong> ——<br>
+B 的资料<strong>已经在库里了</strong>，问题出在「用了但用错」，<br>
+该改的是<strong>提示词约束</strong>和<strong>重排序</strong>，不是切块。</p>
+</blockquote></div>
+</details>
+
+<h3>实操 2 · 改参数，预测后果（练 2.2 + 2.4）</h3>
+<p>制度文档 200 页，每页约 800 字。现在切块大小从 500 字改成 150 字。<br>
+请预测<strong>三个</strong>后果，其中<strong>一个是改善、两个是代价</strong>。</p>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>改善</strong>：检索到的段落<strong>更精确</strong>，噪声更少。</p>
+<p><strong>代价 1</strong>：<strong>召回变少</strong>。查「住宿标准」时，可能命中的是「第 8 条第一款的标题」，<br>
+<strong>真正的数额在第二款里</strong> —— 块太小，把一条完整的规定<strong>切成两半</strong>了。</p>
+<p><strong>代价 2</strong>：<strong>成本上升</strong>。块数从约 320 个变成约 1070 个，<br>
+①向量化的调用次数约 3.3 倍；②检索时要在更多候选里找。</p>
+<blockquote>
+<p>🎯 <strong>这道题的本质是 2.2 说的那个 trade-off</strong>：<br>
+<strong>块太大浪费 token、还稀释语义；块太小切断完整语义。</strong><br>
+<strong>没有「正确值」，只有「针对什么文档结构」的值。</strong></p>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：以为「越小越准」。<br>
+这是外行最常见的直觉。<strong>块大小的正确解法是看文档结构</strong>——<br>
+制度文档的规定<strong>天然按「条」组织</strong>，那么就该<strong>按条/按款切</strong>，<br>
+而不是拍一个 500 或 150 的数字。<strong>这就是「这个方案为什么这么选」要回答的东西。</strong></p>
+</blockquote></div>
+</details>
+
+<h3>实操 3 · 该给代码还是该给 RAG（练 2.5）</h3>
+<p>三个需求分别该用哪一层手段？说清判断依据。</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>你的选择</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>① 「上个月每个人应发多少工资」</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>② 「公司报销流程里，住宿标准是多少」</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>③ 「这封投诉信该归到哪一类」</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>选择</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td><strong>代码</strong></td>
+<td><strong>答案必须精确</strong>。工资算错一分钱都是事故。2.5 的铁律：确定性的交代码</td>
+</tr>
+<tr>
+<td>②</td>
+<td><strong>RAG</strong></td>
+<td>知识在制度文件里，<strong>不在输入里</strong>，且<strong>不需要精确算</strong>，要的是原文依据</td>
+</tr>
+<tr>
+<td>③</td>
+<td>⚠️ <strong>两条路都通，但通常先试 Prompt</strong></td>
+<td>这是<strong>分类判断</strong>——<strong>介于两者之间</strong>。<br>如果类别固定且要稳定→ 代码或微调<br>如果只是给人看个大概 → Prompt 就够<br>⚠️ <strong>别一上来就上 RAG</strong> —— 它在这题里是多余的</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🎯 <strong>本题练的是「先问要不要 RAG」，不是「怎么用 RAG」。</strong><br>
+2.5 的核心是一条边界：<strong>RAG 只负责把资料递过去，它不负责算。</strong><br>
+需求里没有「查资料」这一层，就不该用 RAG。</p>
+<p>⚠️ <strong>③ 是本题真正想考的</strong> —— 大多数人会条件反射选 RAG（因为「听起来像 AI 问题」）。<br>
+<strong>判断依据应该是「这个任务里，答案依赖的是知识还是判断」。</strong><br>
+分类任务不依赖外部知识，<strong>RAG 是多余的</strong>。</p>
+<p>这也正是 0.5 那张图的铁律：<strong>能往上不往下。</strong></p>
+</blockquote></div>
+</details>
+
+<h3>实操 4 · 「记忆」这个词的三种东西（练 2.6）</h3>
+<p>「你们这个助手记得用户的偏好，怎么做的？」下面四种回答，只有一种真正答对了。</p>
+<blockquote>
+<p><strong>A</strong>｜「把用户的偏好存进向量数据库，下次检索的时候一起查出来。」<br>
+<strong>B</strong>｜「这轮对话的历史，模型自己会记得，不用特别处理。」<br>
+<strong>C</strong>｜「用一个表格存用户偏好，比如饮食禁忌、工号、常用地址；下次会话开始时先读这张表，再放进提示词里。」<br>
+<strong>D</strong>｜「跟知识库一样的做法，存进 RAG 里就行。」</p>
+</blockquote>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>只有 C 真正答对了。</strong></p>
+<table>
+<thead>
+<tr>
+<th>答法</th>
+<th>问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>⚠️ <strong>方向对、实现错</strong>。存储方式（表 vs 向量）不是关键，<br>错在<strong>没说清「什么时候读」</strong>——记忆不是「一起查出来」，是<strong>每次会话开头必须主动塞进提示词</strong>，模型不会自己想起来</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td><strong>只有当轮有效</strong>。历史在<strong>上下文窗口</strong>里，超了就丢（0.3 讲过）。这恰好是「工作记忆 ≠ 用户记忆」的典型误解</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>✅ <strong>存储形式、读取时机、用途全说清了</strong></td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td><strong>把记忆和知识库混为一谈</strong>—— 这正是 2.6 要区分的那件事</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🎯 <strong>本题的完整答法还要补一句区分</strong>：<br>
+「<strong>知识库管群体公共知识（制度、产品文档），用户记忆管个体差异（这个人的偏好）。</strong><br>
+前者更新要审核，后者更新靠用户自己改——<br>
+<strong>混在一起会导致：你改了用户的偏好，结果污染了所有人的知识库。</strong>」</p>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：以为「存起来」就算记住了。<br>
+<strong>记忆的三个环节是「存 / 什么时候读 / 读进来放哪」</strong>——<br>
+少任何一环都不成立。<strong>只答「存进向量库」是最常见的半对答案。</strong></p>
+</blockquote></div>
+</details>
+
+<h3>实操 5 · 每季度更新的手册怎么办（练 2.8）</h3>
+<p>制度手册每季度更新。现在的问题是：<strong>线上正在服务，不能停。</strong><br>
+你会怎么做？请说出<strong>两个阶段</strong>分别怎么保证不出错。</p>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>标准答法：双索引切换。</strong></p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>做什么</th>
+<th>为什么这样安全</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>旧版继续服务</strong></td>
+<td>线上照旧用旧索引，<strong>不停机</strong></td>
+<td>用户随时能问，只是答案来自旧版——<strong>可接受的降级</strong></td>
+</tr>
+<tr>
+<td><strong>旁边建新版</strong></td>
+<td>用新文档在<strong>另一边</strong>建新索引</td>
+<td>新旧<strong>并存</strong>，互不影响</td>
+</tr>
+<tr>
+<td><strong>切换</strong></td>
+<td>新索引建完、<strong>校验通过</strong>，一次性切过去</td>
+<td><strong>切换是个瞬时动作</strong>，用户无感</td>
+</tr>
+<tr>
+<td><strong>旧版处理</strong></td>
+<td>旧索引保留一段回滚窗口</td>
+<td>万一新版有问题能立刻切回</td>
+</tr>
+</tbody>
+</table>
+<p><strong>本题的加分点（能答两条以上 = 资深信号）：</strong></p>
+<ul>
+<li><strong>变更走审核</strong>：新政策不是「拿到就更新」，<strong>要有人审</strong>——<br>
+  和 2.8 讲的「提议者 / 审核者异源互审」是同一个道理</li>
+<li><strong>旧版打失效时间</strong>：在检索层按时间过滤，<strong>让模型知道哪版已作废</strong></li>
+<li><strong>收口那句</strong>：<strong>索引是可重建的派生物，真正该审核的是知识本身，不是索引。</strong></li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：答「定期重建就行」。<br>
+这句话对，但<strong>没回答「重建期间服务怎么办」</strong>——<br>
+而这恰好是 2.10 里会<strong>接着追问</strong>的那一句。<br>
+<strong>能主动答出双索引切换，就说明你真的想过上线这件事。</strong></p>
+</blockquote></div>
+</details>
+
+<hr>
 <h2>本阶段要带走的五句话</h2>
 <ol>
 <li>
 <p><strong>RAG 的存在理由只有一个：资料塞不进上下文窗口。</strong> 塞得进就用 Prompt。<br>
-   （<strong>用户记忆也是这样</strong>——几十条记忆直接塞上下文，不用向量库。）</p>
+    （<strong>用户记忆也是这样</strong>——几十条记忆直接塞上下文，不用向量库。）</p>
 </li>
 <li>
 <p><strong>五步流程：切块 → 向量化 → 入库 → 检索 → 生成。</strong> RAG 不会让模型变聪明，它只是把资料递过去。</p>
@@ -1136,11 +1412,11 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <li><strong>五步分成两半：离线三步建索引，在线两步查索引。</strong> 排查问题先判断卡在哪一边。</li>
 <li>
 <p><strong>RAG 解决「知不知道」，不解决「算得对不对」。</strong><br>
-   确定的答案交给代码，模糊的答案交给模型。</p>
+    确定的答案交给代码，模糊的答案交给模型。</p>
 </li>
 <li>
 <p><strong>「用户记忆」和「知识库」是两个东西。</strong> 前者管个体差异，后者管群体公共知识。<br>
-   面试问「Agent 怎么做记忆」，只答 RAG 是答偏的。</p>
+   问「Agent 怎么做记忆」，只答 RAG 是答偏的。</p>
 </li>
 </ol>
 <hr>
@@ -1175,7 +1451,7 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <td>2.5</td>
 </tr>
 <tr>
-<td>面试官问「Agent 怎么做记忆」，先答什么？</td>
+<td>「Agent 怎么做记忆」，先答什么？</td>
 <td>2.6</td>
 </tr>
 <tr>
@@ -1186,19 +1462,26 @@ RAG 的可靠性，一半靠检索，一半靠这段提示词。</p>
 <td>改完知识库文件，为什么还检索不到新的？</td>
 <td>2.8</td>
 </tr>
+<tr>
+<td>「把知识放进微调模型」错在哪？</td>
+<td>2.9</td>
+</tr>
+<tr>
+<td>「索引重建期间怎么办」，怎么答？</td>
+<td>2.8（双索引切换）＋ 2.10</td>
+</tr>
 </tbody>
 </table>
-<p><strong>这八个问题，测验里都会以某种形式出现。</strong> 答得上来，8 分就稳了。</p>
+<p><strong>这十个问题，测验里都会以某种形式出现。</strong> 答得上来，<strong>11.2 分就稳了</strong>。</p>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
+<p>学完请去做同目录下的 <code>测验</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
 <blockquote>
-<p>更省事的做法：直接双击打开 <code>阶段2-RAG\测验.html</code>——选择题点选即判分，<br>
-写完点「生成答卷」，提交给教练批改。</p>
+<p>更省事的做法：直接双击打开同目录的 <code>测验.html</code>——选择题点选即判分，<br>
+写完点「生成答卷」，交给教练批改。</p>
 </blockquote>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 2」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

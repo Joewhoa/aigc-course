@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -162,7 +187,6 @@ strong{color:var(--strong);}
 ├── README.md                      ← 本文件
 ├── 00-课程总纲.md                  ← 课程总入口，路线图 + 知识点浓缩
 ├── 踩坑清单.md                     ← 两类坑：技术本身的坑 ＋ 编写教材的坑
-├── 参考资源-评估.md                ← 对主流 AI 课程资源的实测评估
 │
 ├── 阶段0-基础概念/                 ← README + 讲义 + 测验
 ├── 阶段1-Prompt工程/               ← ＋ 3 个附录（JSON 最小必读 / JSON 补充 / 上下文工程）
@@ -181,7 +205,7 @@ strong{color:var(--strong);}
 默认跟随系统的深色模式设置。</p>
 </blockquote>
 <h2>参考资源</h2>
-<p>本课程设计参考了以下公开课程，详见 <code>参考资源-评估.md</code>：</p>
+<p>本课程设计参考了以下公开课程：</p>
 <ul>
 <li><strong>公开课</strong>（MIT）—— 首选参考</li>
 <li><strong>datawhalechina/hello-agents</strong> —— 原理补充</li>

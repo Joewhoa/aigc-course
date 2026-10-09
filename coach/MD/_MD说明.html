@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MD 文件夹</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
+  transition:background .2s,color .2s;
+}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
+a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
+strong{color:var(--strong);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>MD 文件夹</h1>
+<blockquote>
+<p><strong>这个文件夹里的东西，看不看随你。</strong></p>
+<p>课件的正式内容全部是 <strong>HTML</strong>，双击就能看，不需要任何工具。<br>
+这里是同一批内容的 <strong>Markdown 版</strong>，给两种人：</p>
+<ul>
+<li><strong>想自己改的</strong> —— Markdown 用记事本就能改，改完存回去</li>
+<li><strong>想发给 AI 的</strong> —— 直接把 .md 粘进对话框，AI 读得比 HTML 干净</li>
+</ul>
+<p><strong>不想用 Markdown？直接关掉这个文件夹，去看根目录的 HTML 就行。</strong></p>
+</blockquote>
+<hr>
+<h2>这里有什么</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>对应的 HTML（推荐看这个）</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>学员画像.md</code></td>
+<td><code>../../学员画像.html</code></td>
+<td>教练怎么理解你：称呼、代码能力、学习目的、已会什么、还要补什么</td>
+</tr>
+<tr>
+<td><code>学员错题本.md</code></td>
+<td><code>../../学员错题本.html</code></td>
+<td>你卡过的地方 + 各阶段的常见坑</td>
+</tr>
+<tr>
+<td><code>课程进度.md</code></td>
+<td><code>../../课程进度.html</code></td>
+<td>你学到哪一阶段、测验成绩、错题统计</td>
+</tr>
+<tr>
+<td><code>教练提示词-复制版.md</code></td>
+<td><code>../教练提示词.html</code></td>
+<td>复制这份给你的 AI，它就成你的教练</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>想让 AI 接着教</h2>
+<p>开新对话时，把这三个文件发给教练：</p>
+<ol>
+<li><strong><code>课程进度.md</code></strong> —— 告诉它你走到哪了</li>
+<li><strong><code>学员画像.md</code></strong> —— 告诉它你是谁</li>
+<li><strong><code>学员错题本.md</code></strong> —— 告诉它你卡过什么</li>
+</ol>
+<p>它读完就能接上，不用你重新自我介绍。</p>
+<hr>
+<p><strong>这些文件的内容属于你。</strong> 删掉不影响学习 —— 只是下次要多说一遍。</p>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>

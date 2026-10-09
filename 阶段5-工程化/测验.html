@@ -3,67 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>阶段 5 测验：工程化 · AIGC 求职培训</title>
+<title>阶段 5 测验：工程化 · AIGC 应用工程课程</title>
 <style>
   :root{
-    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
-    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
-    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+    --bg:#f7f6f3;--card:#ffffff;--text:#1f1e1c;--muted:#6b6862;
+    --line:#e5e2db;--accent:#0e7490;--code-bg:#f2efe9;--th:#efece5;
+    --accent-bg:#eaf4f8;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#146c34;--ok-bg:#e8f5ec;--bad:#a32d2d;--bad-bg:#fbeceb;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+      --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+      --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+      --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+      --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
     }
   }
   /* 手动指定深色（覆盖系统设置） */
   :root[data-theme="dark"]{
-    --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-    --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-    --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+    --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+    --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+    --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
   }
   .theme-btn{
-    position:fixed;top:12px;right:14px;z-index:99;
-    width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--line);background:var(--card);color:var(--fg);
-    font-size:16px;cursor:pointer;line-height:1;
-    box-shadow:0 1px 4px rgba(0,0,0,.14);
+    position:fixed;top:14px;right:16px;z-index:99;
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    font-size:17px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
   }
   .theme-btn:hover{border-color:var(--accent);}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  /* body 写成一行：与入口页一致，且每条声明都带分号（工具脚本按分号切取值） */
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.7;transition:background .2s,color .2s}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 24px 96px}
+  /* 表格：短单元格不能被压到换行（中文三个字会断成两行）。
+     markdown 的 |:--:| 会生成 inline text-align:center，浏览器据此收紧列宽，
+     所以给短列一个 min-width，让最长的「说明」列吃掉剩余空间。 */
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:0.92rem;
+    background:var(--card);table-layout:auto}
+  th{background:var(--th);text-align:left;padding:11px 13px;font-weight:600}
+  td{padding:10px 13px;border-top:1px solid var(--line);vertical-align:top}
+  th,td{min-width:5.5em}
+  td:first-child,th:first-child{white-space:nowrap}
+  table td:nth-child(1){min-width:6.5em}
   header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
-  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  h1{font-size:28px;font-weight:600;margin:0 0 10px}
   .meta{color:var(--muted);font-size:14px;line-height:1.9}
   .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
     padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
   button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
     border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
   button:hover{opacity:.85}
-  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--text)}
   .score{font-weight:600;font-size:15px;margin-left:auto}
   .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
   .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
   .qtext{margin:0 0 12px;font-weight:500}
   .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
-    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
-  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--text);font-weight:400}
+  .qtext code{background:var(--code-bg);padding:2px 6px;border-radius:4px;
     font-family:"SF Mono",Consolas,monospace;font-size:.88em}
   .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
     border:1px solid transparent;transition:background .12s}
   .opt:hover{background:var(--accent-bg)}
   .opt input{margin-right:9px;accent-color:var(--accent)}
-  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .opt code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.88em}
   .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
   .fb.show{display:block}
   .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
   .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
   .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
   textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
-    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+    border:1px solid var(--line);background:var(--bg);color:var(--text);resize:vertical;margin-top:6px}
   .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
     font-size:14.5px;line-height:1.8;display:none}
   .hint.show{display:block}
@@ -79,7 +92,7 @@
 <div class="wrap">
 <header>
   <h1>阶段 5 测验：工程化</h1>
-  <div class="meta">** 按规则 13c 重编（v2，14 题）**<br>｜ ** 加 5.10 容器化（补 2 道选择 ＋ 1 道简答 ＋ 回补 5.6 漏题 → 17 题）**<br>｜ ** 按实践反馈补 5.10 三块（Q18 / Q19 / Q20）→ 20 题**<br><strong>满分 20 分 ｜ 及格线 16 分（80%）</strong><br>规则：不及格不进阶段 6。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题<strong>写清楚要点即可，可以分点作答</strong>。<br>⚠️ <strong>每题都标了「考点：x.y」</strong>——那是它在讲义里的出处，答不出来回去看那一节。<br><strong>本卷不考</strong>：手写代码、手写 Dockerfile、论文名 / 文献引用、题面的排版形式。<br><strong>容器化题考的是「看出问题」，不是「默写文件」。</strong></div>
+  <div class="meta">满分 20 分 ｜ 及格线 16 分（80%）<br>规则：不及格不进阶段 6。答错的题记进错题本，同一概念错 2 次，重学那一节。<br>答法：选择题给选项字母；简答题<strong>写清楚要点即可，可以分点作答</strong>。<br>⚠️ <strong>每题都标了「考点：x.y」</strong>——那是它在讲义里的出处，答不出来回去看那一节。<br><strong>本卷不考</strong>：手写代码、手写 Dockerfile、论文名 / 文献引用、题面的排版形式。<br><strong>容器化题考的是「看出问题」，不是「默写文件」。</strong></div>
 </header>
 <div class="rule">做题方式：先自己答，不要翻讲义。选择题直接点选项、点「检查选择题」看结果；简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制后发给教练 Agent 批改。</div>
 <div class="bar">
@@ -197,7 +210,7 @@
 </blockquote></div>
   <textarea id="a9" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h9')">查看参考要点</button>
-  <div class="hint" id="h9">考点：5.1 / 5.2。<b>① 可观测性记四类（缺一扣分）：</b><br>&nbsp;&nbsp;· <b>每次调用的输入 / 输出</b>（复现问题要看当时原文）<br>&nbsp;&nbsp;· <b>工具调用轨迹</b>（错在「选错工具」或「参数填错」）<br>&nbsp;&nbsp;· <b>耗时与成本</b>（定位慢在哪、贵在哪）<br>&nbsp;&nbsp;· <b>失败与重试</b>（区分偶发错与必然错）<br><b>② 为什么看 p95 不只看平均：</b>平均延迟会被大量快请求拉低，<b>p95 反映「最慢的那 5% 用户」的真实体验</b>——而那正是最影响口碑的部分。</div>
+  <div class="hint" id="h9">考点：5.1 / 5.2。<b>① 可观测性记四类（缺一扣分）</b><br>&nbsp;&nbsp;· <b>每次调用的输入 / 输出</b>（复现问题要看当时原文）<br>&nbsp;&nbsp;· <b>工具调用轨迹</b>（错在「选错工具」或「参数填错」）<br>&nbsp;&nbsp;· <b>耗时与成本</b>（定位慢在哪、贵在哪）<br>&nbsp;&nbsp;· <b>失败与重试</b>（区分偶发错与必然错）<br><b>② 为什么看 p95 不只看平均</b>平均延迟会被大量快请求拉低<b>p95 反映「最慢的那 5% 用户」的真实体验</b>——而那正是最影响口碑的部分。</div>
 </div>
 <div class="item" id="q-q10">
   <div class="qhead">Q10</div>
@@ -208,7 +221,7 @@
 </blockquote></div>
   <textarea id="a10" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h10')">查看参考要点</button>
-  <div class="hint" id="h10">考点：5.7。<b>① 三个检查层次（缺一扣分）：</b><br>&nbsp;&nbsp;· <b>结构对不对</b>：字段名、字段数、层级（有没有这个键、有没有多出没见过的键）<br>&nbsp;&nbsp;· <b>类型对不对</b>：值的数据类型（<b>金额应该是数字，不能是字符串 "42"</b>——最常见的坑）<br>&nbsp;&nbsp;· <b>值合不合理</b>：取值范围、格式（不能是负数、日期不能是「32 号」）<br><b>② 为什么不能让守门员自己修 / 放宽：</b><br>守门员会「将就着放行」，它就不是关卡而是摆设——<b>校验的价值恰恰在于「它说不合格就是不合格」</b>。<br>允许：拦下来、要求重试。禁止：自己修数据、自己放宽标准。</div>
+  <div class="hint" id="h10">考点：5.7。<b>① 三个检查层次（缺一扣分）</b><br>&nbsp;&nbsp;· <b>结构对不对</b>：字段名、字段数、层级（有没有这个键、有没有多出没见过的键）<br>&nbsp;&nbsp;· <b>类型对不对</b>：值的数据类型（<b>金额应该是数字，不能是字符串 "42"</b>——最常见的坑）<br>&nbsp;&nbsp;· <b>值合不合理</b>：取值范围、格式<br><b>② 为什么不能让守门员自己修 / 放宽</b><br>守门员会「将就着放行」，它就不是关卡而是摆设——<b>校验的价值恰恰在于「它说不合格就是不合格」</b>。<br>允许：拦下来、要求重试。禁止：自己修数据、自己放宽标准。</div>
 </div>
 <div class="item" id="q-q11">
   <div class="qhead">Q11</div>
@@ -220,7 +233,7 @@
 </blockquote></div>
   <textarea id="a11" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h11')">查看参考要点</button>
-  <div class="hint" id="h11">考点：5.3。<b>① 评估门 vs 做一次评测：</b><br>评估门 = <b>把评测当成发布闸门——不过就不许上线</b>，由结果拍板，而不是「我觉得这次改得挺好」。<br>区别：<b>「测一下看看」是活动，「不过就不发」是闸门。</b>（确实要带病上线（紧急修复）要留痕，不能默默破例）<br><b>② 在线评估补什么短板：</b>离线用固定样本、在上线前；<b>在线用真实用户输入、上线后持续跑</b>，擅长发现<b>实验室无法预见的情况</b>（奇怪输入、新话题、新用法）。<br>实践：从线上日志定期抽样（如每周 200 条）判一遍，<b>把新问题补进离线评测集</b>。<br><b>③ 78% → 82% 怎么判断真假：</b><br>· <b>多跑几轮</b>（同版本跑 3 次看范围，三次是 78/81/79 那 82% 多半不算提升）<br>· <b>看差异够不够大</b>（提升幅度要明显大于波动幅度；差 2–3 个点先怀疑）<br>· 加分：<b>配对分析</b>（同一批题逐条比对，不只看两个总分）</div>
+  <div class="hint" id="h11">考点：5.3。<b>① 评估门 vs 做一次评测</b><br>评估门 = <b>把评测当成发布闸门——不过就不许上线</b>，由结果拍板，而不是「我觉得这次改得挺好」。<br>区别<b>「测一下看看」是活动，「不过就不发」是闸门。</b>（确实要带病上线（紧急修复）要留痕，不能默默破例）<br><b>② 在线评估补什么短板</b>离线用固定样本、在上线前；<b>在线用真实用户输入、上线后持续跑</b>，擅长发现<b>实验室无法预见的情况</b>（奇怪输入、新话题、新用法）。<br>实践：从线上日志定期抽样判一遍<b>把新问题补进离线评测集</b>。<br><b>③ 78% → 82% 怎么判断真假</b><br>· <b>多跑几轮</b>（同版本跑 3 次看范围，三次是 78/81/79 那 82% 多半不算提升）<br>· <b>看差异够不够大</b><br>· 加分<b>配对分析</b>（同一批题逐条比对，不只看两个总分）</div>
 </div>
 <div class="item" id="q-q12">
   <div class="qhead">Q12</div>
@@ -232,7 +245,7 @@
 </blockquote></div>
   <textarea id="a12" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h12')">查看参考要点</button>
-  <div class="hint" id="h12">考点：5.4。<b>① 模型路由：</b><br>加一层「任务难度判断」——分类 / 改写 / 抽取这类<b>简单任务走小模型</b>，多步推理 / 需要判断的走大模型。<br>为什么省：<b>真实请求里简单的那类占多数</b>，让它们走小模型，成本能降一大截而用户几乎无感。<br><b>② 三个机制（缺一扣分）：</b><br>· <b>限流</b>：限制每分钟/每天的调用次数或 token 量——<b>防流量突增打光配额</b>、防单用户刷爆<br>· <b>重试</b>：自动再试一次——应对<b>偶发错</b>（网络抖动、限流）<br>· <b>回退</b>：主模型不可用时<b>切到备选</b>——「A 挂了切 B」，而不是让用户看到报错页<br><b>③ 并行的前提条件：</b><br><b>如果后一个工具的参数要来自前一个工具的结果，就只能串行。</b><br>（不是「能并行就一定该并行」，判断依赖本身就是一项设计能力）</div>
+  <div class="hint" id="h12">考点：5.4。<b>① 模型路由</b><br>加一层「任务难度判断」——分类 / 改写 / 抽取这类<b>简单任务走小模型</b>，多步推理 / 需要判断的走大模型。<br>为什么省<b>真实请求里简单的那类占多数</b>，让它们走小模型，成本能降一大截而用户几乎无感。<br><b>② 三个机制（缺一扣分）</b><br>· <b>限流</b>：限制每分钟/每天的调用次数或 token 量——<b>防流量突增打光配额</b>、防单用户刷爆<br>· <b>重试</b>：自动再试一次——应对<b>偶发错</b>（网络抖动、限流）<br>· <b>回退</b>：主模型不可用时<b>切到备选</b>——「A 挂了切 B」，而不是让用户看到报错页<br><b>③ 并行的前提条件</b><br><b>如果后一个工具的参数要来自前一个工具的结果，就只能串行。</b><br>（不是「能并行就一定该并行」，判断依赖本身就是一项设计能力）</div>
 </div>
 <div class="item" id="q-q13">
   <div class="qhead">Q13</div>
@@ -244,7 +257,7 @@
 </blockquote></div>
   <textarea id="a13" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h13')">查看参考要点</button>
-  <div class="hint" id="h13">考点：5.9。<b>① async 解决什么（一句话）：</b><br>解决<b>「等待」</b>——3 个工具各等 1 秒，串行 3 秒、并行 1 秒。原理是<b>等待期间去干别的</b>，不是「算得更快」。<br><b>② 硬要并行会怎样：</b><br>「先查天气再决定带伞」里，<b>第二个调用在第一个结果出来之前根本拿不到参数</b>——<br>要么拿空值去跑（结果错），要么直接报错。<b>依赖判断错了，并行只会更快地出错。</b><br><b>③ 一个失败了怎么办：</b><br><b>级联中止</b>——A 失败就让 B/C 停（它们的结果已无意义），避免拿到半成品数据。<br>同时<b>并发数要有上限</b>（不然会打爆配额）。</div>
+  <div class="hint" id="h13">考点：5.9。<b>① async 解决什么（一句话）</b><br>解决<b>「等待」</b>——3 个工具各等 1 秒，串行 3 秒、并行 1 秒。原理是<b>等待期间去干别的</b>，不是「算得更快」。<br><b>② 硬要并行会怎样</b><br>「先查天气再决定带伞」里<b>第二个调用在第一个结果出来之前根本拿不到参数</b>——<br>要么拿空值去跑（结果错），要么直接报错。<b>依赖判断错了，并行只会更快地出错。</b><br><b>③ 一个失败了怎么办</b><br><b>级联中止</b>——A 失败就让 B/C 停（它们的结果已无意义），避免拿到半成品数据。<br>同时<b>并发数要有上限</b>（不然会打爆配额）。</div>
 </div>
 <div class="item" id="q-q14">
   <div class="qhead">Q14</div>
@@ -255,7 +268,7 @@
 </blockquote></div>
   <textarea id="a14" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h14')">查看参考要点</button>
-  <div class="hint" id="h14">考点：5.8。<b>① 三件事各解决什么（缺一扣分）：</b><br>· <b>类型注解</b>：让<b>静态类型检查工具在运行之前</b>就抓出错（最便宜发现的一类 bug，不用等它把数据改坏）<br>· <b>venv</b>：隔离「装了哪些包」——<b>让依赖不打架</b>（否则换个项目就跑不起来）<br>· <b>依赖锁定</b>（requirements.txt / lock 文件写死版本）：<b>让环境可复现</b>（任何人任何时候装出来的都一样）<br><b>② venv 的常见误解：</b><br>❌「用了 venv 代码就跑在沙盒里，跑不了我的文件、连不上我的网络，很安全」<br>✅<b>venv 只隔离 Python 包，不限制文件系统 / 网络 / 进程权限——它不是安全沙盒</b>（那是 Docker 之类技术干的活）。<br><b>「以为隔离了包就等于隔离了风险」是会误判的。</b><br>（<b>教材原话</b>：venv「只隔离包依赖，对文件系统、网络和进程没有任何安全约束」）</div>
+  <div class="hint" id="h14">考点：5.8。<b>① 三件事各解决什么（缺一扣分）</b><br>· <b>类型注解</b>：让<b>静态类型检查工具在运行之前</b>就抓出错（最便宜发现的一类 bug，不用等它把数据改坏）<br>· <b>venv</b>：隔离「装了哪些包」——<b>让依赖不打架</b>（否则换个项目就跑不起来）<br>· <b>依赖锁定</b>（requirements.txt / lock 文件写死版本）<b>让环境可复现</b>（任何人任何时候装出来的都一样）<br><b>② venv 的常见误解</b><br>❌「用了 venv 代码就跑在沙盒里，跑不了我的文件、连不上我的网络，很安全」<br>✅<b>venv 只隔离 Python 包，不限制文件系统 / 网络 / 进程权限——它不是安全沙盒</b>（那是 Docker 之类技术干的活）。<br><b>「以为隔离了包就等于隔离了风险」是会误判的。</b><br>（<b>资料里的说法</b>：venv「只隔离包依赖，对文件系统、网络和进程没有任何安全约束」）</div>
 </div>
 <div class="item" id="q-q15">
   <div class="qhead">Q15</div>
@@ -267,18 +280,18 @@
 </blockquote></div>
   <textarea id="a15" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h15')">查看参考要点</button>
-  <div class="hint" id="h15">考点：5.10。<b>① 容器化解决的两个问题（缺一扣分）：</b><br>· <b>可复现</b>：代码在你这跑得好好的、发给别人就报错（Python 版本不同、少装了库）→「程序＋依赖＋配置」打成箱子，<b>到哪都一样</b><br>· <b>隔离</b>：AI 写的代码要跑在机器上，它要是删了你文件、访问了你的网 → 让它跑在隔离空间里<br><b>② 三个概念（缺一扣分）：</b><br>· <b>镜像</b>：打包好的<b>模板</b>（静态）≈ <b>安装包</b><br>· <b>容器</b>：按模板<b>跑起来的实例</b>（动态）≈ <b>装好并在运行的软件</b><br>· <b>volume</b>：把目录<b>挂到容器外面</b>——<b>容器删了数据还在</b>。⚠️ <b>容器里存的数据、容器一删就没了，这是第一大翻车点</b>。<br><b>③ 隔离三档 + 选档判据（缺一扣分）：</b><br>· <b>进程级</b>（最低）：本地跑 ＋ 限制可写范围（工作区沙盒 ＋ 高风险审批）<br>· <b>容器</b>（Docker）：独立文件系统 ＋ 网络栈，<b>但共享内核、内核漏洞仍可能逃逸</b><br>· <b>microVM / 虚拟机</b>（最高）：<b>带独立内核的硬件级隔离</b><br><b>选档判据：输入不可信 ＋ 凭证敏感 ＋ 操作不可逆 → 即使本地开发也要上容器甚至 microVM；<br>本地开发且输入可信 → 进程级 ＋ 工作区沙盒 ＋ 审批通常就够。</b><br>口诀：<b>venv 隔离依赖 / 容器隔离运行 / microVM 隔离硬件。</b></div>
+  <div class="hint" id="h15">考点：5.10。<b>① 容器化解决的两个问题（缺一扣分）</b><br>· <b>可复现</b>：代码在你这跑得好好的、发给别人就报错（Python 版本不同、少装了库）→「程序＋依赖＋配置」打成箱子<b>到哪都一样</b><br>· <b>隔离</b>：AI 写的代码要跑在机器上，它要是删了你文件、访问了你的网 → 让它跑在隔离空间里<br><b>② 三个概念（缺一扣分）</b><br>· <b>镜像</b>：打包好的<b>模板</b>（静态）≈ <b>安装包</b><br>· <b>容器</b>：按模板<b>跑起来的实例</b>（动态）≈ <b>装好并在运行的软件</b><br>· <b>volume</b>：把目录<b>挂到容器外面</b>——<b>容器删了数据还在</b>。⚠️ <b>容器里存的数据、容器一删就没了，这是第一大翻车点</b>。<br><b>③ 隔离三档 + 选档判据（缺一扣分）</b><br>· <b>进程级</b>（最低）：本地跑 ＋ 限制可写范围（工作区沙盒 ＋ 高风险审批）<br>· <b>容器</b>（Docker）：独立文件系统 ＋ 网络栈<b>但共享内核、内核漏洞仍可能逃逸</b><br>· <b>microVM / 虚拟机</b>（最高）<b>带独立内核的硬件级隔离</b><br><b>选档判据：输入不可信 ＋ 凭证敏感 ＋ 操作不可逆 → 即使本地开发也要上容器甚至 microVM；<br>本地开发且输入可信 → 进程级 ＋ 工作区沙盒 ＋ 审批通常就够。</b><br>口诀<b>venv 隔离依赖 / 容器隔离运行 / microVM 隔离硬件。</b></div>
 </div>
 <div class="item" id="q-q16">
   <div class="qhead">Q16</div>
-  <div class="qtext"><p>面试官问：「<strong>你要改一版 Agent（换模型 ＋ 改提示词），怎么保证它安全上线？</strong>」<br>
+  <div class="qtext"><p>「<strong>你要改一版 Agent（换模型 ＋ 改提示词），怎么保证它安全上线？</strong>」<br>
 请给出你的完整做法。</p>
 <blockquote>
 <p>考点：5.11</p>
 </blockquote></div>
   <textarea id="a16" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h16')">查看参考要点</button>
-  <div class="hint" id="h16">考点：5.11。<b>成段或分点均可，答到下面几条就给分：</b><br>· <b>先看「能跑 vs 能用」</b>：明确这次改动要解决哪个「能用」的缺口（可观测 / 可评测 / 成本 / 安全）<br>· <b>跑评测当闸门</b>：<b>评测集不过就不发</b>（评估门），不是「测一下感觉还行」<br>· <b>版本对应</b>：<b>模型版本 ＋ 提示词版本 ＋ 工具版本</b>记清楚<br>· <b>灰度</b>：先放 1%–10% 流量<br>· <b>观察指标</b>：Trace / 失败率 / 成本 / 延迟（<b>能回滚的前提是有监控</b>）<br>· <b>能回滚</b>：指标变差就切回旧版——<b>「能撤回来，才敢改」</b><br>· <b>留版本记录</b>：哪次改了什么、为什么改、效果如何（<b>否则出事不知道是哪次改坏的</b>）</div>
+  <div class="hint" id="h16">考点：5.11。<b>成段或分点均可，答到下面几条就给分</b><br>· <b>先看「能跑 vs 能用」</b>：明确这次改动要解决哪个「能用」的缺口（可观测 / 可评测 / 成本 / 安全）<br>· <b>跑评测当闸门</b><b>评测集不过就不发</b>（评估门），不是「测一下感觉还行」<br>· <b>版本对应</b><b>模型版本 ＋ 提示词版本 ＋ 工具版本</b>记清楚<br>· <b>灰度</b>：先放 1%–10% 流量<br>· <b>观察指标</b>：Trace / 失败率 / 成本 / 延迟（<b>能回滚的前提是有监控</b>）<br>· <b>能回滚</b>：指标变差就切回旧版——<b>「能撤回来，才敢改」</b><br>· <b>留版本记录</b>：哪次改了什么、为什么改、效果如何（<b>否则出事不知道是哪次改坏的</b>）</div>
 </div>
 <div class="item" id="q-q17">
   <div class="qhead">Q17</div>
@@ -289,7 +302,7 @@
 </blockquote></div>
   <textarea id="a17" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h17')">查看参考要点</button>
-  <div class="hint" id="h17">考点：5.6。<b>① 三种模式（缺一扣分）：</b><br>· <b>客户端托管</b>：Agent 跑在<b>用户自己的设备</b>上（个人助手、离线、隐私最严）<br>· <b>托管代理</b>：Agent 跑在<b>厂商的服务器</b>上（多数企业应用属于这类）<br>· <b>工作流编排</b>：Agent 只是<b>大流程里的一个环节</b>，由工作流引擎统一调度（多步骤、强顺序、要审批的业务流程）<br>为什么要分清：影响<b>责任边界</b>（出事谁负责）、<b>数据流向</b>（请求经过谁的服务器）、<b>运维成本</b>（谁升级、谁监控）。<br><b>② 生命周期六步（缺一扣分）：</b><br><b>创建 → 定版本 → 跑评测 → 部署（灰度）→ 观察 → 退役</b><br>· <b>定版本</b>：<b>模型版本 ＋ 提示词版本 ＋ 工具版本，三者要能对应上</b><br>· <b>评测</b>：过不了<b>评估门</b>就不发（5.3）<br>· <b>观察</b>：看 Trace / 指标（5.2），异常就<b>回滚</b><br><b>③ 最容易出事的一步：<b>退役</b>。</b><br><b>很多事故不是「改坏了」，而是「新旧两版并存、下线顺序错了」</b>——<br>旧版本没被安全下掉、或下掉顺序不对，导致流量打到半废弃的版本上。</div>
+  <div class="hint" id="h17">考点：5.6。<b>① 三种模式（缺一扣分）</b><br>· <b>客户端托管</b>：Agent 跑在<b>用户自己的设备</b>上（个人助手、离线、隐私最严）<br>· <b>托管代理</b>：Agent 跑在<b>厂商的服务器</b>上（多数企业应用属于这类）<br>· <b>工作流编排</b>：Agent 只是<b>大流程里的一个环节</b>，由工作流引擎统一调度（多步骤、强顺序、要审批的业务流程）<br>为什么要分清：影响<b>责任边界</b>（出事谁负责）<b>数据流向</b>（请求经过谁的服务器）<b>运维成本</b>（谁升级、谁监控）。<br><b>② 生命周期六步（缺一扣分）</b><br><b>创建 → 定版本 → 跑评测 → 部署（灰度）→ 观察 → 退役</b><br>· <b>定版本</b><b>模型版本 ＋ 提示词版本 ＋ 工具版本，三者要能对应上</b><br>· <b>评测</b>：过不了<b>评估门</b>就不发<br>· <b>观察</b>：看 Trace / 指标，异常就<b>回滚</b><br><b>③ 最容易出事的一步<b>退役</b>。</b><br><b>很多事故不是「改坏了」，而是「新旧两版并存、下线顺序错了」</b>——<br>旧版本没被安全下掉、或下掉顺序不对，导致流量打到半废弃的版本上。</div>
 </div>
 <div class="item" id="q-q18">
   <div class="qhead">Q18</div>
@@ -300,7 +313,7 @@
 </blockquote></div>
   <textarea id="a18" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h18')">查看参考要点</button>
-  <div class="hint" id="h18">考点：5.10。<b>① 根本区别（缺一扣分）：</b><br>· <b>虚拟机带自己的操作系统内核</b>（体积 GB 级、启动分钟级、能跨操作系统跑）<br>· <b>容器只隔离用户态</b>（文件系统 / 网络 / 进程），<b>和宿主机共享内核</b>（体积 MB 级、启动秒级、<b>不能跨内核跑</b>）<br><b>一句话</b>：<b>虚拟机虚拟的是「整台电脑（含操作系统）」；容器虚拟的是「一个隔离的运行环境」。</b><br><b>加分</b>：<b>「容器是轻量级虚拟机」是错的</b>；而且<b>「轻」和「弱」是同一件事的两面</b>——不虚拟硬件所以省资源，但也共用内核所以隔离有边界。<br><b>② 为什么 Windows 装 Docker 必须先装 WSL2：</b><br>因为<b>容器要用宿主机提供的 Linux 内核</b>。Windows 内核与 Linux 内核不同，<br>所以要先装 WSL2，<b>借用它的 Linux 内核来跑容器</b>。<br><b>这件事说明的就是「容器不是虚拟机」</b>——<b>如果真是虚拟机，就自带整个操作系统，不需要这个额外步骤。</b></div>
+  <div class="hint" id="h18">考点：5.10。<b>① 根本区别（缺一扣分）</b><br>· <b>虚拟机带自己的操作系统内核</b>（体积 GB 级、启动分钟级、能跨操作系统跑）<br>· <b>容器只隔离用户态</b>（文件系统 / 网络 / 进程）<b>和宿主机共享内核</b>（体积 MB 级、启动秒级<b>不能跨内核跑</b>）<br><b>一句话</b><b>虚拟机虚拟的是「整台电脑（含操作系统）」；容器虚拟的是「一个隔离的运行环境」。</b><br><b>加分</b><b>「容器是轻量级虚拟机」是错的</b>；而且<b>「轻」和「弱」是同一件事的两面</b>——不虚拟硬件所以省资源，但也共用内核所以隔离有边界。<br><b>② 为什么 Windows 装 Docker 必须先装 WSL2</b><br>因为<b>容器要用宿主机提供的 Linux 内核</b>。Windows 内核与 Linux 内核不同<br>所以要先装 WSL2<b>借用它的 Linux 内核来跑容器</b>。<br><b>这件事说明的就是「容器不是虚拟机」</b>——<b>如果真是虚拟机，就自带整个操作系统，不需要这个额外步骤。</b></div>
 </div>
 <div class="item" id="q-q19">
   <div class="qhead">Q19</div>
@@ -312,7 +325,7 @@
 </blockquote></div>
   <textarea id="a19" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h19')">查看参考要点</button>
-  <div class="hint" id="h19">考点：5.10。<b>① 三道闸（缺一扣分）：</b><br>· <b>闸 1</b>：<b>.dockerignore</b> 挡住构建期——不让密钥被 <code>COPY</code> 进去<br>· <b>闸 2</b>：运行时用 <code>-e 名字=值</code> 传参——<b>只在运行期生效，不落镜像</b><br>· <b>闸 3</b>：<b>代码里根本不硬编码</b>——压根没有密钥可泄露（最省事的一招）<br><b>② 为什么 ENV 不能写真实密钥：</b><br><code>ENV</code> 会<b>明文写进镜像层</b>，<code>docker history</code> 一敲就能看到所有 <code>ENV</code> 的值。<br><b>而且删不掉</b>——后加的层不能移除已生成的层（见 Q20）。<br>→ 该用 <code>-e</code> 运行期传参。<br><b>③ 两文件的关系：</b><br><b>作用几乎一样</b>，都声明「这些文件不要进来」；<code>.gitignore</code> 管<b>不进 git</b>，<code>.dockerignore</code> 管<b>不进镜像</b>。<br><b>关键是两者必须「对齐」</b>——凡是不该进 git 的（尤其 <code>.env</code>），也绝不能进镜像。</div>
+  <div class="hint" id="h19">考点：5.10。<b>① 三道闸（缺一扣分）</b><br>· <b>闸 1</b><b>.dockerignore</b> 挡住构建期——不让密钥被 <code>COPY</code> 进去<br>· <b>闸 2</b>：运行时用 <code>-e 名字=值</code> 传参——<b>只在运行期生效，不落镜像</b><br>· <b>闸 3</b><b>代码里根本不硬编码</b>——压根没有密钥可泄露（最省事的一招）<br><b>② 为什么 ENV 不能写真实密钥</b><br><code>ENV</code> 会<b>明文写进镜像层</b><code>docker history</code> 一敲就能看到所有 <code>ENV</code> 的值。<br><b>而且删不掉</b>——后加的层不能移除已生成的层。<br>→ 该用 <code>-e</code> 运行期传参。<br><b>③ 两文件的关系</b><br><b>作用几乎一样</b>，都声明「这些文件不要进来」；<code>.gitignore</code> 管<b>不进 git</b><code>.dockerignore</code> 管<b>不进镜像</b>。<br><b>关键是两者必须「对齐」</b>——凡是不该进 git 的（尤其 <code>.env</code>），也绝不能进镜像。</div>
 </div>
 <div class="item" id="q-q20">
   <div class="qhead">Q20</div>
@@ -324,7 +337,7 @@
 </blockquote></div>
   <textarea id="a20" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h20')">查看参考要点</button>
-  <div class="hint" id="h20">考点：5.10。<b>① 分层机制（缺一扣分）：</b><br><b>Dockerfile 每条指令产生一层（layer），层一旦生成就不可变。</b><br>· <b>为什么依赖要先 COPY＋先 RUN pip install</b>：只要<b>依赖清单没变</b>，依赖那几层的<b>缓存就能复用</b>；改代码只失效最后一层 → 重建大幅加快。<br>· <b>实测</b>：<b>改一行代码重建 67 秒 → 调好顺序后 8.4 秒</b>（同一个项目，快了 8 倍）。<br><b>② 为什么「先 COPY 再 rm」没用：</b><br>因为<b>层里删不掉东西</b>——你只是<b>新增了一层「标记它没了」</b>，<b>原文件仍在下面那层里</b>，<code>docker history</code> 或解包镜像都能翻出来。<br>→ <b>密钥绝不能靠「删」解决，只能从一开始就不 COPY 进去。</b><br><b>③ docker history 查什么：</b><br>逐层看<b>每层多大、跑了什么命令、有没有泄露的 ENV 值</b>——<b>是验证 Dockerfile 专不专业的直接手段</b>。</div>
+  <div class="hint" id="h20">考点：5.10。<b>① 分层机制（缺一扣分）</b><br><b>Dockerfile 每条指令产生一层（layer），层一旦生成就不可变。</b><br>· <b>为什么依赖要先 COPY＋先 RUN pip install</b>：只要<b>依赖清单没变</b>，依赖那几层的<b>缓存就能复用</b>；改代码只失效最后一层 → 重建大幅加快。<br>· <b>实测</b><b>改一行代码重建 67 秒 → 调好顺序后 8.4 秒</b>。<br><b>② 为什么「先 COPY 再 rm」没用</b><br>因为<b>层里删不掉东西</b>——你只是<b>新增了一层「标记它没了」</b><b>原文件仍在下面那层里</b><code>docker history</code> 或解包镜像都能翻出来。<br>→ <b>密钥绝不能靠「删」解决，只能从一开始就不 COPY 进去。</b><br><b>③ docker history 查什么</b><br>逐层看<b>每层多大、跑了什么命令、有没有泄露的 ENV 值</b>——<b>是验证 Dockerfile 专不专业的直接手段</b>。</div>
 </div>
 <h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
 <div class="bar" style="position:static">
@@ -334,7 +347,7 @@
 <textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制后发给教练 Agent 批改。"></textarea>
 <p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
 <footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
-  文件：<code>阶段5-工程化/测验.md</code>
+  阶段5-工程化 · 阶段练习卷（答完点「生成答卷」，复制后发给教练 Agent 批改）
 </footer>
 </div>
 <script>
@@ -365,7 +378,7 @@
   else mount();
 })();
 var KEY = {"q1": "B", "q2": "B", "q3": "B", "q4": "C", "q5": "C", "q6": "B", "q7": "C", "q8": "C"};
-var WHY = {"q1": "考点：5.2。<b>Trace = 一次完整任务，Span = 任务里的每一步</b>。「慢在哪一步」= 展开 Trace、逐个看 Span 耗时。A 只看总数（知道慢，但不知道慢在哪）；C/D 与定位无关。<br>加分点：能说出<b>按 user_id / model 打标签切分、算 p50 / p95</b>。", "q2": "考点：5.7。守门员只有两个动作：<b>拦下来 或 要求重试</b>。<br>A「补成默认值」= 猜测用户想要什么，不是校验；C「放宽标准」= <b>自我批准</b>（阶段 4 讲过，验证退化成自己批自己）；D 标记成功 = <b>假全绿</b>。<br><b>校验的价值恰恰在于「它说不合格就是不合格」。</b>", "q3": "考点：5.9。<b>第二个调用的参数来自第一个的结果 → 数据依赖 → 只能串行</b>。<br>A/C 忽略数据依赖（并行不是万能提速）；D 理由错（不是模型不支持）。<br><b>依赖判断错了，并行只会更快地出错</b>（拿了空结果去查下一步）。", "q4": "考点：5.3。把评测从「一种活动」变成<b>「上线的闸门」</b>，叫<b>评估门</b>。<br>A 离线评估 ≠ 闸门（它只是用固定样本测）；B 模型判分是判分方式；D A/B 测试是流量分配。<br>出处：公开课 16「离线评估是门槛……新版本必须通过评估门才发布」。", "q5": "考点：5.5。<b>越狱 = 用户本人下危险指令；提示词注入 = 外部数据里藏指令。</b><br>所以 A（抓来的文档）、B（抓来的网页）、D（工具返回）<b>三个都是注入</b>，只有 C（用户直接下指令）是越狱。<br>为什么重要：越狱主要靠「不给它危险能力」（权限最小化）；注入主要靠「不让危险数据被模型当指令」＋「外部数据不进决策层」（隔离 ＋ 数据层护栏）。", "q6": "考点：5.8。<b>venv 只隔离「装了哪些 Python 包」，不限制文件系统、网络、进程权限——它不是安全沙盒。</b><br>A/D 是这个最常见的误解（「开了 venv 就安全了」会导致误判）；C 把 venv 和「依赖锁定」混为一谈——<b>让环境可复现的是锁定版本（requirements.txt / lock 文件），不是 venv</b>。<br><b>教材原话（教材）：venv「只隔离包依赖，对文件系统、网络和进程没有任何安全约束，在 venv 中运行的代码照样可以删除任意文件」。</b>", "q7": "考点：5.10。<b>C 是两个真问题：</b><br>① <b>FROM python:latest</b>——latest 是坏习惯，版本会漂，今天构建跟明天不一样；<br>② <b>COPY . .</b>——把整个项目拷进去时，<b>.env 等密钥文件通常也在里面</b>（除非有 <b>.dockerignore</b> 挡着，而 .dockerignore 是防密钥泄露的第一道闸）。<br><b>A 和 B 恰恰是好习惯：</b>slim 版基础镜像精简；依赖先拷先装是为了缓存（改代码时不用重装依赖）。", "q8": "考点：5.10。<b>容器提供独立的文件系统和网络栈，但与宿主机共享内核——内核漏洞仍可能被利用来逃逸。</b><br>A/B 都把容器说成「完全隔离」，与事实不符。<br><b>隔离三档（教材）：进程级 → 容器 → microVM</b>；<b>选档看「输入可不可信」，不是看哪个方便。</b><br>口诀：<b>venv 隔离依赖、容器隔离运行、microVM 隔离硬件。</b>"};
+var WHY = {"q1": "考点：5.2。<b>Trace = 一次完整任务，Span = 任务里的每一步</b>。「慢在哪一步」= 展开 Trace、逐个看 Span 耗时。A 只看总数（知道慢，但不知道慢在哪）；C/D 与定位无关。<br>加分点：能说出<b>按 user_id / model 打标签切分、算 p50 / p95</b>。", "q2": "考点：5.7。守门员只有两个动作<b>拦下来 或 要求重试</b>。<br>A「补成默认值」= 猜测用户想要什么，不是校验；C「放宽标准」= <b>自我批准</b>（阶段 4 讲过，验证退化成自己批自己）；D 标记成功 = <b>假全绿</b>。<br><b>校验的价值恰恰在于「它说不合格就是不合格」。</b>", "q3": "考点：5.9。<b>第二个调用的参数来自第一个的结果 → 数据依赖 → 只能串行</b>。<br>A/C 忽略数据依赖（并行不是万能提速）；D 理由错（不是模型不支持）。<br><b>依赖判断错了，并行只会更快地出错</b>（拿了空结果去查下一步）。", "q4": "考点：5.3。把评测从「一种活动」变成<b>「上线的闸门」</b>，叫<b>评估门</b>。<br>A 离线评估 ≠ 闸门（它只是用固定样本测）；B 模型判分是判分方式；D A/B 测试是流量分配。<br>相关公开课「离线评估是门槛……新版本必须通过评估门才发布」。", "q5": "考点：5.5。<b>越狱 = 用户本人下危险指令；提示词注入 = 外部数据里藏指令。</b><br>所以 A（抓来的文档）、B（抓来的网页）、D（工具返回）<b>三个都是注入</b>，只有 C（用户直接下指令）是越狱。<br>为什么重要：越狱主要靠「不给它危险能力」（权限最小化）；注入主要靠「不让危险数据被模型当指令」＋「外部数据不进决策层」（隔离 ＋ 数据层护栏）。", "q6": "考点：5.8。<b>venv 只隔离「装了哪些 Python 包」，不限制文件系统、网络、进程权限——它不是安全沙盒。</b><br>A/D 是这个最常见的误解（「开了 venv 就安全了」会导致误判）；C 把 venv 和「依赖锁定」混为一谈——<b>让环境可复现的是锁定版本（requirements.txt / lock 文件），不是 venv</b>。<br><b>资料里的说法：venv「只隔离包依赖，对文件系统、网络和进程没有任何安全约束，在 venv 中运行的代码照样可以删除任意文件」。</b>", "q7": "考点：5.10。<b>C 是两个真问题</b><br>① <b>FROM python:latest</b>——latest 是坏习惯，版本会漂，今天构建跟明天不一样；<br>② <b>COPY . .</b>——把整个项目拷进去时<b>.env 等密钥文件通常也在里面</b>（除非有 <b>.dockerignore</b> 挡着，而 .dockerignore 是防密钥泄露的第一道闸）。<br><b>A 和 B 恰恰是好习惯</b>slim 版基础镜像精简；依赖先拷先装是为了缓存（改代码时不用重装依赖）。", "q8": "考点：5.10。<b>容器提供独立的文件系统和网络栈，但与宿主机共享内核——内核漏洞仍可能被利用来逃逸。</b><br>A/B 都把容器说成「完全隔离」，与事实不符。<br><b>隔离三档：进程级 → 容器 → microVM</b>；<b>选档看「输入可不可信」，不是看哪个方便。</b><br>口诀<b>venv 隔离依赖、容器隔离运行、microVM 隔离硬件。</b>"};
 var CHOICE = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"];
 var ESSAY = ["a9", "a10", "a11", "a12", "a13", "a14", "a15", "a16", "a17", "a18", "a19", "a20"];
 var ESSAY_NO = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];

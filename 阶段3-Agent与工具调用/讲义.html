@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,9 +98,8 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 3 讲义：Agent + 工具调用</h1>
 <blockquote>
-<p>日期：<br>
-本阶段目标：讲清 Agent 是什么、它怎么动手、以及怎么管住它。<br>
-如果做过「用自然语言远程控制设备 / 电脑」类的项目，这一阶段会把它拆开看。<br>
+<p>本阶段目标：讲清 Agent 是什么、它怎么动手、以及怎么管住它。<br>
+如果你见过「用自然语言控制设备 / 电脑」这类东西，这一阶段会把它拆开看。<br>
 阅读重点：<strong>3.2 六步机制</strong> 和 <strong>3.4 四道防线 + 三层护栏</strong>。</p>
 </blockquote>
 <hr>
@@ -143,14 +167,14 @@ Agent 只能通过两个口子和它打交道：</p>
 <p><strong>模型不变的前提下，让 Agent 变强最有效的办法，往往是重新划一遍这两个空间：</strong><br>
 <strong>把需要的数据塞进观察空间，把要做的动作封成工具。</strong></p>
 </blockquote>
-<p><strong>举两个我们自己的例子</strong>：</p>
+<p><strong>举两个具体例子</strong>：</p>
 <ul>
 <li>给 Agent 多加一个「读本地文件」工具 → 它的<strong>动作空间</strong>扩了，原来够不着的东西现在能读。</li>
 <li>把项目规范写进系统提示词 → 它的<strong>观察空间</strong>扩了，原来不知道的规矩现在知道。</li>
 </ul>
 <p><strong>这就是为什么「换个更强的模型」经常不是答案</strong>——很多时候不是模型笨，<br>
 是<strong>该给它看的没给它看、该让它做的没做成工具</strong>。</p>
-<p><strong>一个真实的产品演进例子</strong>（可以直接拿去面试）：</p>
+<p><strong>一个真实的产品演进例子</strong>：</p>
 <blockquote>
 <p>早期的 Agent 大多只干一件事——要么只做深度调研、要么只写代码。<br>
 后来 Manus 把「虚拟浏览器 + 文件系统 + 代码执行」放进同一个 Agent，<br>
@@ -206,7 +230,7 @@ Agent 只能通过两个口子和它打交道：</p>
 <p>模型在这一步做的，仅仅是「用约定好的格式声明我要调用哪个工具」。真正去调用的是 harness。</p>
 <h3>为什么工具调用要用 JSON</h3>
 <p>因为要让程序能<strong>可靠地解析</strong>你填的参数——这是阶段 1 讲的「可判定性」。</p>
-<p><strong>阶段 1 让补 JSON，就是为了这里。</strong> 工具调用的参数、返回值，全是结构化数据；<br>
+<p><strong>阶段 1 的附录专门补了 JSON</strong>，就是为了这里。工具调用的参数、返回值，全是结构化数据；<br>
 不会读 JSON，就没法理解 Agent 到底在干什么。</p>
 <h3>两个值得记住的术语：静态前缀 和 轨迹</h3>
 <p>上面六步跑起来之后，模型每一轮看到的东西其实分成两块：</p>
@@ -237,7 +261,7 @@ Agent 只能通过两个口子和它打交道：</p>
 <li><strong>静态前缀</strong>适合放那些「从头到尾都用得着」的东西，而且<strong>它不变，就能被缓存</strong>（省钱、加速）。</li>
 <li><strong>轨迹</strong>只增不减，所以<strong>任务跑得越久越贵</strong>——这就是为什么需要「上下文压缩」和「轮次上限」。</li>
 </ul>
-<p>面试里问「Agent 的上下文怎么管」，答出这两块就有话可说了。</p>
+<p>这两块正是回答「Agent 的上下文怎么管」时最该先说清楚的。</p>
 <hr>
 <h2>3.3 ReAct：边想边做</h2>
 <p>ReAct = <strong>Re</strong>asoning（推理）+ <strong>Act</strong>ing（行动）。它是 Agent 最主流的思考框架。</p>
@@ -388,8 +412,8 @@ Agent 只能通过两个口子和它打交道：</p>
 这一条管的是「<strong>做失败了怎么恢复</strong>」。缺了它，Agent 会在死胡同里反复撞墙，<br>
 直到撞满轮次上限（防线 4）才停——<strong>烧掉的全是真金白银</strong>。</p>
 </blockquote>
-<h3>面试里这四条很吃香</h3>
-<p>多数人只会说「我做了个 Agent」，不会说「我怎么管住它」。<br>
+<h3>为什么这四条最该记</h3>
+<p>多数人复盘时只会说「我做了个 Agent」，不会说「我怎么管住它」。<br>
 能讲清这四道防线，说明做过真实的东西，而不只是跑过 demo。</p>
 <h3>但这四道还不够：护栏有三层</h3>
 <p>刚才那四道防线，其实是<strong>同一个位置上的四件事</strong>——它们都在拦「Agent 要动手的那一刻」。<br>
@@ -425,7 +449,7 @@ Agent 只能通过两个口子和它打交道：</p>
 </tbody>
 </table>
 <p><strong>越往下越硬</strong>——因为越往下，越不靠「模型自己判断」，也就越难被一次攻击打穿。</p>
-<p><strong>为什么必须有下面两层</strong>？教材给了一句很关键的话：</p>
+<p><strong>为什么必须有下面两层</strong>？资料里给了一句很关键的话：</p>
 <blockquote>
 <p><strong>处在同一个上下文里的 Agent，很难判断自己是不是已经被注入。</strong></p>
 </blockquote>
@@ -433,7 +457,7 @@ Agent 只能通过两个口子和它打交道：</p>
 文档、别人的工具描述里混进上下文，<strong>Agent 自己分辨不出来</strong>。<br>
 所以第一层只能「降低成功率」，给不了保证。<strong>真正兜底的是：就算模型被骗了，<br>
 它手上的凭证也不允许它做那件事</strong>（比如给它一个只能读的账号）。</p>
-<p><strong>这层的价值在面试里怎么用</strong>：</p>
+<p><strong>这一层怎么表述才到位</strong>：</p>
 <blockquote>
 <p>「我的做法是在执行层做权限最小化 + 高风险确认；<br>
 但我也知道执行层不是最后一道——<strong>真正兜底的是数据层的权限</strong>，<br>
@@ -481,14 +505,14 @@ Agent 只能通过两个口子和它打交道：</p>
 </table>
 <p><strong>看出来了吗——我们的「四道防线」，就是它的「约束 / 验证 / 纠正」三要素。</strong><br>
 我们没讲错，只是<strong>用词不一样</strong>。它这套用词是当前行业的通用语言，<br>
-<strong>面试时用它的词会更顺</strong>。</p>
-<p><strong>为什么 Harness 是「竞争力」（书里给的实例，可以直接拿去面试）</strong>：</p>
+<strong>用它的词来表述会更通用</strong>。</p>
+<p><strong>为什么 Harness 是「竞争力」（资料里给的实例）</strong>：</p>
 <blockquote>
 <p>LangChain 在一个终端任务的评测基准上，把得分从 <strong>52.8% 提到 66.5%</strong><br>
 （排行榜从 30 名开外进到前 5）。<strong>改的不是模型，是 Harness</strong>——<br>
 让 Agent 自动检查自己的执行结果、检测是否陷进重复循环、优化思考策略。</p>
 </blockquote>
-<p><strong>一句话面试话术</strong>：</p>
+<p><strong>一句话概括</strong>：</p>
 <blockquote>
 <p>「模型能力正在商品化，真正的差异化在模型之外的工程——<br>
 也就是 Harness：上下文怎么管、工具怎么给、怎么约束、怎么验证、出错怎么纠正。」</p>
@@ -533,14 +557,14 @@ Agent 只能通过两个口子和它打交道：</p>
 </table>
 <h3>不写代码的人怎么用</h3>
 <p><strong>用大白话写验收条件，让 AI 去写测试。</strong></p>
-<p>举例——一个图片批量换色脚本：</p>
+<p>举例——一个批量处理图片素材的脚本：</p>
 <blockquote>
 <p>① 非目标像素的 RGB 必须和原图<strong>完全一致</strong><br>
 ② 输出目录的文件数<strong>等于</strong>输入目录<br>
 ③ 处理失败的图<strong>必须</strong>出现在清单里，不许静默跳过</p>
 </blockquote>
 <p><strong>这三条就是验收条件，也是验收 AI 干活的标准。</strong> 不写代码，但能写这三条。</p>
-<h3>为什么这条对面试重要</h3>
+<h3>为什么这条重要</h3>
 <p>能说「我先定验收条件，再让 AI 实现，最后跑一遍验证」——<br>
 这比说「我让 AI 写了个脚本」高一个层次。前者是<strong>管理结果</strong>，后者是<strong>许愿</strong>。</p>
 <hr>
@@ -591,36 +615,36 @@ Agent 只能通过两个口子和它打交道：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">顺序</th>
+<th>顺序</th>
 <th>问自己</th>
 <th>是 → 用什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>单个模型调用能解决吗？</td>
 <td><strong>就一次调用</strong>，别搞编排</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>能清晰分解成固定的子任务吗？</td>
 <td><strong>工作流</strong>——步骤写死，模型只在里面干活</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>步骤数不确定、需要边走边看吗？</td>
 <td><strong>自主 Agent</strong></td>
 </tr>
 </tbody>
 </table>
-<p><strong>书里的原话</strong>：「对于可以清晰分解为固定子任务的场景，考虑使用工作流。<br>
+<p>资料里的原话：「对于可以清晰分解为固定子任务的场景，考虑使用工作流。<br>
 <strong>只有当需要动态决策和灵活的执行路径时，才使用自主 Agent。</strong>」</p>
 <blockquote>
 <p>📌 <strong>补一句</strong>：「<strong>能不能拆成固定的子任务</strong>」这件事<strong>本身就是一项能力</strong>——<br>
 拆得对不对，直接决定了上面第三步往哪走。这项能力叫<strong>任务拆解</strong>，<br>
 我们在阶段 5 讲 Harness 时会正式讲（怎么把一个模糊的大目标拆成一串可验收的小步）。<br>
-这里先记住：<strong>它是「选编排模式」的前置动作，也是面试里经常被顺手问的一句。</strong></p>
+这里先记住：<strong>它是「选编排模式」的前置动作，也是最容易被顺手问的一句。</strong></p>
 </blockquote>
 <p><strong>还有一句要记住</strong>：「Agent 系统通常会用<strong>延迟和成本</strong>换取更好的任务性能，应该谨慎权衡。」</p>
 <h3>混合模式（实际工程里最常见）</h3>
@@ -678,13 +702,13 @@ Agent 只能通过两个口子和它打交道：</p>
 </tr>
 </tbody>
 </table>
-<h3>为什么这一节对面试最重要</h3>
-<p>面试官问「<strong>什么时候你会用 Agent</strong>」——<strong>这是个筛子题</strong>。</p>
+<h3>为什么这一节最重要</h3>
+<p>「<strong>什么时候你会用 Agent</strong>」——<strong>这是个筛子题</strong>。</p>
 <blockquote>
 <p><strong>只会答「Agent 更智能所以能用就用」的，是不懂。</strong><br>
 <strong>能答「能确定流程的就别上自主，因为延迟和成本更高、还更难控制」的，是懂。</strong></p>
 </blockquote>
-<p><strong>一句话面试话术</strong>：</p>
+<p><strong>一句话概括</strong>：</p>
 <blockquote>
 <p>「我按从简单到复杂来选：先看单次调用够不够，其次看能不能拆成固定流程——<br>
 能拆就用工作流，因为执行路径确定、更安全也更便宜；<br>
@@ -753,24 +777,24 @@ Agent 就只能<strong>被动等你说</strong>——不能主动问你，也不
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>原则</th>
 <th>具体怎么说</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><strong>通用工具优于专用工具</strong></td>
 <td>一个「读文件」胜过十个「读报表」「读日志」「读配置」。<strong>只有四种情况才退回专用</strong>：① 安全权限要审计 ② 要屏蔽平台差异 ③ 使用频率极高 ④ 参数结构太复杂</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>描述的重点是「什么时候用」</strong></td>
 <td>不是「这个工具能做什么」，而是「<strong>什么情况下该选我</strong>」。<strong>边界条件比能力描述更重要</strong>。再配上 1–5 个真实使用例子</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td><strong>参数要保真</strong></td>
 <td><strong>禁止「静默转换」</strong>——模型说传 A，就别偷偷改成 B。模型看到的世界和工具动手的世界，不能有系统性偏差</td>
 </tr>
@@ -804,77 +828,81 @@ Agent 就只能<strong>被动等你说</strong>——不能主动问你，也不
 </tr>
 </tbody>
 </table>
-<p><strong>「按需查阅」这个思路，你其实很熟</strong>：<br>
-WorkBuddy 的技能（Skills）就是这套——<strong>少量技能索引常驻，完整内容用到才读</strong>。<br>
-<strong>你有实操，只是现在对上概念名了。</strong></p>
+<p><strong>「按需查阅」这个思路，你可能已经见过</strong>：<br>
+现在主流的 Agent 工具大多都有「技能（Skills）」机制，用的就是这套——<br>
+<strong>少量技能索引常驻，完整内容用到才读</strong>。<br>
+<strong>如果你用过这类工具，这块你就有实操，只是现在对上概念名了。</strong></p>
 <hr>
-<h2>3.8 面试会怎么问</h2>
+<h2>3.8 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「Agent 和普通调用差在哪？」</td>
+<td>Agent 和普通调用差在哪？</td>
 <td>「Agent 更智能」</td>
 <td><strong>多了循环</strong>：能看结果再决定下一步</td>
 </tr>
 <tr>
-<td>「<strong>什么时候该用 Agent</strong>？」</td>
+<td><strong>什么时候该用 Agent？</strong></td>
 <td>「Agent 更智能，能用就用」</td>
 <td>⭐ <strong>编排模式</strong>：先看单次调用够不够；能拆成固定流程就用<strong>工作流</strong>；只有步骤数事先说不准才上<strong>自主 Agent</strong></td>
 </tr>
 <tr>
-<td>「工具调用怎么实现的？」</td>
+<td>工具调用怎么实现的？</td>
 <td>「模型自己调用的」</td>
 <td>说<strong>六步链条</strong>，强调模型只出请求、程序才执行</td>
 </tr>
 <tr>
-<td>「怎么防止 Agent 做坏事？」</td>
+<td>怎么防止 Agent 做坏事？</td>
 <td>「加提示词约束」</td>
 <td>说<strong>四道防线</strong>：权限最小化 / 高风险确认 / 参数校验 / 轮次成本上限；⭐ <strong>再往上说一层</strong>：这四道都在<strong>执行层</strong>，兜底的是<strong>数据层</strong>——因为那层不依赖模型判断</td>
 </tr>
 <tr>
-<td>「Agent 被提示注入了怎么办？」</td>
+<td>Agent 被提示注入了怎么办？</td>
 <td>「提示词里写清楚别听它的」</td>
 <td>⭐ 说<strong>护栏分层</strong>：<strong>同一个上下文里的 Agent 判断不了自己是否被注入</strong>，所以上下文层只能降低成功率；真正兜底的是<strong>执行层（凭证 + 人工确认）和数据层（权限）</strong></td>
 </tr>
 <tr>
-<td>「Agent 老是选错工具怎么办？」</td>
+<td>Agent 老是选错工具怎么办？</td>
 <td>「换个更强的模型」</td>
 <td>⭐ <strong>先改工具描述</strong>——重点写「什么情况下该选我」，加真实使用例子</td>
 </tr>
 <tr>
-<td>「模型之外还有什么可优化的？」</td>
+<td>模型之外还有什么可优化的？</td>
 <td>「不知道」</td>
 <td>⭐ 说 <strong>Harness</strong>：上下文管理 + 工具接口 + 约束 + 验证 + 纠正；⭐ <strong>能再加一句「模型固定时，扩观察空间和动作空间最有效」更好</strong></td>
 </tr>
 <tr>
-<td>「怎么知道它干对了？」</td>
+<td>怎么知道它干对了？</td>
 <td>「看一眼」</td>
 <td>先定验收条件 → 跑一次确认会失败 → 再实现 → 跑通才算完成</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2>本阶段要带走的三句话</h2>
+<h2>本阶段要带走的四句话</h2>
 <ol>
 <li>
 <p><strong>Agent = 模型 + 工具 + 循环。</strong> 那个「看结果再决定下一步」就是它的本质；<br>
-   而它循环的对手是<strong>环境</strong>——<strong>模型不变时，扩观察空间和动作空间最有效</strong>。</p>
+    而它循环的对手是<strong>环境</strong>——<strong>模型不变时，扩观察空间和动作空间最有效</strong>。</p>
 </li>
 <li>
 <p><strong>模型只出请求，执行永远在外层程序。</strong> 六步链条要能背下来；<br>
-   上下文 = <strong>静态前缀 + 轨迹</strong>（轨迹只增不减，所以越跑越贵）。</p>
+    上下文 = <strong>静态前缀 + 轨迹</strong>（轨迹只增不减，所以越跑越贵）。</p>
 </li>
 <li>
 <p><strong>能动手就有风险。</strong> 管住它靠<strong>四道防线</strong>（= 行业术语里的 Harness 约束/验证/纠正），<br>
-   而四道防线都在<strong>执行层</strong>——真正兜底的是<strong>数据层</strong>，因为那层不依赖模型判断。<br>
-   证明它干对了靠先定验收条件。</p>
+    而四道防线都在<strong>执行层</strong>——真正兜底的是<strong>数据层</strong>，因为那层不依赖模型判断。<br>
+    证明它干对了靠先定验收条件。</p>
 </li>
 <li>
 <p>⭐ <strong>不是所有任务都该用自主 Agent。</strong> 能确定流程的用<strong>工作流</strong>；<br>
@@ -882,11 +910,10 @@ WorkBuddy 的技能（Skills）就是这套——<strong>少量技能索引常�
 </li>
 </ol>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
+<p>学完请去做同目录下的 <code>测验</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 3」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程进度</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
+  transition:background .2s,color .2s;
+}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
+a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
+strong{color:var(--strong);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>课程进度</h1>
+<blockquote>
+<p><strong>这份文件是给你（学员）自查用的。</strong><br>
+教练 Scout 会在你每次过关时更新它 —— 走到哪一阶段、哪个小节、错题攒了多少。</p>
+<p><strong>换新对话的时候记得把它发给教练</strong>，它就知道从哪儿接着教了，不用你重新解释一遍。</p>
+</blockquote>
+<hr>
+<h2>总体进度</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>状态</th>
+<th>日期</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段 0 · 基础概念</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 1 · Prompt 工程</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 2 · RAG</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 3 · Agent 与工具调用</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 4 · 多 Agent 协作</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 5 · 工程化</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 6 · 垂直应用</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 7 · 求职实战</td>
+<td>⬜ 未开始</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>当前所在阶段</strong>：还没开始<br>
+<strong>最后更新</strong>：——</p>
+<hr>
+<h2>本阶段细节</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前阶段</td>
+<td>—</td>
+</tr>
+<tr>
+<td>正在学到</td>
+<td>—</td>
+</tr>
+<tr>
+<td>本阶段测验</td>
+<td>未做</td>
+</tr>
+<tr>
+<td>测验成绩</td>
+<td>—</td>
+</tr>
+<tr>
+<td>追问</td>
+<td>未做</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>错题统计</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>错题数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段 0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 2</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 3</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 4</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 5</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 6</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>阶段 7</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>0</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>错题的具体内容在 <strong>学员错题本</strong> 里，这里只记数量。</p>
+</blockquote>
+<hr>
+<h2>下一步该做什么</h2>
+<blockquote>
+<p>教练每次推进时都会更新这一段。</p>
+</blockquote>
+<p><strong>还没开始</strong> —— 从 <code>阶段0-基础概念/阶段0本章导读.html</code> 开始。</p>
+<hr>
+<h2>换对话时怎么接上</h2>
+<ol>
+<li>把这三个文件发给新的教练：<strong>课程进度</strong>、<strong>学员画像</strong>、<strong>学员错题本</strong></li>
+<li>说一句「我在学阶段 N，之前学到这里」</li>
+<li>它读完就接上了 —— 不用重新自我介绍</li>
+</ol>
+<hr>
+<p><em>这份文件的内容由你和教练共同维护。</em><em>它只是进度记录，删了也不影响学习</em><em> —— 只是下次要多说一遍。</em></p>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>

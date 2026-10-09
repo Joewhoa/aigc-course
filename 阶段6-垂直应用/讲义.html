@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,32 +98,33 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 6 讲义：垂直应用</h1>
 <blockquote>
-<p>** 按教材核验 ⑥ 补充<strong>：6.2 行业趋势结论、6.3 A2A 实质、6.5 手段三步递进、<br>
-6.7 「先问有没有 API」决策准则、</strong>新增 6.8 框架了解<strong>（面试节改为 6.8）<br>
-本阶段目标：把前面五阶段学的东西，放进真实行业场景里，讲清「这套技术到底能怎么落地」。<br>
-阅读重点：</strong>6.3 协议标准（MCP / A2A）<strong>、</strong>6.5 三种落地范式 ＋ 手段三步递进<strong>、</strong>6.8 框架了解**。</p>
+<p>本阶段目标：把前面五阶段学的东西，放进真实行业场景里，讲清「这套技术到底能怎么落地」。<br>
+阅读重点：<strong>6.3 协议标准（MCP / A2A）</strong>、<strong>6.5 三种落地范式 ＋ 手段三步递进</strong>、<strong>6.8 框架了解</strong>。</p>
 </blockquote>
 <hr>
 <h2>怎么用这份讲义</h2>
 <ul>
-<li><strong>读多久</strong>：全篇 10 节，约 40–45 分钟。</li>
+<li><strong>读多久</strong>：全篇 9 节，约 40–45 分钟。</li>
 <li>
-<p><strong>什么顺序</strong>：<strong>按 6.1 → 6.9 顺序读</strong>。6.1–6.8 是「落地方法论」，<br>
-<strong>6.8 框架了解</strong>（本次新增）是<strong>独立的一节</strong>，可放最后读。</p>
+<p><strong>什么顺序</strong>：<strong>按 6.1 → 6.9 顺序读</strong>。6.1–6.7 是「落地方法论」，<br>
+<strong>6.8 框架了解</strong>是<strong>独立的一节</strong>，可放最后读。</p>
 </li>
 <li>
 <p><strong>哪里停下来自测</strong>：看到 🧩 停一下，合上讲义用自己的话答一遍，再往下读。</p>
 </li>
 <li>
-<p><strong>读完做什么</strong>：去做同目录的 <code>测验.md</code>（<strong>14 题，11.2 分及格</strong>），把答案回传给我。<br>
-<strong>做完务必回头扫一遍有没有漏答的要点</strong>——多数人的问题不是「不懂」，而是「漏答」。</p>
+<p><strong>读完做什么</strong>：去做同目录的 <code>测验</code>（<strong>14 题，11.2 分及格</strong>，80%）。<br>
+  做完<strong>务必回头扫一遍有没有漏答的要点</strong>——多数人的问题不是「不懂」，而是「漏答」。</p>
 </li>
 <li>
-<p><strong>卡住怎么办</strong>：<strong>任何一处看不懂，直接在对话里标出来</strong>——这不是麻烦我，<strong>是在帮我找讲义的漏洞</strong>。</p>
+<p><strong>卡住怎么办</strong>：<strong>任何一处看不懂，直接标出来问教练</strong>。卡住的地方通常就是讲义的漏洞，<br>
+  提出来才能补上——讲义就是这么一节一节补出来的。</p>
 </li>
-<li><strong>⚠️ 一个定位提醒</strong>：本阶段会提到框架（LangChain / LlamaIndex 等），<br>
+<li>
+<p><strong>⚠️ 一个定位提醒</strong>：本阶段会提到框架（LangChain / LlamaIndex 等），<br>
   但<strong>不要求你用、更不要求你写</strong>。这一节要练的是判断力：<br>
-<strong>看到有人推荐框架，你能问出「它省了我什么、代价是什么」。</strong></li>
+<strong>看到有人推荐框架，你能问出「它省了我什么、代价是什么」。</strong></p>
+</li>
 </ul>
 <hr>
 <h2>6.1 先说清「垂直应用」是什么</h2>
@@ -170,15 +196,15 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>同一套技术，五种做法。</strong> 这就是「垂直」的含义——<strong>不是技术不同，是取舍不同</strong>。</p>
-<p><strong>面试话术</strong>：面试官问「你怎么看 AI 在 X 行业的应用」，不要说通用能力，要说<strong>这个行业的容错率有多低、哪些环节绝对不能出错</strong>。</p>
-<h3>⭐ 一句更上层的话：行业正在从「能做事」转向「可靠地做事」（ 补 · 教材出处 教材-319）</h3>
+<p><strong>回答这个问题的要点</strong>：谈 AI 在 X 行业的应用，不要泛泛讲通用能力，要说<strong>这个行业的容错率有多低、哪些环节绝对不能出错</strong>。</p>
+<h3>⭐ 一句更上层的话：行业正在从「能做事」转向「可靠地做事」</h3>
 <p><strong>这不是本节的小结，是整个行业的现状判断</strong>：</p>
 <blockquote>
 <p><strong>行业正在从「能做事」向「可靠地做事」转变。</strong><br>
 模型能力已经够用了——<strong>决定差距的，是它能不能被稳稳当当地放进真实业务里。</strong><br>
 而决定「稳不稳」的，就是 <strong>Harness 工程</strong>（阶段 3 讲的护栏 ＋ 阶段 5 讲的可观测 ＋ 校验）。</p>
 </blockquote>
-<p><strong>这直接决定你的求职方向判断</strong>：</p>
+<p><strong>这直接决定你的能力方向判断</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -198,14 +224,14 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <blockquote>
-<p><strong>面试怎么用</strong>：被问「你怎么看未来 1–2 年 AI 的发展」，<br>
+<p><strong>这个结论怎么用</strong>：谈「未来 1–2 年 AI 的发展」时，<br>
 可以答：「<strong>我觉得瓶颈不在模型，在工程</strong>——模型已经够聪明了，<br>
 但把它放进真实业务里、让它<strong>不出事</strong>，这件事大部分团队还没做好。<br>
 <strong>所以我认为竞争力会从『会调模型』转向『会做可靠性工程』。</strong>」</p>
 </blockquote>
 <hr>
 <h2>6.3 协议标准：MCP / A2A（这块容易被追问）</h2>
-<p>这是行业正在标准化的方向，面试里提一句会很亮。</p>
+<p>这是行业正在标准化的方向，也是最容易被追问的一块。</p>
 <h3>为什么需要协议标准</h3>
 <p>阶段 3 讲过工具调用：模型要输出结构化文本，程序去执行。问题是——</p>
 <blockquote>
@@ -219,7 +245,6 @@ strong{color:var(--strong);}
 <th>协议</th>
 <th>全称</th>
 <th>解决什么</th>
-<th>教材出处</th>
 </tr>
 </thead>
 <tbody>
@@ -227,19 +252,16 @@ strong{color:var(--strong);}
 <td><strong>MCP</strong></td>
 <td>Model Context Protocol</td>
 <td><strong>模型/Agent ↔ 工具/数据源</strong> 的统一接口。一次接好，到处能用</td>
-<td>李 ch1 / ch4</td>
 </tr>
 <tr>
 <td><strong>A2A</strong></td>
 <td>Agent to Agent</td>
 <td><strong>Agent ↔ Agent</strong> 之间的通信标准</td>
-<td>李 教材-521</td>
 </tr>
 <tr>
 <td><strong>NLWeb</strong></td>
 <td>Natural Language Web</td>
 <td>用自然语言访问网站内容的协议</td>
-<td>⚠️ <strong>补充资料，主教材未覆盖</strong></td>
 </tr>
 </tbody>
 </table>
@@ -247,8 +269,8 @@ strong{color:var(--strong);}
 <blockquote>
 <p><strong>MCP 就像「USB 接口」</strong>——以前每个设备插口都不一样，现在统一成一个标准口，谁都能插。</p>
 </blockquote>
-<h3>⭐ A2A 到底是什么：跟 MCP 的分工（ 补 · 教材出处 教材-521）</h3>
-<p>原讲义里 A2A 只有一行，这里补上<strong>它真正解决的问题</strong>：</p>
+<h3>⭐ A2A 到底是什么：跟 MCP 的分工</h3>
+<p>光记住「MCP 接工具、A2A 接 Agent」不够，还要能答出「那 A2A 具体解决什么」。先看对照：</p>
 <table>
 <thead>
 <tr>
@@ -275,7 +297,7 @@ strong{color:var(--strong);}
 </tr>
 </tbody>
 </table>
-<p><strong>A2A 的关键机制</strong>（书里提的，理解就够）：</p>
+<p><strong>A2A 的关键机制</strong>（理解就够，不用背）：</p>
 <ul>
 <li>
 <p><strong>Agent Card（智能体名片）</strong>：一个 Agent 对外声明「<strong>我能做什么、需要你提供什么、我是谁</strong>」——<br>
@@ -288,13 +310,13 @@ strong{color:var(--strong);}
 </ul>
 <blockquote>
 <p><strong>一句话记住分工</strong>：<strong>MCP 让 Agent 会用工具，A2A 让 Agent 会找同行。</strong><br>
-前者接「物」，后者接「人」——<strong>不对，接的是「别的 Agent」</strong>。</p>
+前者接「物」（工具、数据），后者接「别的 Agent」。</p>
 </blockquote>
-<p><strong>面试怎么讲</strong>：「<strong>MCP 和 A2A 解决的是两个不同层面的碎片化</strong>——<br>
+<p><strong>一句话完整表述</strong>：「<strong>MCP 和 A2A 解决的是两个不同层面的碎片化</strong>——<br>
 MCP 是<strong>工具接入碎片化</strong>（接口不统一，每次重写）；<br>
 A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互相调不通，用 Agent Card 声明能力来对接）。<br>
 一个接工具，一个接同行。」</p>
-<h3>面试要点</h3>
+<h3>这一节的核心</h3>
 <p>不用背细节，能说清「MCP 是为了解决工具接入碎片化、让工具能被复用」，就已经到位。</p>
 <hr>
 <h2>6.4 行业落地的一般路径</h2>
@@ -337,7 +359,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </table>
 <p><strong>最容易翻车的是第 1 步和第 2 步</strong>——技术都对，选错了场景或指标，项目就没有价值。</p>
 <hr>
-<h2>6.5 三种落地范式（面试常考）</h2>
+<h2>6.5 三种落地范式（高频）</h2>
 <table>
 <thead>
 <tr>
@@ -368,16 +390,16 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </tr>
 </tbody>
 </table>
-<p><strong>面试话术</strong>：把做过的项目往这三个范式里归位。比如「批量换色」属于内容生成类 + 流程自动化，「账单核对项目」属于知识问答类。</p>
-<h3>⭐ 第 3 步「选手段」展开：有一条<strong>三步递进</strong>的顺序（ 补 · 教材出处 教材-440）</h3>
-<p>第 3 步「选手段」不是自由选择，<strong>教材给了一条明确的递进顺序</strong>：</p>
+<p><strong>怎么用这张表</strong>：把做过的项目往这三个范式里归位。比如「批量生成商品图」属于内容生成类 + 流程自动化，「内部文档问答助手」属于知识问答类。</p>
+<h3>⭐ 第 3 步「选手段」展开：有一条<strong>三步递进</strong>的顺序</h3>
+<p>第 3 步「选手段」不是自由选择，<strong>有一条明确的递进顺序</strong>：</p>
 <pre><code>① 先优化提示词      ← 最便宜，先试这个
       ↓ 还是不够
 ② 再考虑工作流       ← 步骤固定、要可预测时
       ↓ 还是不够
 ③ 最后才引入自主 Agent ← 最灵活，也最不可控、最贵
 </code></pre>
-<p><strong>教材原话的意思</strong>：「<strong>先优化提示词，再考虑工作流，最后才引入自主 Agent。</strong>」</p>
+<p><strong>这个顺序的通用表述</strong>：「<strong>先优化提示词，再考虑工作流，最后才引入自主 Agent。</strong>」</p>
 <p><strong>为什么是这个顺序</strong>（这就是「成本 vs 灵活性」的取舍）：</p>
 <table>
 <thead>
@@ -415,7 +437,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 很多团队一上来就想上 Agent（显得高级），<br>
 但如果<strong>工作流能解决，就不要用 Agent</strong>——<br>
 <strong>因为 Agent 会带来一整套额外的工程负担</strong>（护栏、监控、评测、容错，见阶段 3–5）。</p>
-<p><strong>面试怎么讲</strong>：「我选手段是有<strong>顺序</strong>的：<strong>先优化提示词 → 再考虑工作流 → 最后才上自主 Agent</strong>。<br>
+<p><strong>一句话完整表述</strong>：「我选手段是有<strong>顺序</strong>的：<strong>先优化提示词 → 再考虑工作流 → 最后才上自主 Agent</strong>。<br>
 因为<strong>自主 Agent 不是更高级，是更不可控</strong>——它会多带一整套工程负担（护栏、监控、评测）。<br>
 <strong>能用工作流解决的，我不用 Agent。</strong>」</p>
 </blockquote>
@@ -480,29 +502,29 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">步</th>
+<th>步</th>
 <th>干什么</th>
 <th>对应阶段 3 的什么</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><strong>截屏</strong> —— 看屏幕上现在有什么</td>
 <td>Observation（观察）</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>决定</strong> —— 该点哪、该输什么</td>
 <td>Thought（想）</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td><strong>操作</strong> —— 移动鼠标、点击、敲键盘</td>
 <td>Action（做）</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td><strong>再截屏</strong> —— 确认上一步有没有生效</td>
 <td>回到第 1 步</td>
 </tr>
@@ -510,7 +532,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </table>
 <p><strong>看出来了吗——这就是阶段 3 的 ReAct 循环，只是「观察」从文字换成了截图。</strong><br>
 机制没变，<strong>换的是输入形式</strong>。</p>
-<h3>⭐ 先问一句：这软件有 API 吗？（ 补 · 教材出处 教材 / 公开课 15:11）</h3>
+<h3>⭐ 先问一句：这软件有 API 吗？</h3>
 <p><strong>CUA 不是首选，是「实在没办法」时的最后手段。</strong></p>
 <p>判断顺序（<strong>做行业落地时的第一个问题</strong>）：</p>
 <pre><code>这个系统有 API / 数据接口吗？
@@ -519,7 +541,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
           ├─ 人工操作 → 就人工（不一定非要用 AI）
           └─ 量大、重复、值得自动化 → 才上 CUA ⚠️
 </code></pre>
-<p><strong>为什么 API 优先</strong>（教材的原话是「<strong>了解何时计算机使用代理比仅用 API 自动化更合适</strong>」）：</p>
+<p><strong>为什么 API 优先</strong>（判断准则：<strong>先搞清楚「用界面操作」和「调接口」哪个更合适</strong>）：</p>
 <table>
 <thead>
 <tr>
@@ -559,7 +581,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <blockquote>
 <p><strong>一句话</strong>：<strong>CUA 是「用眼睛和手代替 API」，代价是又慢又不稳又危险——所以只在真的没 API 时才用。</strong></p>
 </blockquote>
-<p><strong>面试怎么讲</strong>：「我判断要不要上 Computer Use，<strong>第一步永远不是『能不能做』，而是『这系统有没有 API』</strong>——<br>
+<p><strong>一句话完整表述</strong>：「我判断要不要上 Computer Use，<strong>第一步永远不是『能不能做』，而是『这系统有没有 API』</strong>——<br>
 <strong>有 API 就用 API</strong>，因为它更快、更稳、可验证。<br>
 <strong>CUA 只在没有 API、且量大重复、值得自动化时才上</strong>，<br>
 而且必须配套护栏：<strong>高风险动作前要人工确认</strong>（阶段 5 · 5.5 讲过为什么它风险特别高）。」</p>
@@ -592,34 +614,36 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <li><strong>高风险动作要人确认</strong>：提交、删除、付款前必须停下来问</li>
 <li><strong>全程留痕</strong>：每一步截屏都存下来，出事能回看</li>
 </ol>
-<h3>面试怎么用这个知识点</h3>
-<p><strong>如果面试官问「Agent 还能用在什么场景」，Computer Use 是个好答案</strong>，因为：</p>
+<h3>这个知识点怎么用</h3>
+<p>谈「Agent 还能用在什么场景」时，Computer Use 是个很有说服力的例子，因为：</p>
 <ol>
 <li><strong>它解决了真问题</strong>——大量系统没有 API</li>
 <li><strong>它体现了你懂机制</strong>——你能说清「这就是 ReAct 换了观察形式」</li>
 <li><strong>它体现了你懂风险</strong>——能主动说沙箱和确认机制</li>
 </ol>
-<p><strong>一句话话术</strong>：</p>
+<p><strong>一句话完整表述</strong>：</p>
 <blockquote>
 <p>「很多老系统没有 API，只能走 Computer Use——让 Agent 截屏、识别、模拟操作。<br>
 机制上它就是 ReAct，只是观察从文字变成截图。所以复用的是同一套东西：<br>
 循环、工具、还有 Harness 的约束和验证。风险更高，所以必须加沙箱和高风险确认。」</p>
-<p><strong>想深入看</strong>：<code>拓展课/拓展3-多模态交互.md</code>（学完主线再看）</p>
+<p><strong>想深入看</strong>：多模态交互（图片、音频、屏幕理解）属于主线之外的内容，<br>
+本课程不展开——你只要记住一件事：<strong>输入形式变了，机制没变</strong>，<br>
+这正是上面 CUA 那张表的含义。</p>
 </blockquote>
 <hr>
-<h2>6.8 框架了解：LangChain / LlamaIndex 到底要不要用（ 新增）</h2>
+<h2>6.8 框架了解：LangChain / LlamaIndex 到底要不要用</h2>
 <blockquote>
 <p><strong>本节定位：只讲「它解决什么问题、什么时候值得用、什么时候不划算」。</strong><br>
 <strong>不教调 API、不要求写 LangChain 代码</strong>——你的分工是「读得懂、能验收」，<br>
 而这一节要练的判断力是：<strong>看到有人推荐框架，你能问出「它省了我什么、代价是什么」。</strong></p>
 </blockquote>
-<h3>一、先破一个误解：「学框架」是求职里性价比最低的事</h3>
-<p><strong>教材 教材 的原话（这句本身就是你要会的东西）</strong>：</p>
+<h3>一、先破一个误解：为什么「学框架」性价比最低</h3>
+<p><strong>一个很准确的行业说法（这句本身就是你要会的东西）</strong>：</p>
 <blockquote>
 <p>「<strong>学会某个具体框架的用法并不重要</strong>……关键考量在于<br>
 <strong>它能否用尽可能少的抽象层让你专注于业务逻辑</strong>。」</p>
 </blockquote>
-<p><strong>为什么这么讲</strong>（三个原因，面试可答）：</p>
+<p><strong>为什么这么讲</strong>（三个原因）：</p>
 <table>
 <thead>
 <tr>
@@ -634,11 +658,11 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </tr>
 <tr>
 <td><strong>② 抽象层是调试盲区</strong></td>
-<td><strong>教材 原话</strong>：「<strong>每多一层抽象都会成为以后调试时新的盲区</strong>」<br>——出问题时要一层层扒开看它到底做了什么</td>
+<td><strong>一个很准确的说法</strong>：「<strong>每多一层抽象都会成为以后调试时新的盲区</strong>」<br>——出问题时要一层层扒开看它到底做了什么</td>
 </tr>
 <tr>
 <td><strong>③ 底层能力才是壁垒</strong></td>
-<td><strong>教材 讲 LangChain 时的说法</strong>：它「<strong>仅通过优化 Harness 就显著提升基准表现</strong>」<br>→ <strong>框架的价值在「工程外壳」，不在模型能力</strong></td>
+<td>有一类框架<strong>仅通过优化 Harness（护栏 ＋ 工具 ＋ 循环）就显著提升了基准表现</strong>，模型本身没变强<br>→ <strong>框架的价值在「工程外壳」，不在模型能力</strong></td>
 </tr>
 </tbody>
 </table>
@@ -676,10 +700,10 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </table>
 <blockquote>
 <p>⚠️ <strong>这一行不用背</strong>。<strong>你要会的是「它们大致是哪一类」</strong>——<br>
-面试时被问「你用过什么框架」，<strong>说得出定位和取舍，比报出一堆名字重要得多</strong>。</p>
+谈「你用过什么框架」时，<strong>说得出定位和取舍，比报出一堆名字重要得多</strong>。</p>
 </blockquote>
 <h3>三、⭐ 核心判断：什么时候<strong>不该</strong>用框架</h3>
-<p><strong>这是本节最值钱的一段</strong>（教材 教材 的立场）：</p>
+<p><strong>这是本节最值钱的一段</strong>（<strong>一个行业共识</strong>）：</p>
 <blockquote>
 <p><strong>「保持简单。直接的 API 调用优于复杂的框架。」</strong></p>
 </blockquote>
@@ -729,7 +753,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </tr>
 </tbody>
 </table>
-<h3>四、你的验收视角（<strong>这才是你的活</strong>）</h3>
+<h3>四、验收视角（<strong>这才是分工所在</strong>）</h3>
 <p>当有人说「这个项目用了 LangChain」，<strong>你要能问出这三个问题</strong>：</p>
 <table>
 <thead>
@@ -758,7 +782,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <strong>这个理由够吗？</strong> ——<strong>不够</strong>。「生态好、社区活跃」说的是<strong>框架本身</strong>，<br>
 不是<strong>它对你这个项目解决了什么问题</strong>。<strong>要问回「它替你省了什么」。</strong></p>
 </blockquote>
-<h3>五、面试怎么讲（<strong>这段话很值钱</strong>）</h3>
+<h3>五、怎么把这一段讲清楚（<strong>这段话很值钱</strong>）</h3>
 <blockquote>
 <p>「<strong>我了解主流框架，但我不会为了用而用。</strong> 行业里有个说法很准确：<br>
 <strong>『直接的 API 调用优于复杂的框架』，而且『每多一层抽象都会成为以后调试时新的盲区』。</strong></p>
@@ -770,7 +794,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 所以我看框架项目，<strong>先问它替我省了什么</strong>，而不是先看它用了什么。」</p>
 </blockquote>
 <hr>
-<h3>⭐ 同一个场景，四种搭法（ 补 ·暴露的缺口）</h3>
+<h3>⭐ 同一个场景，四种搭法</h3>
 <p><strong>上表只说了「各是什么定位」，太抽象。这里用同一个例子把四种搭法摆出来对比。</strong></p>
 <p><strong>场景：一家公司要做「报销自动审批」</strong>（小额自动过、大额转人工）</p>
 <table>
@@ -812,7 +836,7 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <blockquote>
 <p><strong>一句话记住</strong>：<br>
 <strong>LangChain / LlamaIndex / CrewAI = 代码（你写）；Dify / n8n = 流程图（业务方拖）。</strong><br>
-而 <strong>③ 之所以存在，就是因为他不会写代码</strong>——这正好对应「<strong>流程固定的工作流没必要上框架，除非要可视化给别人看</strong>」。</p>
+而 <strong>③ 之所以存在，就是因为业务方不会写代码</strong>——这正好对应「<strong>流程固定的工作流没必要上框架，除非要可视化给别人看</strong>」。</p>
 </blockquote>
 <h3>⭐ 低代码平台到底怎么跑（把它接回你学过的 ReAct）</h3>
 <p><strong>很多人卡在这里：以为 Dify 是「更简单的 AI 工具」。不是——它是把 Agent 那套东西包进了可拖拽的壳。</strong></p>
@@ -885,8 +909,8 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <p><strong>可视化有个隐藏代价</strong>：<strong>业务方能自己改 ＝ 没人管质量</strong>。<br>
 他可能把 prompt 改坏了、或删掉一个护栏步骤，<strong>而且往往不通知你</strong>。</p>
 <p>→ <strong>所以用低代码平台，必须配「版本记录 + 变更评审」</strong>（阶段 5 的老话：<strong>能撤回来，才敢改</strong>）。</p>
-<h3>⭐ 你的验收重点在哪（按你的分工）</h3>
-<p><strong>你不写代码，但会验收用它搭出来的系统——这三处必须看</strong>：</p>
+<h3>⭐ 验收重点在哪（按分工）</h3>
+<p><strong>不写代码、但要验收用它搭出来的系统——这三处必须看</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -910,77 +934,80 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 </tbody>
 </table>
 <blockquote>
-<p>⚠️ <strong>面试怎么讲</strong>：「低代码平台的价值是<strong>让业务方能自己改</strong>，<br>
+<p>⚠️ <strong>一句话完整表述</strong>：「低代码平台的价值是<strong>让业务方能自己改</strong>，<br>
 但代价是<strong>没人管质量 ＋ 被平台绑死</strong>。<br>
 所以用它的前提是两条护栏：<strong>高风险节点留人工确认 ＋ 有版本记录能回滚</strong>。<br>
 另外我判断它该不该上，只看一条：<strong>这个流程需要业务方自己改吗</strong>——<br>
 不需要的话，写代码更可控。」</p>
 </blockquote>
 <hr>
-<h2>6.9 面试会怎么问</h2>
+<h2>6.9 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「你怎么看 AI 在 X 行业的应用？」</td>
+<td>你怎么看 AI 在 X 行业的应用？</td>
 <td>讲通用的模型能力</td>
 <td>讲这个行业的<strong>容错率</strong>和<strong>关键不许可出错环节</strong></td>
 </tr>
 <tr>
-<td>「<strong>你怎么看未来 1–2 年 AI 的发展？</strong>」</td>
+<td><strong>你怎么看未来 1–2 年 AI 的发展？</strong></td>
 <td>「模型会越来越强」</td>
-<td>「<strong>瓶颈不在模型，在工程</strong>——怎么让它<strong>不出事</strong>才是稀缺能力」（教材-319）</td>
+<td>「<strong>瓶颈不在模型，在工程</strong>——怎么让它<strong>不出事</strong>才是稀缺能力」</td>
 </tr>
 <tr>
-<td>「MCP 是什么？」</td>
+<td>MCP 是什么？</td>
 <td>「一个新框架」</td>
 <td>「统一工具接入的标准接口，解决工具碎片化、让工具能复用」</td>
 </tr>
 <tr>
-<td>「<strong>A2A 和 MCP 有什么区别？</strong>」</td>
+<td><strong>A2A 和 MCP 有什么区别？</strong></td>
 <td>「都是协议标准」</td>
 <td><strong>MCP 接工具、A2A 接 Agent</strong>（Agent Card 声明能力）；一个接「物」，一个接「同行」</td>
 </tr>
 <tr>
-<td>「一个行业场景怎么落地？」</td>
+<td>一个行业场景怎么落地？</td>
 <td>「接个模型就行」</td>
 <td>说<strong>五步路径</strong>：找场景 → 定指标 → 选手段 → 小范围试 → 迭代</td>
 </tr>
 <tr>
-<td><strong>「你怎么选技术手段？」</strong></td>
+<td><strong>你怎么选技术手段？</strong></td>
 <td>「复杂就用 Agent」</td>
 <td><strong>三步递进</strong>：先优化提示词 → 再工作流 → <strong>最后才自主 Agent</strong>（<strong>Agent 不是更高级，是更不可控</strong>）</td>
 </tr>
 <tr>
-<td><strong>「Computer Use 什么时候用？」</strong></td>
+<td><strong>Computer Use 什么时候用？</strong></td>
 <td>「没有 API 就能用」</td>
 <td><strong>第一步先问「有 API 吗」——有就用 API</strong>（更快更稳可验证）；CUA 是最后手段</td>
 </tr>
 <tr>
-<td>「你的项目属于哪种范式？」</td>
+<td>你的项目属于哪种范式？</td>
 <td>「就是个 AI 应用」</td>
 <td>归位到<strong>三种范式</strong>之一，并说清用了哪些阶段的技术</td>
 </tr>
 <tr>
-<td>「技术重要还是行业理解重要？」</td>
+<td>技术重要还是行业理解重要？</td>
 <td>「技术」</td>
 <td>「技术是及格线，行业理解决定能不能真落地」</td>
 </tr>
 <tr>
-<td><strong>「你用过 LangChain 吗？」</strong></td>
+<td><strong>你用过 LangChain 吗？</strong></td>
 <td>「用过，很熟」（或反过来「没用过」）</td>
 <td>说<strong>定位 ＋ 取舍</strong>：知道它是干什么的；<strong>能用直接调 API 解决的我不用框架</strong>，因为<strong>抽象层是调试盲区</strong></td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2>本阶段要带走的三句话</h2>
+<h2>本阶段要带走的四句话</h2>
 <ol>
 <li><strong>垂直应用 = 把通用能力装进具体场景。</strong> 价值在对场景的理解，不在模型本身。</li>
 <li><strong>行业正从「能做事」转向「可靠地做事」</strong>——<strong>竞争力在工程，不在调模型</strong>（这正是阶段 3–5 的内容）。</li>
@@ -988,11 +1015,10 @@ A2A 是<strong>Agent 之间协作碎片化</strong>（各有各的接法，互�
 <li><strong>框架是工具，不是信仰。</strong> <strong>直接的 API 调用优于复杂框架</strong>——<strong>因为每层抽象都是一个调试盲区。</strong></li>
 </ol>
 <hr>
-<p>学完请去做同目录的 <code>测验.md</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
+<p>学完请去做同目录的 <code>测验</code>，<strong>14 题，11.2 分及格</strong>（80%）。</p>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 6」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

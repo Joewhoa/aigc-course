@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -108,44 +133,41 @@ strong{color:var(--strong);}
 </tr>
 <tr>
 <td><strong>5.7</strong></td>
-<td>⭐ <strong>输出校验</strong> —— 代码层的守门员（本阶段新增）</td>
+<td>⭐ <strong>输出校验</strong> —— 代码层的守门员</td>
 </tr>
 <tr>
 <td><strong>5.8</strong></td>
-<td>⭐ <strong>Python 工程基本功</strong> —— 类型注解 / venv / 依赖锁定（本阶段新增）</td>
+<td>⭐ <strong>Python 工程基本功</strong> —— 类型注解 / venv / 依赖锁定</td>
 </tr>
 <tr>
 <td><strong>5.9</strong></td>
-<td>⭐ <strong>async 异步</strong> —— 什么时候能并行，什么时候不能（本阶段新增）</td>
+<td>⭐ <strong>async 异步</strong> —— 什么时候能并行，什么时候不能</td>
 </tr>
 <tr>
 <td><strong>5.10</strong></td>
-<td>⭐ <strong>容器化部署</strong> —— 镜像 / 容器 / volume ＋ <strong>Dockerfile 写法</strong> ＋ 隔离三档（本阶段新增）<br>　★ 另含：<strong>容器 vs 虚拟机</strong> ＋ <strong><code>.dockerignore</code> 三道闸</strong> ＋ <strong>分层机制</strong>（含 67s→8.4s 实测）＋ <strong>真实踩坑</strong></td>
+<td>⭐ <strong>容器化部署</strong> —— 镜像 / 容器 / volume ＋ <strong>Dockerfile 写法</strong> ＋ 隔离三档<br>　★ 另含：<strong>容器 vs 虚拟机</strong> ＋ <strong><code>.dockerignore</code> 三道闸</strong> ＋ <strong>分层机制</strong>（含 67s→8.4s 实测）＋ <strong>真实踩坑</strong></td>
 </tr>
 <tr>
 <td>5.11</td>
-<td>面试会怎么问</td>
+<td>章节小测：能答上来才算真会了</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>** 按教材核验扩充<strong>（教材 ch1/ch2/ch4/ch5/ch6/ch7 ＋ 公开课 06/10/16/17/18）：<br>
-</strong>原 7 节 → 10 节**（新增 5.7–5.9）；另就地补 6 处<br>
-（Trace/Span、评估门、模型路由、越狱 vs 注入、部署模式、生命周期）。<br>
-</p>
-<p><strong>5.10 容器化</strong>（教材依据 = <strong>教材 ch4「隔离与沙盒」</strong>：隔离三档<br>
-<strong>进程级 / 容器 / microVM</strong>，以及「<strong>venv 不是沙盒</strong>」的澄清——与 5.8 呼应）：</p>
-<p>· <strong>容器 vs 虚拟机</strong>（含「Windows 上装 Docker 必须先装 WSL2」这个机制原因）<br>
-· <strong><code>.dockerignore</code> 系统理解与「密钥三道闸」</strong><br>
-· <strong>分层机制</strong>（层不可变 → 依赖先装、代码后拷才能复用缓存）<br>
-· <strong>三条常见环境问题</strong>（代理导致构建失败 ／ 环境变量删除方式不对 ／<br>
-  拉不动镜像的真因常是 IPv6 不通）</p>
+<p><strong>本阶段新增的两块</strong>（如果你只想抓重点，这两块是重点）：</p>
+<p>· <strong>可观测性 / 评测 / 成本延迟 / 安全 / 部署</strong>（5.2–5.6）——<br>
+  Trace 与 Span、评估门、模型路由、越狱 vs 注入、三种部署模式、Agent 生命周期。<br>
+· <strong>容器化</strong>（5.10）——<strong>隔离三档：进程级 / 容器 / microVM</strong>，<br>
+  以及「<strong>venv 不是沙盒</strong>」的澄清——与 5.8 呼应。<br>
+  包含：容器 vs 虚拟机（含「Windows 上装 Docker 必须先装 WSL2」这个机制原因）、<br>
+<code>.dockerignore</code> 与「密钥三道闸」、分层机制（层不可变 → 依赖先装、代码后拷才能复用缓存）、<br>
+  三条常见环境问题（代理导致构建失败／环境变量删除方式不对／拉不动镜像的真因常是 IPv6 不通）。</p>
 <p>⚠️ <strong>本阶段不补的内容</strong>：K8s ／ 容器网络 ／ 存储驱动 —— 属 Infra 层，与本课程定位无关。</p>
 </blockquote>
 <h2>文件</h2>
 <ul>
-<li><code>讲义.md</code> / <code>讲义.html</code> —— 正文（<strong>11 节</strong>）</li>
-<li><code>测验.md</code> / <code>测验.html</code> —— <strong>20 题（选择 8 ＋ 简答 12），16 分及格</strong></li>
+<li><code>讲义</code> / <code>讲义.html</code> —— 正文（<strong>11 节</strong>）</li>
+<li><code>测验</code> / <code>测验.html</code> —— <strong>20 题（选择 8 ＋ 简答 12），16 分及格</strong></li>
 </ul>
 <h2>过关标准</h2>
 <ul>
@@ -157,6 +179,7 @@ strong{color:var(--strong);}
 <li>能说清<strong>越狱与提示词注入</strong>的区别</li>
 <li><strong>能说清 Docker 解决了哪两个问题、隔离三档怎么选、为什么「用了 Docker 就安全」是错的</strong></li>
 <li><strong>能验收一个 Dockerfile（5 条检查）</strong></li>
+<li><strong>考核是「设计题 ＋ 验收题」，不考手写代码</strong> —— 代码由 AI 写，你负责判断和验收</li>
 </ul>
 <h2>本阶段最该记住的三句</h2>
 <blockquote>
@@ -166,40 +189,6 @@ strong{color:var(--strong);}
 <p><strong>容器化 = 可复现 ＋ 隔离；但别把 Docker 当绝对安全。</strong><br>
 <strong>venv 隔离依赖、容器隔离运行、microVM 隔离硬件</strong>——选哪档看<strong>输入可不可信</strong>。</p>
 </blockquote>
-<hr>
-<h2>✅ 开课待补已并入（ 结清）</h2>
-<blockquote>
-<p>来源： ）。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>原待补</th>
-<th>落点</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Pydantic 校验</strong></td>
-<td>→ <strong>5.7 输出校验</strong>（用教材的「守门员」概念讲，<strong>不硬塞产品名</strong>——两本教材都没有这个词）</td>
-<td>✅ 已并入</td>
-</tr>
-<tr>
-<td><strong>Python 工程基本功</strong></td>
-<td>→ <strong>5.8</strong>（类型注解 / venv / 依赖锁定；<strong>venv 讲成「纠偏」</strong>：它不是安全沙盒）</td>
-<td>✅ 已并入</td>
-</tr>
-<tr>
-<td><strong>async 异步</strong></td>
-<td>→ <strong>5.9</strong>（了解级，不教语法；<strong>重点讲「什么时候不能并行」</strong>）</td>
-<td>✅ 已并入</td>
-</tr>
-</tbody>
-</table>
-<p><strong>仍然坚持的原则</strong>：<strong>不补「手写 Python」</strong>——本课程的分工是「代码由 AI 写、他负责判断与验收」，<br>
-手写类考核已明确撤除（见《交付规范》第七节）。<br>
-5.7 / 5.8 / 5.9 都按「<strong>他怎么验收</strong>」的角度写，考核形式为<strong>设计题 + 验收题</strong>。</p>
 <hr>
 <h2>📌 追加：容器化（5.10）与「不考手写」的关系</h2>
 <p><strong>「写法也学习一下」</strong>，这与「不考手写代码」<strong>不冲突</strong>，原因是：</p>

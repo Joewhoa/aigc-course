@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -74,7 +99,7 @@ strong{color:var(--strong);}
 <h1>补充讲义：微调（Fine-tuning）到底是怎么操作的</h1>
 <blockquote>
 <p>类型：<strong>补充材料</strong>（不属于阶段 2 讲义正文，不用做测验）<br>
-起因：你说「看着还是不太明白微调具体是怎么操作」——<strong>这个提问抓对了</strong>，<br>
+很多人学到这会问「微调具体是怎么操作」——这个问题抓对了，<br>
 阶段 2 讲义只讲了「微调管什么」，没讲「怎么做」。<br>
 <strong>读完时间</strong>：约 20 分钟 ｜ <strong>怎么用</strong>：先读一遍，最后做「自测 6 问」自检</p>
 </blockquote>
@@ -82,10 +107,10 @@ strong{color:var(--strong);}
 <h2>📖 怎么用这份讲义</h2>
 <ol>
 <li>先看第 1 节建立「微调到底动了什么」的直觉（<strong>这是全篇最重要的一节</strong>）</li>
-<li>第 2 节看真实操作流程（用你自己项目举例）</li>
-<li>第 3-4 节看技术名词（SFT / LoRA / RLHF）——<strong>这一部分面试会问，要能说清区别</strong></li>
-<li>第 5 节看「什么时候不该用」——<strong>这是面试的分水岭</strong></li>
-<li>最后自测 6 问，对不上答案就回读对应小节</li>
+<li>第 2 节看真实操作流程（走一遍完整六步）</li>
+<li>第 3 节看技术名词（SFT / LoRA / RLHF）——<strong>这部分要能说清区别</strong></li>
+<li>第 4 节看「一张表把概念钉死」，第 5 节看「小模型到底是什么」、第 6 节看「什么时候不该用」</li>
+<li>最后做第 7 节的自测 7 问，对不上答案就回读对应小节</li>
 </ol>
 <hr>
 <h2>1. 先建立一个直觉：微调到底动了什么？</h2>
@@ -136,7 +161,7 @@ strong{color:var(--strong);}
 <tbody>
 <tr>
 <td>1000 条「用户问 X，我们客服这样回」</td>
-<td>学会你们客服的<strong>语气、话术、格式</strong></td>
+<td>学会你们客服的<strong>语气、表达习惯、格式</strong></td>
 </tr>
 <tr>
 <td>500 条「把这段文字变成 JSON」</td>
@@ -150,8 +175,8 @@ strong{color:var(--strong);}
 </table>
 <p>⚠️ <strong>注意「行为习惯」这四个字</strong>——微调学到的是倾向，不是硬规则，也不是知识库。</p>
 <hr>
-<h2>2. 具体怎么操作？用你的项目走一遍</h2>
-<p>假设明天你要做一个场景：<strong>账单核对项目的回答要严格符合公司的固定格式</strong>（先给结论、再给依据、最后给金额）。</p>
+<h2>2. 具体怎么操作？完整走一遍</h2>
+<p>假设明天你要做一个场景：<strong>财务对账助手的回答要严格符合固定格式</strong>（先给结论、再给依据、最后给金额）。</p>
 <p>现在的做法是每次都在提示词里写「请按以下格式回答……」，<strong>但模型有时会跑偏</strong>。</p>
 <p><strong>微调的完整流程（六步）：</strong></p>
 <h3>第 1 步：准备数据（这是最花时间的一步，占 70% 工作量）</h3>
@@ -170,7 +195,7 @@ strong{color:var(--strong);}
 </ul>
 <h3>第 2 步：写系统提示词 + 选基础模型</h3>
 <ul>
-<li><strong>系统提示词</strong>：总规则（比如「你是账单核对项目」）</li>
+<li><strong>系统提示词</strong>：总规则（比如「你是一名财务对账助手」）</li>
 <li><strong>基础模型</strong>：你要改哪个模型？可以是通用大模型，也可以选一个小模型来省钱</li>
 </ul>
 <h3>第 3 步：开始训练</h3>
@@ -220,7 +245,7 @@ strong{color:var(--strong);}
 </table>
 <hr>
 <h2>3. 三个必须分清的词：SFT / LoRA / RLHF</h2>
-<p>面试听到这三个词不要慌，它们是在回答「<strong>微调的具体方式</strong>」这个问题。</p>
+<p>看到这三个词不要慌，它们回答的是同一个问题：<strong>微调具体怎么做</strong>。</p>
 <h3>SFT（Supervised Fine-Tuning，监督微调）</h3>
 <p><strong>是什么</strong>：最常见的一种微调。就是拿「问题 → 标准答案」成对的例子去训练。</p>
 <p><strong>大白话</strong>：<strong>照着标准答案练</strong>。给它看题目和答案，让它模仿。</p>
@@ -234,7 +259,7 @@ strong{color:var(--strong);}
 <li><strong>快</strong>（几小时 vs 几天）</li>
 <li><strong>可以换</strong>：一个基础模型可以挂好几个不同的「帘子」，按场景切换</li>
 </ul>
-<p><strong>⚠️ 面试要点</strong>：现在说「微调」，工业界<strong>默认指的是 LoRA 这种</strong>，不是从头改整个模型。能说出这一点，面试官会知道你接触过真实工程。</p>
+<p><strong>⚠️ 一个容易忽略的点</strong>：现在说「微调」，工业界<strong>默认指的是 LoRA 这种</strong>，不是从头改整个模型。知道这一点说明你接触过真实工程。</p>
 <h3>RLHF（Reinforcement Learning from Human Feedback，人类反馈强化学习）</h3>
 <p><strong>是什么</strong>：更进阶的一种。不是给标准答案，而是给「<strong>哪个回答更好</strong>」的偏好判断，让模型自己摸索。</p>
 <p><strong>大白话</strong>：<strong>不告诉它标准答案，只告诉它「这个比那个好」</strong>，让它自己去试。</p>
@@ -299,11 +324,10 @@ strong{color:var(--strong);}
 <p>用大模型（贵）跑通一个场景 → 收集几千条「大模型的好回答」→<br>
 <strong>拿这些数据微调一个小模型</strong> → 小模型干同样的活，<strong>成本降到几十分之一</strong>。</p>
 </blockquote>
-<p>这个用法叫「<strong>蒸馏</strong>」（让小的学大的）。<strong>面试提这个，比只答「调风格」显得懂行情。</strong></p>
+<p>这个用法叫「<strong>蒸馏</strong>」（让小的学大的）。<strong>知道这个，比只答「调风格」更接近真实工程。</strong></p>
 <hr>
-<h2>4·补、「小模型」到底是什么？（ 他提问后补）</h2>
-<p>⚠️ <strong>先说一个我上一版用词不清的地方</strong>：</p>
-<p>我在两个不同的意思上用了「小模型」这个词，<strong>它们不是一回事</strong>：</p>
+<h2>5.「小模型」到底是什么？</h2>
+<p>⚠️ <strong>先说清一件事</strong>：「小模型」这个词在两个不同的意思上被用到，<strong>它们不是一回事</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -336,36 +360,36 @@ strong{color:var(--strong);}
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">步</th>
+<th>步</th>
 <th>做什么</th>
 <th>大白话</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">①</td>
+<td>①</td>
 <td><strong>先让大模型干活</strong></td>
-<td>拿它跑你这个场景（比如账单问答），跑出几千条回答</td>
+<td>拿它跑你这个场景（比如财务对账问答），跑出几千条回答</td>
 </tr>
 <tr>
-<td style="text-align: center;">②</td>
+<td>②</td>
 <td><strong>人工挑出好的</strong></td>
 <td>大模型的回答不是每条都好，<strong>挑出对的那批当教材</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">③</td>
+<td>③</td>
 <td><strong>拿这批教材训练小模型</strong></td>
 <td>就是我们前面讲的微调流程——<strong>小模型照着学</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">④</td>
+<td>④</td>
 <td><strong>上线小模型</strong></td>
 <td>之后所有请求走小模型，<strong>大模型只在「出教材」时用</strong></td>
 </tr>
 </tbody>
 </table>
 <h3>⭐ 为什么这样能省钱（算给你看）</h3>
-<p>这是整件事的关键，也是面试的得分点：</p>
+<p>这是整件事的关键：</p>
 <table>
 <thead>
 <tr>
@@ -407,7 +431,7 @@ strong{color:var(--strong);}
 <p><strong>小模型不是「免费的便宜货」，是「用一次性的训练成本，换长期的调用成本下降」。</strong><br>
 <strong>调用量越大越划算；调用量小的时候，反而不划算。</strong></p>
 </blockquote>
-<h3>面试怎么答这块</h3>
+<h3>这一块怎么理解</h3>
 <p>被问「微调能省钱吗，怎么省」，按这个说：</p>
 <blockquote>
 <p>「最主流的用法是<strong>蒸馏</strong>——先用大模型跑通场景，<br>
@@ -447,7 +471,7 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <hr>
-<h2>5. 什么时候<strong>不该</strong>用微调（面试分水岭）</h2>
+<h2>6. 什么时候<strong>不该</strong>用微调（最容易踩的分水岭）</h2>
 <table>
 <thead>
 <tr>
@@ -495,66 +519,66 @@ strong{color:var(--strong);}
 </blockquote>
 <p>为什么错：<strong>① 不准</strong>（微调学的是倾向，不是精确知识）<br>
 <strong>② 一更新就要重训</strong>（文档改了，你还得重新准备数据、重新训练一遍）<br>
-<strong>③ 查不到依据</strong>（面试官问「这个答案你哪来的」，你答不上）</p>
+<strong>③ 查不到依据</strong>（问「这个答案你哪来的」，答不上）</p>
 <p><strong>一句话记住</strong>：</p>
 <blockquote>
 <p><strong>要知识用 RAG，要习惯用微调，提示词能解决就别上这两个。</strong></p>
 </blockquote>
 <hr>
-<h2>6. 自测 7 问（读完了自己过一遍）</h2>
+<h2>7. 自测 7 问（读完了自己过一遍）</h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>问题</th>
 <th>对应小节</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>微调改变的是模型的什么？（一句话）</td>
 <td>1</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>为什么说「数据准备占 70% 工作量」？</td>
 <td>2</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>SFT 和 LoRA 的区别是什么？（用「房子」那个比喻说）</td>
 <td>3</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td>微调最主流的工业用法是什么？（不是「调风格」）</td>
 <td>4</td>
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
-<td><strong>「训练小模型」是怎么训的？谁是老师谁是学生？</strong></td>
-<td><strong>4·补</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">6</td>
-<td><strong>蒸馏为什么能省钱？关键在哪个量？</strong></td>
-<td><strong>4·补</strong></td>
-</tr>
-<tr>
-<td style="text-align: center;">7</td>
-<td>「拿微调记业务知识」错在哪？（说两条理由）</td>
 <td>5</td>
+<td><strong>「训练小模型」是怎么训的？谁是老师谁是学生？</strong></td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>蒸馏为什么能省钱？关键在哪个量？</strong></td>
+<td><strong>5</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td>「拿微调记业务知识」错在哪？（说两条理由）</td>
+<td>6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>⚠️ 第 5、6 问是<strong> 他提问后新增的</strong>——原版只写了「用小模型替代大模型省钱」这句结论，<br>
-<strong>没讲小模型从哪来、为什么省</strong>。他说「不懂」是对的。</p>
+<p>⚠️ <strong>第 5 节的「小模型」有两种含义</strong>，很多人在这里会混——<br>
+如果第 5、6 问答不上来，回读第 5 节那两张对照表。</p>
 </blockquote>
 <hr>
-<h2>7. 面试怎么答（照着说就行）</h2>
-<p><strong>问：「微调和 RAG 有什么区别？」</strong></p>
+<h2>8. 完整表述（可以照着说）</h2>
+<p><strong>核心问题：「微调和 RAG 有什么区别？」</strong></p>
 <blockquote>
 <p>「它们解决的是不同的问题。RAG 管的是『知不知道』——把资料检索出来，在提问的时候递给模型，<br>
 知识留在外面，文档更新了换个文件就行。微调管的是『怎么说话』——拿自己的例子重新训练模型，<br>
@@ -567,33 +591,15 @@ strong{color:var(--strong);}
 <p><strong>一句话：RAG 给的是知识，微调改的是风格和习惯，提示词能解决就别上这两个。</strong>」</p>
 </blockquote>
 <hr>
-<h2>8. 这份讲义的边界（先说清楚）</h2>
+<h2>9. 这份讲义的边界（先说清楚）</h2>
 <ul>
 <li><strong>不用做测验</strong>——这是补充材料，不进考核</li>
 <li><strong>不需要你动手</strong>——微调是 agent 干的活，你要会的是<strong>判断该不该用、该用哪种</strong></li>
 <li><strong>阶段 5（工程化）会讲工程细节</strong>——这份只建立概念，不深入部署、评测体系</li>
-<li>想再深入的话，看<strong>拓展课 拓展1-模型后训练SFT与RL</strong>（那份更技术一些）</li>
+<li><strong>这份讲义的边界</strong>：微调属于「训练模型」那一层，本课程全程<strong>只教到「判断该不该用」为止</strong>，<br>
+  不教你自己训模型。想知道微调在工程上怎么落地，看<strong>阶段 5（工程化）</strong>。</li>
 </ul>
 <hr>
-<h2>附：改动记录</h2>
-<table>
-<thead>
-<tr>
-<th>日期</th>
-<th>改动</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>新建。起因：学员做完阶段 2 第三轮测验后提问「微调具体是怎么操作的」——阶段 2 讲义只讲了「微调管什么」，没讲「怎么做」</td>
-</tr>
-<tr>
-<td></td>
-<td><strong>新增 4·补「小模型到底是什么」</strong> ＋ 自测由 6 问改 7 问。起因：学员追问「<strong>训练小模型又是什么意思，是用成本更低的模型的意思吗？</strong>」——原版只写了「用小模型替代大模型省钱」这一句结论，<strong>没讲小模型从哪来、蒸馏怎么跑、为什么能省</strong>。<br>新增内容：两种「小模型」的词义澄清（同系列轻量版 vs 更小的模型）／蒸馏四步（大模型当老师）／<strong>为什么省钱要算「训练一次性 vs 调用长期」这笔账</strong>（含假设数字的摊薄示例）／四条代价（能力降 / 要人挑数据 / 要重训 / 评测不能省）／面试怎么答「微调能省钱吗」</td>
-</tr>
-</tbody>
-</table>
 </div>
 
 <script>

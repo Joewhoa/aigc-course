@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,11 +98,8 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 5 讲义：工程化</h1>
 <blockquote>
-<p>** 按教材核验补 3 节 ＋ 6 处<strong><br>
-｜ ** 按新增 5.10 容器化</strong>（含 Dockerfile 写法；教材依据见 ch4 隔离三档）<br>
-｜ ** 按实践反馈补 5.10<strong>：容器 vs 虚拟机 / <code>.dockerignore</code> 系统理解 / 分层机制 / 真实踩坑<br>
-本阶段目标：讲清「做出来了」和「能上线」之间差什么。这是把 demo 变成产品的那一层。<br>
-阅读重点：</strong>5.2 可观测性<strong>、</strong>5.3 评测<strong>、</strong>5.7 输出校验<strong>、</strong>5.10 容器化**。</p>
+<p>本阶段目标：讲清「做出来了」和「能上线」之间差什么。这是把 demo 变成产品的那一层。<br>
+阅读重点：<strong>5.2 可观测性</strong>、<strong>5.3 评测</strong>、<strong>5.7 输出校验</strong>、<strong>5.10 容器化</strong>。</p>
 </blockquote>
 <hr>
 <h2>怎么用这份讲义</h2>
@@ -85,24 +107,27 @@ strong{color:var(--strong);}
 <li><strong>读多久</strong>：全篇 <strong>11 节</strong>，约 45–50 分钟。</li>
 <li>
 <p><strong>什么顺序</strong>：<strong>按 5.1 → 5.11 顺序读</strong>。前六节是「工程化主干」，<br>
-<strong>5.7–5.10 是新增的四节</strong>（输出校验 / Python 工程基本功 / async 异步 / 容器化），<br>
-  它们各自独立，可以任意穿插。<strong>5.10 容器化</strong>建议放在 5.6 之后紧接着读——它讲的是「怎么把东西部署出去」。</p>
+<strong>5.7–5.10 四节</strong>（输出校验 / Python 工程基本功 / async 异步 / 容器化）各自独立，<br>
+  可以任意穿插。<strong>5.10 容器化</strong>建议放在 5.6 之后紧接着读——它讲的是「怎么把东西部署出去」。</p>
 </li>
 <li>
 <p><strong>哪里停下来自测</strong>：看到 🧩 停一下，合上讲义用自己的话答一遍，再往下读。</p>
 </li>
 <li>
-<p><strong>读完做什么</strong>：去做同目录的 <code>测验.md</code>（<strong>14 题，11.2 分及格</strong>），把答案回传给我。<br>
-<strong>做完务必回头扫一遍有没有漏答的要点</strong>——多数人的问题不是「不懂」，而是「漏答」。</p>
+<p><strong>读完做什么</strong>：去做同目录的 <code>测验</code>（<strong>20 题，16 分及格</strong>，80%）。<br>
+  做完<strong>务必回头扫一遍有没有漏答的要点</strong>——多数人的问题不是「不懂」，而是「漏答」。</p>
 </li>
 <li>
-<p><strong>卡住怎么办</strong>：<strong>任何一处看不懂，直接在对话里标出来</strong>——这不是麻烦我，<strong>是在帮我找讲义的漏洞</strong>。</p>
+<p><strong>卡住怎么办</strong>：<strong>任何一处看不懂，直接标出来问教练</strong>。卡住的地方通常就是讲义的漏洞，<br>
+  提出来才能补上——这是这套课设计的运转方式。</p>
 </li>
-<li><strong>⚠️ 一个定位提醒</strong>：本阶段有 Python 相关内容（5.8 / 5.9 / 5.10），但<strong>不要求你写代码</strong>。<br>
-  我们的分工是<strong>「代码由 AI 写，你负责看懂、判断、验收」</strong>——所以这几节讲的是<br>
+<li>
+<p><strong>⚠️ 一个定位提醒</strong>：本阶段有 Python 相关内容（5.8 / 5.9 / 5.10），但<strong>不要求你写代码</strong>。<br>
+  分工是<strong>「代码由 AI 写，你负责看懂、判断、验收」</strong>——所以这几节讲的是<br>
 <strong>「这个机制是什么、为什么需要、我怎么验收」</strong>，不是「怎么写」。<br>
 <strong>5.10 容器化是例外</strong>：Dockerfile 是<strong>声明式清单</strong>（像采购单，不像代码，没有 if 和循环），<br>
-<strong>学它的「写法」和学「读代码」不是一回事</strong>，所以那一节是<strong>要你看得懂、能验收</strong>。</li>
+<strong>学它的「写法」和学「读代码」不是一回事</strong>，所以那一节是<strong>要你看得懂、能验收</strong>。</p>
+</li>
 </ul>
 <hr>
 <h2>5.1 先分清两个词：能跑 vs 能用</h2>
@@ -143,7 +168,7 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>工程化 = 把「能跑」变成「能用」。</strong></p>
-<p><strong>一句面试话术</strong>：面试官问「你的项目上线过吗」，如果只做过 demo，诚实说「做到了可运行版本」，<br>
+<p><strong>一句提醒</strong>：被问到「你的项目上线过吗」，如果只做过 demo，诚实说「做到了可运行版本」，<br>
 但要能说清「要上线还缺什么」——这比硬吹有价值。</p>
 <hr>
 <h2>5.2 可观测性：出问题了你能查吗</h2>
@@ -212,7 +237,7 @@ strong{color:var(--strong);}
 ├── Span 3: 调用模型生成回答        1.9s
 └── Span 4: 输出校验                0.05s  ← 5.7 节讲的守门员
 </code></pre>
-<p><strong>为什么这套结构重要</strong>（面试能说清这个就算真做过）：</p>
+<p><strong>为什么这套结构重要</strong>（能说清这个就算真做过）：</p>
 <ul>
 <li><strong>能分层定位</strong>：Trace 告诉你「这次慢」，Span 告诉你「慢在哪一步」。</li>
 <li>
@@ -231,7 +256,7 @@ strong{color:var(--strong);}
 </blockquote>
 <h3>一个真实的最小实践</h3>
 <p>不用搭复杂系统，<strong>先把每次调用的输入输出写进日志文件</strong>（哪怕是 JSON 一行一条），就已经能解决 80% 的排查问题。</p>
-<p><strong>面试要点</strong>：能说「我给每次调用记了完整的输入输出和工具轨迹，按 Trace/Span 组织，<br>
+<p><strong>验收要点</strong>：能说「我给每次调用记了完整的输入输出和工具轨迹，按 Trace/Span 组织，<br>
 出问题能定位到具体哪一步，还能按用户和模型切分看 p95」——<strong>这说明做过真实工程</strong>。</p>
 <hr>
 <h2>5.3 评测：怎么知道「变好了」还是「变差了」</h2>
@@ -345,7 +370,7 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>为什么这条重要</strong>：它把「凭感觉上线」变成「<strong>有据可依地上线</strong>」。<br>
-面试里说「<strong>我们的评测集是发布闸门，不过就不上</strong>」，比说「我们会做评测」高一个层级。</p>
+说「<strong>我们的评测集是发布闸门，不过就不上</strong>」，比说「我们会做评测」高一个层级。</p>
 <h3>⭐ 在线评估：实验室看不见的问题</h3>
 <p><strong>这一小节讲的是上面第二组分类里的「在线评估」</strong>（不是判分方式）。</p>
 <p>离线评测用的是<strong>事先准备的固定样本</strong>。但线上会遇到实验室里根本没有的情况：</p>
@@ -409,15 +434,16 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <blockquote>
-<p>** 收紧<strong>：讲义原来说「5% 以内差异很可能只是运气」——</strong>这个说法偏松<strong>。<br>
-更准确的是：</strong>先看波动幅度<strong>；如果样本量够、想更严格，还要做</strong>配对分析<strong><br>
-（同一批题上逐条比对，而不是只看两个总分）。教材的要求是<br>
-</strong>「分差要超过噪声、在配对分析中成立、且能复现，才值得发布改动」<strong>。<br>
-→ </strong>结论不变（小幅提升先怀疑），但表述更严谨。**</p>
+<p>⚠️ <strong>一个容易放松的判断标准</strong>：早期常见的说法是「5% 以内差异很可能只是运气」——<br>
+<strong>这个门槛偏松</strong>，容易把噪声当提升。<br>
+更准确的做法是：<strong>先看波动幅度</strong>；如果样本量够、想更严格，还要做<strong>配对分析</strong><br>
+（同一批题上逐条比对，而不是只看两个总分）。通行做法的要求是<br>
+<strong>「分差要超过噪声、在配对分析中成立、且能复现，才值得发布改动」</strong>。<br>
+→ <strong>结论不变（小幅提升先怀疑），但判定要更严谨。</strong></p>
 </blockquote>
 <p><strong>一句话</strong>：<strong>没有评估，你分不清「设计带来的提升」和「随机波动」。</strong><br>
 <strong>有了评估但不看波动，你还是在自欺欺人。</strong></p>
-<p><strong>面试价值</strong>：如果你能说「我改完之后重跑了三轮，<br>
+<p><strong>这句话的价值</strong>：能说「我改完之后重跑了三轮，<br>
 通过率稳定从 78% 提到 92%，这个幅度超出随机波动」——<br>
 <strong>这比说「我改完更好了」高一个层级</strong>，因为它证明你知道「怎么才算真的更好」。</p>
 <hr>
@@ -449,7 +475,7 @@ strong{color:var(--strong);}
 </code></pre>
 <p><strong>为什么有效</strong>：<strong>大部分真实请求里，简单的那类占多数</strong>。<br>
 让它们走小模型，成本能降一大截，而用户几乎感觉不到差别。</p>
-<p><strong>面试怎么讲</strong>：「我加了一层任务难度路由——分类、改写、抽取这类走小模型，<br>
+<p><strong>可以这么说</strong>：「我加了一层任务难度路由——分类、改写、抽取这类走小模型，<br>
 多步推理和需要判断的走大模型。<strong>上线后大模型调用量降了 X%，质量指标没掉。</strong>」</p>
 <h3>⭐ 限流与回退：别让一个模型挂了拖垮整个服务</h3>
 <table>
@@ -505,7 +531,7 @@ strong{color:var(--strong);}
 </table>
 <p><strong>为什么要在讲义里说这个</strong>：<strong>「能并行」不是万能提速</strong>——<br>
 判断「这批工具调用之间有没有依赖」，本身是一项<strong>设计能力</strong>。<br>
-面试时能说清这个，比说「我们做了异步」实在得多。（详见 <strong>5.9</strong>）</p>
+能说清这个，比说「我们做了异步」实在得多。（详见 <strong>5.9</strong>）</p>
 <hr>
 <h2>5.5 安全：LLM 应用特有的三类风险</h2>
 <p>这块和传统软件安全不太一样，是 LLM 应用独有的：</p>
@@ -536,11 +562,11 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <h3>提示词注入要特别强调</h3>
-<p>这是<strong>面试高频考点</strong>，也是很多人答不上来的点。</p>
+<p>这是<strong>高频考点</strong>，也是很多人答不上来的点。</p>
 <p><strong>核心对策一句话</strong>：<strong>不要把「安全判断」交给模型。</strong><br>
 模型可以被说服，代码不能被说服。凡是「不能出错」的操作，都要有代码层的硬约束。</p>
 <h3>⭐ 注入 ≠ 越狱：两个经常被混为一谈的词</h3>
-<p>面试时说错这两个词，会显得没真正理解攻击面：</p>
+<p>说错这两个词，会显得没真正理解攻击面：</p>
 <table>
 <thead>
 <tr>
@@ -609,7 +635,7 @@ strong{color:var(--strong);}
 <p><strong>本阶段 5.5 讲的三类风险，正好对应这三层</strong>——回头对照 3.4，<strong>你会发现安全不是三个孤立的点，是一条纵深防线</strong>。</p>
 <hr>
 <h2>5.6 部署形态：模型跑在哪</h2>
-<p>简单分三种，够面试用：</p>
+<p>简单分三种，够用：</p>
 <table>
 <thead>
 <tr>
@@ -767,10 +793,10 @@ strong{color:var(--strong);}
 </tr>
 </tbody>
 </table>
-<p><strong>面试价值</strong>：能说「Agent 上线不是发出去就完了，还有版本对应、评估门、灰度观察、退役管理」——<br>
+<p><strong>这句话的价值</strong>：能说「Agent 上线不是发出去就完了，还有版本对应、评估门、灰度观察、退役管理」——<br>
 <strong>这说明你知道 Agent 系统有生命周期，而不只是一个 API 调用。</strong></p>
 <hr>
-<h2>5.7 ⭐ 输出校验：代码层的守门员（ 新增）</h2>
+<h2>5.7 ⭐ 输出校验：代码层的守门员</h2>
 <h3>先说问题出在哪</h3>
 <p>前面 5.5 讲「输出不可控」，但没说<strong>具体怎么控</strong>。最常见的一类问题是：</p>
 <blockquote>
@@ -794,13 +820,13 @@ strong{color:var(--strong);}
       ↓ 是
    继续往下走
 </code></pre>
-<p><strong>教材里对应的概念</strong>（教材）：</p>
+<p><strong>资料里对应的概念</strong>：</p>
 <ul>
-<li>第 1 章验证层：「自动判断操作结果的对错；<strong>只看数据（如工具返回的 JSON 字段），而不看模型自由生成的文本</strong>」</li>
-<li>第 5 章：「代码化校验在操作前设置<strong>最后一道防线</strong>……作为<strong>守门员</strong>」</li>
+<li>验证层：「自动判断操作结果的对错；<strong>只看数据（如工具返回的 JSON 字段），而不看模型自由生成的文本</strong>」</li>
+<li>「代码化校验在操作前设置<strong>最后一道防线</strong>……作为<strong>守门员</strong>」</li>
 </ul>
 <blockquote>
-<p><strong>注意</strong>：两本教材里<strong>都没有直接出现「Pydantic」这个词</strong>——但概念是有的。<br>
+<p><strong>注意</strong>：这些资料里<strong>都没有直接出现「Pydantic」这个词</strong>——但概念是有的。<br>
 业界用 <strong>Pydantic</strong> 这类库来实现「schema 定义 + 自动校验」，我们讲的是<strong>这个机制</strong>，不是某个库的用法。</p>
 </blockquote>
 <h3>怎么检查（三个层次，从松到严）</h3>
@@ -854,8 +880,9 @@ strong{color:var(--strong);}
 </table>
 <p><strong>为什么</strong>：如果守门员会「将就着放行」，那它就不是关卡，是摆设——<br>
 <strong>校验的价值恰恰在于「它说不合格就是不合格」</strong>。</p>
-<h3>你的验收视角（这一节对你的分工很重要）</h3>
-<p>你不写代码，但<strong>这恰好是你最该会的那部分</strong>：</p>
+<h3>验收视角（这一节对分工要验收的人很重要）</h3>
+<p>分工是<strong>「代码由 AI 写，你负责看懂、判断、验收」</strong>——<br>
+<strong>这恰好是校验环节最该会的那部分</strong>：</p>
 <p><strong>当 AI 给你一段「带校验」的代码，你能验收什么</strong>：</p>
 <table>
 <thead>
@@ -888,11 +915,11 @@ strong{color:var(--strong);}
 「把缺的那个字段补成默认值，然后继续」——<strong>这算合格吗？</strong><br>
 ——<strong>不算</strong>。那不是校验，是「猜测用户在想要什么」。正确做法是<strong>拦下来并报明确错误</strong>。</p>
 </blockquote>
-<p><strong>面试怎么讲</strong>：「模型的输出我一律不直接信——外面套一层 schema 校验，<br>
+<p><strong>可以这么说</strong>：「模型的输出我一律不直接信——外面套一层 schema 校验，<br>
 字段、类型、取值范围都查，不通过就拦下来并要求重试，<strong>校验器自己不会放宽标准</strong>。<br>
 这跟阶段 3 讲的『安全判断不交给模型』是同一个思路：<strong>把模型的输出当不可信输入处理</strong>。」</p>
 <hr>
-<h2>5.8 ⭐ Python 工程基本功：够用就好（ 新增）</h2>
+<h2>5.8 ⭐ Python 工程基本功：够用就好</h2>
 <blockquote>
 <p><strong>本节定位</strong>：不讲语法大全。只讲三件<strong>「项目是否健康」的判断依据</strong>——<br>
 因为你的分工是<strong>验收</strong>，你需要能看出「这个项目的工程底子靠不靠谱」。</p>
@@ -930,7 +957,7 @@ def total(items: list[dict]) -&gt; float:
 <p><strong>验收视角</strong>：一个项目<strong>有没有类型标注、有没有跑类型检查</strong>，<br>
 是判断「它靠不靠谱」的<strong>低成本信号</strong>——因为它反映团队是否在意「错误要早发现」。</p>
 <blockquote>
-<p><strong>面试话术</strong>：「AI 写的项目我会要求它带类型标注并跑静态检查，<br>
+<p><strong>可以这么说</strong>：「AI 写的项目我会要求它带类型标注并跑静态检查，<br>
 因为类型错误是<strong>最便宜发现</strong>的一类 bug——运行前就能抓到，不用等它把数据改坏。」</p>
 </blockquote>
 <h3>二、venv：<strong>它不是沙盒</strong>（这条专门讲来纠偏）</h3>
@@ -996,7 +1023,7 @@ def total(items: list[dict]) -&gt; float:
 三件事都不高级，但<strong>缺一件，项目就会在别人机器上跑不起来</strong>。</p>
 </blockquote>
 <hr>
-<h2>5.9 ⭐ async 异步：什么时候能并行，什么时候不能（ 新增）</h2>
+<h2>5.9 ⭐ async 异步：什么时候能并行，什么时候不能</h2>
 <blockquote>
 <p><strong>本节定位：了解级。</strong> 不讲 <code>async def</code> 怎么写，只讲<br>
 <strong>「它解决什么问题」和「什么时候用不上」</strong>——后者更重要，因为<strong>误用会更快地错</strong>。</p>
@@ -1062,12 +1089,12 @@ def total(items: list[dict]) -&gt; float:
 </blockquote>
 <h3>失败了怎么办：级联中止</h3>
 <p>并行还有一个现实问题：<strong>其中一个失败了，别的还在跑</strong>。</p>
-<p>处理原则（教材的说法是「级联中止」）：</p>
+<p>处理原则（资料里的说法是「级联中止」）：</p>
 <ul>
 <li><strong>A 失败了，B/C 要不要继续跑？</strong> 通常<strong>要停</strong>——因为它们的结果可能已经没意义了</li>
 <li><strong>并发数要有上限</strong>：不是越多越好，<strong>一次开太多会打爆配额</strong>（和 5.4 的速率限制是一回事）</li>
 </ul>
-<h3>验收视角（你的分工）</h3>
+<h3>验收视角（分工在验收）</h3>
 <p><strong>当 AI 给你一段「做了并行」的代码，你能验收什么</strong>：</p>
 <table>
 <thead>
@@ -1096,7 +1123,7 @@ def total(items: list[dict]) -&gt; float:
 这两个调用能并行吗？——<strong>不能</strong>，第二个的输入是第一个的输出。<br>
 如果 AI 给的代码把它们放进了同一个「并发组」，<strong>这就是个 bug</strong>。</p>
 </blockquote>
-<p><strong>面试怎么讲</strong>：「我了解异步解决的是等待问题，<strong>但我们先判断工具之间有没有数据依赖</strong>——<br>
+<p><strong>可以这么说</strong>：「我了解异步解决的是等待问题，<strong>但我们先判断工具之间有没有数据依赖</strong>——<br>
 有依赖的串行、无依赖的并行，<strong>失败要级联中止，并发数设上限</strong>。<br>
 <strong>并发数不是越高越好，会打爆配额。</strong>」</p>
 <hr>
@@ -1221,39 +1248,39 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <p><strong>一个体现「它只是清单」的细节</strong>：<code>RUN</code> 每执行一条就产生一层（layer），<br>
 所以<strong>依赖要先拷、先装</strong>（③ ④ 在 ⑤ 之前）——这样以后只改代码时，<br>
 前面几层不用重装，<strong>构建快得多</strong>。这个顺序是「常识性优化」，不需要懂原理也能做对。</p>
-<h3>怎么验收一个 Dockerfile（你的核心能力）</h3>
+<h3>怎么验收一个 Dockerfile（核心能力）</h3>
 <p><strong>不看它能不能跑，先看它专不专业</strong>：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>检查</th>
 <th>为什么有问题</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><code>FROM</code> <strong>写死版本了吗</strong></td>
 <td><code>latest</code> 是坏习惯——版本会漂，今天构建跟明天不一样，bug 神出鬼没</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>有没有把密钥 COPY 进去</strong></td>
 <td><code>COPY . .</code> 把整个项目拷进去时，<strong><code>.env</code> 文件通常也在里面</strong>——<strong>这是最常见的严重泄密方式</strong></td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td>装的东西<strong>精简吗</strong></td>
 <td>装了用不到的东西 = 镜像臃肿、构建慢、攻击面大</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td>端口<strong>开得对吗</strong></td>
 <td>多开一个端口 = 多一个能被摸到的入口</td>
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
+<td>5</td>
 <td>数据目录<strong>挂 volume 了吗</strong></td>
 <td>不挂 = 容器一删数据全丢</td>
 </tr>
@@ -1269,11 +1296,11 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <strong>它是防密钥泄露的第一道闸</strong>；没有它，<code>COPY . .</code> 就是个风险动作。</p>
 <h3>隔离强度：⚠️「用了 Docker 就安全」是误解</h3>
 <p>这一条接着 5.5（安全）和 5.8（venv 不是沙盒）——<strong>三者是一条线</strong>。</p>
-<p><strong>教材（教材 ch4）按隔离强度从低到高给了三档</strong>：</p>
+<p><strong>常见的隔离强度按从低到高分成三档</strong>：</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">强度</th>
+<th>强度</th>
 <th>手段</th>
 <th>隔离到什么程度</th>
 <th>适合</th>
@@ -1281,26 +1308,26 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;"><strong>1（最低）</strong></td>
+<td><strong>1（最低）</strong></td>
 <td><strong>进程级隔离</strong></td>
 <td>在你本地跑，但<strong>限制可写范围</strong>（工作区沙盒 + 高风险操作要审批）</td>
 <td>输入可信、本地开发</td>
 </tr>
 <tr>
-<td style="text-align: center;"><strong>2</strong></td>
+<td><strong>2</strong></td>
 <td><strong>容器（Docker）</strong></td>
 <td>独立的文件系统 ＋ 网络栈，<strong>但和宿主机共享内核</strong></td>
 <td>输入不完全可信</td>
 </tr>
 <tr>
-<td style="text-align: center;"><strong>3（最高）</strong></td>
+<td><strong>3（最高）</strong></td>
 <td><strong>microVM / 虚拟机</strong></td>
 <td><strong>带独立内核的硬件级隔离</strong></td>
 <td>运行<strong>完全不可信</strong>的代码</td>
 </tr>
 </tbody>
 </table>
-<p><strong>关键认知（教材原话的意思）</strong>：</p>
+<p><strong>关键认知（资料里的意思）</strong>：</p>
 <ul>
 <li>
 <p>容器<strong>隔离更完整，但和宿主机共享内核</strong>——所以<strong>内核漏洞仍可能被利用来逃逸</strong>。<br>
@@ -1310,7 +1337,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <p>容器环境<strong>还应该设 CPU、内存、磁盘、网络的使用上限</strong>，防止失控的代码耗尽资源。</p>
 </li>
 </ul>
-<p><strong>选哪档？按这个判断</strong>（教材给的判据）：</p>
+<p><strong>选哪档？按这个判断</strong>（通用的判据）：</p>
 <blockquote>
 <p><strong>输入不可信 ＋ 凭证敏感 ＋ 操作不可逆 → 即使在本地开发，也要上容器甚至 microVM。</strong><br>
 <strong>本地开发且输入可信 → 进程级 ＋ 工作区沙盒 ＋ 审批，通常就够。</strong></p>
@@ -1346,7 +1373,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <p><strong>一句话</strong>：<strong>venv 是「依赖隔离」，容器是「运行隔离」，microVM 是「硬件隔离」。</strong><br>
 <strong>层级越高越安全，也越贵。</strong> 选哪档看你在跑什么，<strong>不是看哪个方便</strong>。</p>
 </blockquote>
-<h3>⭐ 容器 vs 虚拟机：面试高频，也是最常被答错的一题</h3>
+<h3>⭐ 容器 vs 虚拟机：最容易答错的一题</h3>
 <p><strong>先说结论</strong>：「容器是轻量级虚拟机」——<strong>这句话是错的</strong>。容器<strong>不是虚拟机</strong>。</p>
 <table>
 <thead>
@@ -1384,7 +1411,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <p><strong>虚拟机虚拟的是「整台电脑（含操作系统）」；容器虚拟的是「一个隔离的运行环境」。</strong><br>
 <strong>容器轻，是因为它不虚拟硬件、只隔离进程。</strong></p>
 </blockquote>
-<p>⚠️ <strong>这条有最好的实证素材，就在你本机</strong>：</p>
+<p>⚠️ <strong>这条有最好的实证素材</strong>：</p>
 <blockquote>
 <p><strong>你在 Windows 上装 Docker，Docker Desktop 强制要求先装 WSL2</strong> ——<br>
 <strong>为什么？</strong><br>
@@ -1393,7 +1420,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <p>→ <strong>如果你装的真的是虚拟机，就不需要这个额外步骤了</strong>（虚拟机自带整个 OS）。<br>
 <strong>这个「必须先装 WSL2」的事实，本身就是「容器不是虚拟机」的直接证据。</strong></p>
 </blockquote>
-<p><strong>面试怎么讲</strong>：「容器不是轻量虚拟机——<strong>虚拟机带自己的内核，容器共享宿主机内核</strong>。<br>
+<p><strong>可以这么说</strong>：「容器不是轻量虚拟机——<strong>虚拟机带自己的内核，容器共享宿主机内核</strong>。<br>
 所以容器<strong>秒级启动、体积小</strong>，但<strong>不能跨内核跑</strong>（Linux 容器跑不了 Windows 程序）。<br>
 最直接的实证是：<strong>Windows 上装 Docker 必须先装 WSL2</strong>，因为容器要借用 Linux 内核。」</p>
 <blockquote>
@@ -1413,7 +1440,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <li><strong>纯本地、只自己用的一次性工具</strong>——比如你跑一次的批量处理脚本。<br>
   为它学容器化是<strong>净亏</strong>：多一层概念、多一个坑，收益为零。</li>
 </ul>
-<p><strong>面试怎么讲</strong>：「我把项目容器化了，理由是 <strong>① 交付时能一键启动、② AI 生成的代码跑在隔离环境里不碰我的主机文件</strong>。<br>
+<p><strong>可以这么说</strong>：「我把项目容器化了，理由是 <strong>① 交付时能一键启动、② AI 生成的代码跑在隔离环境里不碰我的主机文件</strong>。<br>
 但我<strong>没有把 Docker 理解成绝对安全</strong>——它共享内核，真正的硬隔离要 microVM。<br>
 <strong>选哪档是按『输入可不可信』判断的，不是按方不方便。</strong>」</p>
 <hr>
@@ -1457,7 +1484,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <li>Dockerfile 里有没有 <code>ENV</code> <strong>写真实密钥值</strong>？——<strong><code>ENV</code> 会明文写进镜像层，<code>docker history</code> 直接能看到</strong>；<br>
    运行时该用 <code>-e 名字=值</code> 传（<code>-e</code> 只在运行时生效，<strong>不落镜像</strong>）。</li>
 </ol>
-<p><strong>面试怎么讲</strong>：「<strong>密钥不进镜像我有三道闸</strong>：<code>.dockerignore</code> 挡住构建期、<code>-e</code> 传参保证运行期不落盘、<br>
+<p><strong>可以这么说</strong>：「<strong>密钥不进镜像我有三道闸</strong>：<code>.dockerignore</code> 挡住构建期、<code>-e</code> 传参保证运行期不落盘、<br>
 代码里根本不硬编码。<strong>特别注意 <code>ENV</code> 是会明文进镜像层的</strong>，<br>
 <code>docker history</code> 一敲就能看到所有 <code>ENV</code> 值——所以真密钥绝对不能写在 <code>ENV</code> 里。」</p>
 <hr>
@@ -1484,7 +1511,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 </tbody>
 </table>
 <blockquote>
-<p><strong>⭐ 实测数据（你自己跑出来的）</strong>：<code>图片批量处理项目</code> 改一行代码重建 <strong>67 秒</strong>；<br>
+<p><strong>⭐ 实测数据</strong>：某个图片批量处理项目，改一行代码重建 <strong>67 秒</strong>；<br>
 调整好分层顺序后同样改动 <strong>8.4 秒</strong>——<strong>同一个项目，只因为顺序对了，快了 8 倍。</strong></p>
 </blockquote>
 <p><strong>怎么自己验证</strong>（不用记结论，去看）：</p>
@@ -1512,8 +1539,8 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 </tr>
 </tbody>
 </table>
-<p><strong>面试怎么讲</strong>：「Dockerfile 是<strong>分层的</strong>，每条指令一层、层不可变。<br>
-所以<strong>依赖要先装、代码后拷</strong>——依赖清单不变就能复用缓存，<strong>我实测把重建从 67 秒降到 8 秒</strong>。<br>
+<p><strong>可以这么说</strong>：「Dockerfile 是<strong>分层的</strong>，每条指令一层、层不可变。<br>
+所以<strong>依赖要先装、代码后拷</strong>——依赖清单不变就能复用缓存，<strong>我实测把重建从 67 秒降到 8.4 秒</strong>。<br>
 另一面是<strong>层里删不掉东西</strong>，所以密钥绝不能靠「删」来解决，只能<strong>从一开始就不 <code>COPY</code> 进去</strong>。<br>
 我自己会 <code>docker history</code> 逐层核对。」</p>
 <hr>
@@ -1525,7 +1552,7 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>症状</th>
 <th>真因</th>
 <th>解法</th>
@@ -1533,19 +1560,19 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>构建报 <code>Bad Gateway</code>（<strong>502</strong>）</td>
 <td><strong>代理把请求带歪了</strong>——环境里注入了一个不通的代理地址，Docker CLI 转发给引擎时用了它</td>
 <td><strong>清空 5 个代理变量</strong>（<code>HTTP_PROXY</code> / <code>HTTPS_PROXY</code> / <code>http_proxy</code> / <code>https_proxy</code> / <code>ALL_PROXY</code>）</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>清了还是 502</td>
 <td><strong>删除环境变量的命令不生效</strong>（实测：删了变量还在）</td>
 <td><strong>改用「赋值」</strong>：<code>$env:HTTP_PROXY=""</code>（<strong>不是删，是置空</strong>）</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td><code>dial tcp [2a03:2880:...]:443</code> 超时</td>
 <td><strong>IPv6 不通</strong>——该域名的 IPv4 通（实测返回 200）、IPv6 不通</td>
 <td>从<strong>国内镜像源</strong>预拉基础镜像，绕开要认证的域名</td>
@@ -1556,96 +1583,99 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <p>⚠️ <strong>第 3 条最值得记</strong>：它纠正了一个常见误解——<br>
 <strong>国内「Docker 拉不动镜像」的最常见真因，往往不是墙，是 IPv6 优先但不通</strong>。<br>
 <strong>遇到卡在网络，先分清是「域名解析」还是「连接」，别一律当成被墙。</strong></p>
-<p><strong>给你的一句提醒</strong>：这些坑<strong>只发生在特定机器环境</strong>（代理 / IPv6），<br>
+<p><strong>一句提醒</strong>：这些坑<strong>只发生在特定机器环境</strong>（代理 / IPv6），<br>
 <strong>不是 Docker 本身的机制问题</strong>。记住「症状 → 大方向」即可，<strong>不必背解法</strong>——<br>
 真遇到了，按「查代理 → 分 IPv4 / IPv6」的顺序查就行。</p>
 </blockquote>
 <hr>
-<h2>5.11 面试会怎么问</h2>
+<h2>5.11 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「你的项目上线了吗？」</td>
+<td>你的项目上线了吗？</td>
 <td>硬吹「上线了」</td>
 <td>诚实说清当前阶段 + 说清「要上线还缺什么」</td>
 </tr>
 <tr>
-<td>「线上出问题你怎么查？」</td>
+<td>线上出问题你怎么查？</td>
 <td>「看日志」</td>
 <td>说<strong>可观测性</strong>：Trace/Span 组织，记完整输入输出 + 工具轨迹，能按维度切 p95</td>
 </tr>
 <tr>
-<td>「怎么知道改了更好了？」</td>
+<td>怎么知道改了更好了？</td>
 <td>「感觉更好了」</td>
 <td>说<strong>评测集</strong>：固定样本重跑、对比通过率，<strong>而且它是发布闸门——不过就不上线</strong></td>
 </tr>
 <tr>
-<td>「<strong>模型输出格式老是乱的怎么办？</strong>」</td>
+<td><strong>模型输出格式老是乱的怎么办？</strong></td>
 <td>「多试几次」</td>
 <td>说<strong>输出校验</strong>：schema 定义 + 代码层守门员，字段/类型/取值都查，<strong>不通过就拦下来，校验器自己不放宽标准</strong></td>
 </tr>
 <tr>
-<td>「LLM 应用有什么安全风险？」</td>
+<td>LLM 应用有什么安全风险？</td>
 <td>「要防黑客」</td>
 <td>说<strong>提示词注入</strong>：外部数据藏指令；<strong>并分清越狱（用户自己越权）vs 注入（外部数据攻击）</strong>；核心对策是「安全判断不交给模型」</td>
 </tr>
 <tr>
-<td>「成本怎么控制？」</td>
+<td>成本怎么控制？</td>
 <td>「用便宜的模型」</td>
 <td>说<strong>模型路由</strong>（简单走小模型）+ 缓存 + 精简输入 + <strong>限流</strong></td>
 </tr>
 <tr>
-<td>「你说的异步，是不是所有工具都能并行？」</td>
+<td>你说的异步，是不是所有工具都能并行？</td>
 <td>「都能，所以更快」</td>
 <td>⚠️ <strong>先判断数据依赖</strong>——后一个的输入来自前一个就只能串行；<strong>依赖判断错了，并行会更快地出错</strong></td>
 </tr>
 <tr>
-<td>「项目依赖怎么管的？」</td>
+<td>项目依赖怎么管的？</td>
 <td>「pip install 一下」</td>
 <td>说<strong>依赖锁定</strong>（写版本号，可复现）+ <strong>venv 隔离包依赖</strong>（但<strong>它不是安全沙盒</strong>）</td>
 </tr>
 <tr>
-<td>「<strong>你怎么保证你的项目在别人机器上能跑起来？</strong>」</td>
+<td><strong>你怎么保证你的项目在别人机器上能跑起来？</strong></td>
 <td>「发代码给他就行」</td>
 <td>说<strong>容器化</strong>：把程序＋依赖＋配置打成镜像，一键启动，<strong>换个环境结果一致</strong></td>
 </tr>
 <tr>
-<td>「<strong>Docker 就安全吗？</strong>」</td>
+<td><strong>Docker 就安全吗？</strong></td>
 <td>「用了 Docker 就安全了」</td>
 <td>⚠️ <strong>不</strong>——容器<strong>共享内核</strong>。说清隔离三档（进程级 / 容器 / microVM）＋ <strong>按「输入可不可信」选档</strong>；并说清 <strong>venv 只隔离包依赖，不是沙盒</strong></td>
 </tr>
 <tr>
-<td>「<strong>容器和虚拟机有什么区别？</strong>」</td>
+<td><strong>容器和虚拟机有什么区别？</strong></td>
 <td>「容器就是轻量虚拟机」</td>
 <td>⚠️ <strong>不是</strong>——<strong>虚拟机带自己的内核，容器共享宿主机内核</strong>。所以容器秒级启动、几 MB，<strong>但不能跨内核跑</strong>（Linux 容器跑不了 Windows 程序）</td>
 </tr>
 <tr>
-<td>「<strong>密钥怎么保证不进镜像？</strong>」</td>
+<td><strong>密钥怎么保证不进镜像？</strong></td>
 <td>「不给它就行」</td>
 <td>说<strong>三道闸</strong>：<code>.dockerignore</code> 挡构建期 ／ <code>-e</code> 传参不落盘 ／ 代码不硬编码；<strong>并指出 <code>ENV</code> 会明文进镜像层</strong>（<code>docker history</code> 可见）</td>
 </tr>
 <tr>
-<td>「<strong>Dockerfile 为什么要那么写顺序？</strong>」</td>
+<td><strong>Dockerfile 为什么要那么写顺序？</strong></td>
 <td>「规范要求」</td>
 <td>说<strong>分层机制</strong>：层不可变 → <strong>依赖先装、代码后拷</strong>才能复用缓存；<strong>并说明层里删不掉东西</strong>，所以密钥不能靠「删」解决</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2>本阶段要带走的三句话</h2>
+<h2>本阶段要带走的五句话</h2>
 <ol>
 <li><strong>工程化 = 把「能跑」变成「能用」。</strong> 差别在可观测、可评测、成本可控。</li>
 <li><strong>黑盒要装仪表盘。</strong> 记完整输入输出 + 工具轨迹，<strong>用 Trace/Span 组织</strong>，出事能定位到哪一步。</li>
 <li>
 <p><strong>模型的输出当不可信输入处理。</strong> 加一道代码层守门员（字段/类型/取值），<strong>不过就拦下来</strong>——<br>
-   安全判断不交给模型，校验标准也不交给模型。</p>
+    安全判断不交给模型，校验标准也不交给模型。</p>
 </li>
 <li>
 <p><strong>并行之前先判断依赖。</strong> 有依赖只能串行；<strong>依赖判断错了，并行只会更快地出错</strong>。</p>
@@ -1658,197 +1688,196 @@ CMD [&quot;python&quot;, &quot;app.py&quot;]       # ⑦ 启动命令：运行�
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>问题</th>
 <th>对应小节</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td>能跑和能用，差在哪些方面？</td>
 <td>5.1</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td>可观测性要记哪四类东西？</td>
 <td>5.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td><strong>Trace 和 Span 分别是什么？为什么要看 p95 不只看平均？</strong></td>
 <td>5.2</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td>评测集怎么建？三种判分方式各适合什么？</td>
 <td>5.3</td>
 </tr>
 <tr>
-<td style="text-align: center;">5</td>
+<td>5</td>
 <td><strong>什么是「评估门」？它和「做评测」的区别是什么？</strong></td>
 <td>5.3</td>
 </tr>
 <tr>
-<td style="text-align: center;">6</td>
+<td>6</td>
 <td>离线评估和在线评估各管什么？</td>
 <td>5.3</td>
 </tr>
 <tr>
-<td style="text-align: center;">7</td>
+<td>7</td>
 <td>怎么判断「通过率涨了 4%」是真的还是波动？</td>
 <td>5.3</td>
 </tr>
 <tr>
-<td style="text-align: center;">8</td>
+<td>8</td>
 <td><strong>模型路由是什么？为什么有效？</strong></td>
 <td>5.4</td>
 </tr>
 <tr>
-<td style="text-align: center;">9</td>
+<td>9</td>
 <td><strong>限流、重试、回退分别解决什么问题？</strong></td>
 <td>5.4</td>
 </tr>
 <tr>
-<td style="text-align: center;">10</td>
+<td>10</td>
 <td>三类安全风险分别是什么？</td>
 <td>5.5</td>
 </tr>
 <tr>
-<td style="text-align: center;">11</td>
+<td>11</td>
 <td><strong>越狱和提示词注入的区别是什么？</strong></td>
 <td>5.5</td>
 </tr>
 <tr>
-<td style="text-align: center;">12</td>
+<td>12</td>
 <td>三层护栏分别管什么？这次算回顾还是新学？</td>
 <td>5.5</td>
 </tr>
 <tr>
-<td style="text-align: center;">13</td>
+<td>13</td>
 <td>部署形态怎么选？判断依据是什么？</td>
 <td>5.6</td>
 </tr>
 <tr>
-<td style="text-align: center;">14</td>
+<td>14</td>
 <td><strong>「谁负责跑」的三种模式是什么？</strong></td>
 <td>5.6</td>
 </tr>
 <tr>
-<td style="text-align: center;">15</td>
+<td>15</td>
 <td>Agent 的生命周期有哪几步？</td>
 <td>5.6</td>
 </tr>
 <tr>
-<td style="text-align: center;">16</td>
+<td>16</td>
 <td><strong>模型输出为什么会「格式乱」？</strong></td>
 <td>5.7</td>
 </tr>
 <tr>
-<td style="text-align: center;">17</td>
+<td>17</td>
 <td><strong>输出校验查哪三个层次？</strong></td>
 <td>5.7</td>
 </tr>
 <tr>
-<td style="text-align: center;">18</td>
+<td>18</td>
 <td><strong>校验失败时，为什么不能让守门员自己「修好」或「放宽标准」？</strong></td>
 <td>5.7</td>
 </tr>
 <tr>
-<td style="text-align: center;">19</td>
+<td>19</td>
 <td><strong>类型注解、venv、依赖锁定，各自解决什么问题？</strong></td>
 <td>5.8</td>
 </tr>
 <tr>
-<td style="text-align: center;">20</td>
+<td>20</td>
 <td><strong>关于 venv 的常见误解是什么？</strong></td>
 <td>5.8</td>
 </tr>
 <tr>
-<td style="text-align: center;">21</td>
+<td>21</td>
 <td><strong>什么情况下工具调用不能并行？为什么判断错了会更糟？</strong></td>
 <td>5.9</td>
 </tr>
 <tr>
-<td style="text-align: center;">22</td>
+<td>22</td>
 <td><strong>容器化解决了哪两个问题？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">23</td>
+<td>23</td>
 <td><strong>镜像、容器、volume 分别是什么？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">24</td>
+<td>24</td>
 <td><strong>Dockerfile 的 7 条指令分别管什么？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">25</td>
+<td>25</td>
 <td><strong>验收一个 Dockerfile 要查哪 5 点？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">26</td>
+<td>26</td>
 <td><strong>隔离强度分哪三档？怎么选？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">27</td>
+<td>27</td>
 <td><strong>「用了 Docker 就安全」这句话错在哪？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">28</td>
+<td>28</td>
 <td><strong>容器和虚拟机的根本区别是什么？为什么「容器是轻量虚拟机」是错的？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">29</td>
+<td>29</td>
 <td><strong>Windows 上装 Docker 为什么必须先装 WSL2？这说明什么？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">30</td>
+<td>30</td>
 <td><strong><code>.dockerignore</code> 是什么？跟 <code>.gitignore</code> 有什么同与不同？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">31</td>
+<td>31</td>
 <td><strong>「密钥不进镜像」的三道闸是哪三道？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">32</td>
+<td>32</td>
 <td><strong>为什么 <code>ENV</code> 不能写真实密钥值？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">33</td>
+<td>33</td>
 <td><strong>Dockerfile 的分层机制是什么？为什么依赖要先装、代码后拷？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">34</td>
+<td>34</td>
 <td><strong>「先 COPY 再删文件」为什么没用？</strong></td>
 <td>5.10</td>
 </tr>
 <tr>
-<td style="text-align: center;">35</td>
+<td>35</td>
 <td><strong><code>docker history</code> 用来查什么？</strong></td>
 <td>5.10</td>
 </tr>
 </tbody>
 </table>
 <p><strong>这 35 问全能不看稿答出来 → 本阶段就扎实了。</strong><br>
-（测验只考其中一部分，但这 27 问覆盖了面试会问的全部要点。）</p>
+（测验只考其中一部分，但这 35 问覆盖了本阶段全部要点。）</p>
 <hr>
-<p>学完请去做同目录的 <code>测验.md</code>，<strong>20 题，16 分及格</strong>（80%）。</p>
+<p>学完请去做同目录的 <code>测验</code>，<strong>20 题，16 分及格</strong>（80%）。</p>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 5」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

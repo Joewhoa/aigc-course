@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,9 +98,8 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 1 讲义：Prompt 工程</h1>
 <blockquote>
-<p>日期：<br>
-本阶段目标：把「跟 AI 说句话」升级成「设计一段输入」。这是 AI 应用工程师最日常的工作。<br>
-阅读方式：分 7 节。第 1.3 和 1.4 节是本阶段的核心。</p>
+<p>本阶段目标：把「跟 AI 说句话」升级成「设计一段输入」。这是 AI 应用工程师最日常的工作。<br>
+阅读方式：分 8 节。第 1.3 和 1.4 节是本阶段的核心。</p>
 </blockquote>
 <hr>
 <h2>1.1 先纠正一个认知：提示词不是「聊天」</h2>
@@ -229,7 +253,7 @@ strong{color:var(--strong);}
 <p><strong>注意第 2 条的设计思路</strong>：不要只说「不许做什么」，要给出「那该做什么」。<br>
 只禁止而不给替代方案，模型往往还是会编——因为它总得输出点什么。</p>
 </blockquote>
-<p>这条在面试里是高频考点，而且能明显区分出「懂原理」和「背话术」。</p>
+<p>这条是高频考点，而且能明显区分出「懂原理」和「只会照抄模板」。</p>
 <hr>
 <h2>1.5 被忽略的原则：Prompt 是要被测试的</h2>
 <p>提示词不是写一次就完事。它更像代码：</p>
@@ -256,10 +280,10 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>这就是「Prompt 工程」里「工程」两个字的含义。</strong></p>
-<p>差别在这里：只会说「我会调提示词」的人，和能说「我改提示词前先固定一组测试样例，改完重跑对比，避免改好一个场景、弄坏另一个」的人，面试官会判断成两个不同的级别。</p>
+<p>差别在这里：只会说「我会调提示词」的人，和能说「我改提示词前先固定一组测试样例，改完重跑对比，避免改好一个场景、弄坏另一个」的人，水平是两个不同的层级。</p>
 <hr>
-<h2>1.6 拿真实项目过一遍</h2>
-<h3>例子一：图片批量换色</h3>
+<h2>1.6 拿两个例子过一遍</h2>
+<h3>例子一：批量处理图片素材</h3>
 <p><strong>如果只说「把这张图的这个颜色换成那个颜色」</strong> → 它会自由发挥：<br>
 换多少幅度？容差多少？边界像素怎么办？输出什么格式？尺寸变不变？——全靠猜。</p>
 <p><strong>设计过的输入应该长这样</strong>：</p>
@@ -290,45 +314,298 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>差别在哪</strong>：前者要来来回回改十遍；后者一次说清，而且<strong>失败了能知道</strong>。</p>
-<h3>例子二：百万行 Excel 批量处理</h3>
+<h3>例子二：数据量大到不能直接读表时</h3>
 <ul>
 <li><strong>只说「帮我分析这个表」</strong> → 它会猜你想看什么，还可能试图把表读进去（阶段 0 讲过，读不进去）</li>
 <li><strong>说清</strong>：「按部门聚合金额求和，输出金额最高的 10 个部门，用 markdown 表格，不要图表，不要解释」</li>
 </ul>
 <p><strong>同一个模型，两种输入，输出可用性天差地别。这就是 Prompt 工程的价值。</strong></p>
 <hr>
-<h2>1.7 面试会怎么问</h2>
+<h2>1.7 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「你怎么写提示词？」</td>
+<td>提示词该怎么写？</td>
 <td>「我会尽量描述清楚」</td>
 <td>说<strong>结构</strong>：角色 / 任务 / 约束 / 格式；说<strong>手法</strong>：给例子、限格式、设边界</td>
 </tr>
 <tr>
-<td>「模型不听话怎么办？」</td>
+<td>模型不听话怎么办？</td>
 <td>「多试几次」</td>
 <td>先定位是哪类不听话（格式 / 内容 / 编造），再对症下药</td>
 </tr>
 <tr>
-<td>「怎么保证输出稳定？」</td>
+<td>怎么保证输出稳定？</td>
 <td>「把温度调低」</td>
 <td>固定测试用例 + few-shot + 限定格式 + 温度调低，四件套一起上</td>
 </tr>
 <tr>
-<td>「提示词能写多长？」</td>
+<td>提示词能写多长？</td>
 <td>「越长越好」</td>
 <td>受<strong>上下文窗口</strong>限制（阶段 0 的 Token），越长越贵、越慢，也可能被中间内容冲淡</td>
 </tr>
 </tbody>
 </table>
+<hr>
+<h2>1.8 实操：找出提示词里真正起作用的那一段</h2>
+<p>四段式里最容易漏的是<strong>约束</strong>和<strong>格式</strong>，但真正难判断的是「哪一段在起作用」。<br>
+这一节练的不是「写得漂亮」，是<strong>改一个字就能看出变化</strong>的能力。<br>
+<strong>全部题目不需要写代码、不需要装工具，在这儿就能做完。</strong></p>
+<h3>实操 1 · 四段式体检（练 1.2）</h3>
+<p>下面四段提示词，每段都缺东西。请分别写出<strong>缺哪一段</strong>，以及<strong>缺了会导致什么后果</strong>。</p>
+<blockquote>
+<p><strong>A</strong>｜「你是一个客服助手。请帮我回答用户的退货问题。」<br>
+<strong>B</strong>｜「你是客服主管。请把这段用户消息归类，并给出处理建议。」<br>
+<strong>C</strong>｜「你是客服主管。阅读下面这段用户邮件，分类只能从『产品质量/物流/服务态度/退款/其他』里选。只依据邮件内容，不脑补。不确定的归入『其他』。」<br>
+<strong>D</strong>｜「你是数据分析助手。帮我算一下上个月的销售额。」</p>
+</blockquote>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><table>
+<thead>
+<tr>
+<th>条</th>
+<th>缺哪段</th>
+<th>后果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>缺任务细节 + 约束 + 格式</strong></td>
+<td>任务太笼统（"回答退货问题"——回答什么？怎么说？），约束和格式全无。<strong>输出必然不可用</strong></td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td><strong>缺约束 + 格式</strong></td>
+<td>⚠️ 这一条最容易被判成"还行"——但<strong>"归类"归成几类？输出成什么形式？</strong> 都不明确。这个提示词<strong>没法用</strong>，因为你无法判断输出对不对</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>只缺格式</strong></td>
+<td>四段里最标准的。约束给得很足（限定类别、禁止脑补、给了兜底）。<strong>但没说输出格式</strong>——程序没法直接解析，需要你手动读</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td><strong>缺任务细节 + 约束 + 格式</strong></td>
+<td>最严重：「上个月」是哪个月？销售额按什么口径算（含税？退款扣不扣）？输出成表格还是一句话？<strong>三处都可能算错</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🎯 <strong>本题要记住的判断习惯</strong>：<br>
+<strong>看「输出能不能直接用」，而不是看「提示词读起来顺不顺」。</strong><br>
+B 读起来最像样，但它是<strong>四条里最不可用的</strong>——因为你没法验收它。<br>
+这就是 1.5 讲的：提示词是<strong>要被测试的</strong>，而测试的前提是它有明确的输出标准。</p>
+</blockquote></div>
+</details>
+
+<h3>实操 2 · 「不要编造」为什么没用（练 1.4）</h3>
+<p>两个提示词，都想让它「别编造」。哪个更有效？为什么？</p>
+<blockquote>
+<p><strong>A</strong>｜「请基于我提供的资料回答，不要编造。」<br>
+<strong>B</strong>｜「请只依据我提供的资料回答。资料里没有明确写的，就回答『资料未提及』。你必须在回答末尾列出你用到的资料原文片段。」</p>
+</blockquote>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>B 更有效</strong>，而且有效在三个地方：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>给了替代动作</strong></td>
+<td>❌ 没给。它被禁止编造，但<strong>没被告知那该怎么表现</strong>——模型只能自己猜，猜不出来就会继续编</td>
+<td>✅ 给了明确出口：「回答『资料未提及』」</td>
+</tr>
+<tr>
+<td><strong>可验证</strong></td>
+<td>❌ 没法判断它有没有照做</td>
+<td>✅ 强制它列出原文片段，<strong>你一眼就能对</strong></td>
+</tr>
+<tr>
+<td><strong>逼它暴露不确定</strong></td>
+<td>❌ 编造是「最顺的下一句」，不禁止它就顺着写</td>
+<td>✅ 要求引用，它就得回到资料里找</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：以为「禁止」比「引导」有效。<br>
+<strong>恰恰相反</strong> —— 1.4 讲的核心机制是：<br>
+<strong>模型永远要输出点什么。你只禁止不给出口，它就用「最顺的内容」填满。</strong></p>
+<p>所以写约束永远要遵守一条：<strong>每禁掉一件事，必须同时给一个替代动作。</strong></p>
+<p>B 末尾那句「列出原文片段」是额外的加分项——<br>
+<strong>它把「验证」的成本从你身上转移到了它身上。</strong></p>
+</blockquote></div>
+</details>
+
+<h3>实操 3 · 改一个字，看结果变不变（练 1.3 + 1.5）</h3>
+<p>同一个任务，三版提示词。<strong>只改了一处</strong>。请判断哪一处的改动最可能显著改变输出结果。</p>
+<blockquote>
+<p><strong>原版</strong>｜「分析这段用户反馈，输出要点。」<br>
+<strong>A 版</strong>｜「分析这段用户反馈，<strong>不超过 5 条</strong>要点。」<br>
+<strong>B 版</strong>｜「<strong>逐条</strong>分析这段用户反馈，输出要点。」<br>
+<strong>C 版</strong>｜「分析这段用户反馈，输出要点。<strong>用表格呈现。</strong>」</p>
+</blockquote>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>三处改动都会改结果，但改的东西不同</strong>——这正是本题要练的分辨力：</p>
+<table>
+<thead>
+<tr>
+<th>版</th>
+<th>改的是哪一段</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><strong>约束</strong>（数量）</td>
+<td>改变了<strong>输出的量</strong>。反馈有 12 条时，模型会<strong>挑 5 条</strong>——而挑哪 5 条是不确定的</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td><strong>任务粒度</strong></td>
+<td>改变了<strong>输出的方式</strong>。「逐条」意味着不能合并同类项，输出会<strong>变长、变碎</strong></td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><strong>格式</strong></td>
+<td>改变了<strong>输出的结构</strong>。内容可能没变，但<strong>可被程序解析了</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>本题真正要教的是「先想清楚要控制什么」</strong>：</p>
+<ul>
+<li>想要<strong>可被程序处理</strong> → 改<strong>格式</strong>（C）</li>
+<li>想要<strong>结果稳定可比</strong>（比如多次跑要能对比） → 改<strong>约束</strong>（A）</li>
+<li>想要<strong>不丢细节</strong> → 改<strong>任务粒度</strong>（B）</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：以为「加了字数限制就会更准」。<br>
+A 反而<strong>可能降低质量</strong>——模型被迫在 12 条里挑 5 条，<br>
+挑到的不一定是最重要的那 5 条。<strong>约束不是免费的，它在帮你做取舍。</strong></p>
+<p>这也解释了1.5 的要求：<strong>改完要重跑一遍看实际变化</strong>，<br>
+而不是凭想象猜它会怎么变。</p>
+</blockquote></div>
+</details>
+
+<h3>实操 4 · 找出那个「无法验收」的输出（练 1.5 + 1.7）</h3>
+<p>要保证提示词质量稳定，下面四种做法哪种撑得住推敲？</p>
+<blockquote>
+<p><strong>A</strong>｜「我会多写几种版本，挑效果最好的那个。」<br>
+<strong>B</strong>｜「我会固定一组测试用例，每次改提示词都重跑一遍对比。」<br>
+<strong>C</strong>｜「提示词写得足够详细，它就会稳定。」<br>
+<strong>D</strong>｜「我用的是业界验证过的模板，网上都有。」</p>
+</blockquote>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>只有 B 撑得住</strong>，理由是它回答了「怎么知道变好了」这个问题。</p>
+<table>
+<thead>
+<tr>
+<th>做法</th>
+<th>继续追问时会发生什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>「效果最好」——<strong>按什么标准算最好？</strong> 没有标准就没法比较，等于没答</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>✅ 「固定一组测试用例」给出了<strong>可重复的对比基准</strong>。追问「用例怎么来的」也能答：从历史真实案例里挑</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>「写得详细」和「稳定」之间<strong>没有必然联系</strong>。细节可以写到很多，但<strong>没验证过就是没验证过</strong></td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>「业界验证过」——<strong>谁的业界？</strong> 模板能抄，<strong>效果不能抄</strong>。而且这是拿别人的东西当自己的验收依据</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>🎯 <strong>B 是唯一能继续往下走的</strong>：<br>
+追问会接着来「用例只有 3 条够吗」——<br>
+<strong>这时能答「先覆盖典型 case，跑到稳定再加」就是资深信号了。</strong></p>
+<p>⚠️ <strong>本题最容易学错的地方</strong>：以为 B 是「标准答案背下来就行」。<br>
+<strong>背下来没有用</strong> —— 要的是你<strong>真的这么干过</strong>，<br>
+所以要能立刻举出：你的测试用例是什么、怎么固定的、改了什么之后对比了什么。</p>
+</blockquote></div>
+</details>
+
+<h3>实操 5 · 这段话哪里没说清（练 1.1）</h3>
+<p>有人介绍自己「熟悉 Prompt 工程」，被追问「你实际做过什么」，他这么答：</p>
+<blockquote>
+<p>「我调过很多提示词，效果都挺稳定的。我还研究了很多技巧，<br>
+比如角色设定、少样本示例、温度调节那些。」</p>
+</blockquote>
+<p>问题出在哪？按 1.2 的四段式重写一遍。</p>
+<details class="fold">
+<summary>点击查看答案</summary>
+<div class="foldbody"><p><strong>问题：这段话里，一个具体信息都没有。</strong></p>
+<table>
+<thead>
+<tr>
+<th>说的词</th>
+<th>别人听到后会想什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「调过很多提示词」</td>
+<td>多少个？什么场景？</td>
+</tr>
+<tr>
+<td>「效果都挺稳定」</td>
+<td><strong>怎么衡量的稳定？</strong></td>
+</tr>
+<tr>
+<td>「研究了很多技巧」</td>
+<td>研究到什么程度？能用还是知道？</td>
+</tr>
+<tr>
+<td>「角色设定、少样本示例、温度调节」</td>
+<td>这是<strong>教科书目录</strong>，不是实际做法</td>
+</tr>
+</tbody>
+</table>
+<p><strong>只列名词，别人会认为你只是记住了这些词。</strong></p>
+<p><strong>按四段式重写（结构照抄，内容换成你真做过的）：</strong></p>
+<blockquote>
+<p><strong>角色</strong>｜在（具体场景，比如公司客服）里负责（具体职责）。<br>
+<strong>任务</strong>｜我调的是（具体任务：把用户投诉分类／把会议记录转成待办／……）。<br>
+<strong>约束</strong>｜最花时间的约束是（具体一条，比如「分类只能从 5 个固定类里选，不确定就归『其他』」）。<br>
+<strong>格式</strong>｜输出是固定 JSON，字段名和类型都定死，<strong>下游程序直接读，不用人看</strong>。</p>
+<p>🎯 <strong>本题的关键不是措辞，是「可验证性」</strong>：<br>
+重写后的每一句，别人都能接着往下问，<strong>而你答得出来</strong>。</p>
+<p>⚠️ <strong>最容易学错的地方</strong>：以为要点是「别罗列术语」。<br>
+<strong>错</strong>——术语该提，<strong>但每个术语后面要挂一个自己真做过的具体动作</strong>。<br>
+「少样本示例」这个词本身没用，<br>
+「我给了 3 个输入输出样例，格式问题就再没出现过」才有用。</p>
+</blockquote></div>
+</details>
+
 <hr>
 <h2>本阶段要带走的三句话</h2>
 <ol>
@@ -337,11 +614,10 @@ strong{color:var(--strong);}
 <li><strong>只禁止不给替代方案，等于没约束。</strong> 「资料未提及」比「不要编造」有用。</li>
 </ol>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>，10 题，8 分及格。</p>
+<p>学完请去做同目录下的 <code>测验</code>，10 题，8 分及格。</p>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 1」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

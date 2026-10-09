@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,13 +98,13 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>附录 · JSON 最小必读</h1>
 <blockquote>
-<p><strong>为什么有这一节</strong>：查教材时发现——<strong>JSON 全课从来没被正式介绍过</strong>，<br>
-但阶段 1 的 1.4「限定输出格式」<strong>直接假定你会</strong>；全课只在阶段 3 讲过一句「为什么工具调用要用 JSON」。<br>
-教材（教材前言）把 JSON 列为「<strong>必需：阅读全书的基础</strong>」，和 Git、命令行、REST API 并列。</p>
-<p><strong>这是课程的缺口，不是你的问题。</strong> 学习版就地补在这里；<br>
-<strong>通用版会归位到阶段 0（基础概念）</strong> —— </p>
-<p>📎 <strong>配套文件</strong>：<code>附录-JSON补充-从Python对照着看.md</code>。<br>
-那份专门回答「JSON 是不是像 Python 的数组」——<strong>逐条对照 + 三条最要命的差异 + 验收清单</strong>。<br>
+<p><strong>为什么有这一节</strong>：JSON 是这套课的<strong>地基之一</strong>，但它常常被默认「你应该会」。<br>
+阶段 1 的 1.4「限定输出格式」直接假定你懂 JSON；阶段 3 讲工具调用时也只提了一句<br>
+「为什么工具调用要用 JSON」。在真实工程里，JSON 和 Git、命令行、REST API 并列，<br>
+属于<strong>必须掌握的基础</strong>。</p>
+<p><strong>这不是你基础差，是课程默认跳过了它。</strong> 本节把它补齐。</p>
+<p>📎 <strong>配套文件</strong>：还有一份《JSON 补充 · 从 Python 对照着看》，专门回答<br>
+「JSON 是不是像 Python 的数组」——逐条对照 ＋ 三条最要命的差异 ＋ 验收清单。<br>
 本文件讲<strong>是什么</strong>，那份讲<strong>和 Python 像不像、差在哪</strong>。两份配合看。</p>
 </blockquote>
 <hr>
@@ -169,7 +194,7 @@ strong{color:var(--strong);}
 <p>模型输出一段随便写的文字，程序<strong>没法可靠地读</strong>；<br>
 模型输出 JSON，程序<strong>能一条条取出来用</strong>。</p>
 </blockquote>
-<p>教材里说得更狠（教材第 8 章）：</p>
+<p>资料里说得更狠：</p>
 <blockquote>
 <p>「如果任务要求输出 JSON 或工具调用，而模型吐出的是无法解析的文本，<br>
 <strong>奖励函数连「成功还是失败」都判断不了</strong>。」</p>
@@ -179,36 +204,36 @@ strong{color:var(--strong);}
 <li><strong>工具定义</strong>用它（JSON Schema 描述参数）</li>
 <li><strong>提示词约束</strong>用它（阶段 1 的 1.4）</li>
 <li><strong>记忆存储</strong>用它（阶段 2 的 2.6）</li>
-<li><strong>安全校验</strong>用它（教材：「安全检查<strong>只看结构化数据</strong>，不看模型自由生成的文本」）</li>
+<li><strong>安全校验</strong>用它（「安全检查<strong>只看结构化数据</strong>，不看模型自由生成的文本」）</li>
 </ul>
 <hr>
 <h2>四、四条设计铁律（背下来）</h2>
 <table>
 <thead>
 <tr>
-<th style="text-align: center;">#</th>
+<th>#</th>
 <th>铁律</th>
 <th>不遵守会怎样</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: center;">1</td>
+<td>1</td>
 <td><strong>字段名拼写固定</strong></td>
 <td>程序按名字读，错一个字母 = <strong>这个字段不存在</strong>，静默丢数据</td>
 </tr>
 <tr>
-<td style="text-align: center;">2</td>
+<td>2</td>
 <td><strong>每个字段标类型</strong></td>
 <td>数字写成字符串 → 程序算不了</td>
 </tr>
 <tr>
-<td style="text-align: center;">3</td>
+<td>3</td>
 <td><strong>枚举值列死</strong></td>
 <td>只写「类别」不列取值 → 模型会<strong>自己发明</strong>不在列表里的</td>
 </tr>
 <tr>
-<td style="text-align: center;">4</td>
+<td>4</td>
 <td><strong>分层</strong></td>
 <td>明细和汇总混在一起 → 程序没法逐条处理</td>
 </tr>
@@ -242,7 +267,7 @@ strong{color:var(--strong);}
 <code>status</code> 和 <code>reason</code> 的取值给了范围、<strong><code>results</code>（明细）与 <code>summary</code>（汇总）分开两层</strong>。</p>
 <hr>
 <h2>六、你不写，但你要会<strong>验收</strong>（这才是重点）</h2>
-<p>按你定的规矩：<strong>JSON 由 AI 写，你负责验收。</strong> 所以你要认得<strong>这五处</strong>：</p>
+<p>按你定的规矩：<strong>JSON 由 AI 写，你负责验收。</strong> 所以你要认得<strong>下面这五处</strong>：</p>
 <table>
 <thead>
 <tr>
@@ -274,6 +299,11 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>认这五处，不需要你会写一行 JSON。</strong></p>
+<blockquote>
+<p>📎 配套的《JSON 补充 · 从 Python 对照着看》第五节，<br>
+把它压成了<strong>7 条可以直接照着扫的清单</strong>（多了「键必须是字符串」「只认双引号」「没有尾逗号」三条语法项），<br>
+还配了两份<strong>故意埋了错的 JSON</strong> 让你练手。</p>
+</blockquote>
 <hr>
 <h2>七、一句话收口</h2>
 <blockquote>

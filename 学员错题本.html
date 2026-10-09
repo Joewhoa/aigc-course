@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学员错题本</title>
+<style>
+:root{
+  --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
+}
+/* 深色模式：跟随系统，也可手动切换（右上角按钮） */
+:root[data-theme="dark"]{
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
+  }
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
+  transition:background .2s,color .2s;
+}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
+/* 主题切换按钮 */
+.theme-btn{
+  position:fixed; top:14px; right:16px; z-index:99;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:var(--card); color:var(--text);
+  font-size:17px; cursor:pointer; line-height:1;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.theme-btn:hover{border-color:var(--accent);}
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
+   border-bottom:3px solid var(--accent); padding-bottom:14px;}
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
+   border-left:4px solid var(--accent);}
+h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
+h4{font-size:1rem; margin:22px 0 8px;}
+p{margin:12px 0;}
+blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
+  border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
+blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
+table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
+  background:var(--card); border-radius:8px; overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
+th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
+td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
+code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
+  font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
+  overflow-x:auto; font-size:0.86rem; line-height:1.6;}
+pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
+hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
+li{margin:6px 0;}
+ul,ol{padding-left:26px; margin:12px 0;}
+ol > li::marker{font-weight:700; color:var(--accent);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
+a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
+strong{color:var(--strong);}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>学员错题本</h1>
+<blockquote>
+<p><strong>这份文件是给你（学员）的，不是给教练的。</strong><br>
+你的教练 Agent 叫 <strong>Scout</strong> —— 教学过程中，它会把你卡住的地方、答错的地方、<br>
+说「我原来以为…」的地方，一条条记进这份文件。</p>
+<p><strong>建议做法</strong>：把这份文件（或它的副本）放在你自己的笔记里。<br>
+学完 8 个阶段回头看，里面全是你自己踩过的坑 —— 那比标准答案有用得多。</p>
+</blockquote>
+<hr>
+<h2>怎么用这份文件</h2>
+<table>
+<thead>
+<tr>
+<th>你想做的事</th>
+<th>怎么做</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开始学之前</td>
+<td>不用看，直接从<code>阶段0本章导读.html</code> 开始</td>
+</tr>
+<tr>
+<td>学完一阶段</td>
+<td>看「阶段总览」那一栏，确认自己走到哪了</td>
+</tr>
+<tr>
+<td>卡住的时候</td>
+<td>翻 Scout 记下的这几条，看是不是同一个坑</td>
+</tr>
+<tr>
+<td>学完 8 个阶段</td>
+<td>通读一遍，那些「我原来以为 X，其实 Y」就是你的成长证据</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这份文件会自己长大</strong> —— 每一次 Scout 教你一次，它就多一条记录。</p>
+<hr>
+<h2>阶段总览</h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>状态</th>
+<th>累计错题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段 0 · 基础概念</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 1 · Prompt 工程</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 2 · RAG</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 3 · Agent 与工具调用</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 4 · 多 Agent 协作</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 5 · 工程化</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 6 · 垂直应用</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+<tr>
+<td>阶段 7 · 综合实战</td>
+<td>⬜ 未开始</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>目前所在阶段</strong>：还没开始<br>
+<strong>最后更新</strong>：——</p>
+<hr>
+<h2>我的记录（Scout 自动维护）</h2>
+<blockquote>
+<p>⚠️ <strong>这一节由 Scout 写入</strong>，你不用手填。<br>
+每条记录会写清：<strong>你在哪儿卡的</strong> → <strong>你当时怎么想的</strong> → <strong>正确理解是什么</strong>。</p>
+</blockquote>
+<h3>格式说明（Scout 按这个格式写）</h3>
+<pre><code>[阶段N · 小节X.Y] 你的问题或题目
+你当时说的/做的：
+Scout 的回答：正确理解是……
+你的原话（如果这是误解）：「我原来以为 ______，其实 ______」
+错因类型：概念错 / 调用失败 / 表达不完整
+</code></pre>
+<h3>三种错，Scout 会分开标</h3>
+<table>
+<thead>
+<tr>
+<th>错因</th>
+<th>什么意思</th>
+<th>怎么补</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>概念错</strong></td>
+<td>理解反了</td>
+<td>回讲义重读那一小节</td>
+</tr>
+<tr>
+<td><strong>调用失败</strong></td>
+<td>概念答对过，这次没想起来用</td>
+<td>不用重读，做一张检查清单提醒自己</td>
+</tr>
+<tr>
+<td><strong>表达不完整</strong></td>
+<td>意思对，漏了要点</td>
+<td>不用重读，<strong>重讲一遍并收口</strong>就行</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>还没有记录</h2>
+<blockquote>
+<p>Scout 会随着教学自动往这里写。<br>
+如果你打开这份文件时这里还是空的 —— 说明还没开始学，或者教练还没配置好。</p>
+</blockquote>
+<hr>
+<h2>附：可能遇到的坑（参考，不限于此）</h2>
+<blockquote>
+<p>下面是<strong>这门课里常见的坑</strong>，供你预习用。<br>
+但真正属于你的坑，由 Scout 在教学时记进上面那一节 —— 因为<strong>你的卡点和别人的不一定一样</strong>。</p>
+</blockquote>
+<h3>阶段 0 · 基础概念</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>以为模型有记忆</td>
+<td>记忆是外面存的，每次把历史重新发给它</td>
+<td>关键结论要写进文件，别指望它记得</td>
+</tr>
+<tr>
+<td>以为它在「查资料」</td>
+<td>它在生成「最顺的下一句」</td>
+<td>想要它说对，就得<strong>给它材料</strong></td>
+</tr>
+<tr>
+<td>以为答对了就等于懂了</td>
+<td>答对但说不出「为什么这么选」= 未掌握</td>
+<td>让教练追问一句</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 1 · Prompt 工程</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加了「不要编造」它照样编</td>
+<td>只给了禁止项，没给替代动作</td>
+<td>改成「<strong>资料未提及就回答『资料未提及』</strong>」</td>
+</tr>
+<tr>
+<td>每次输出字段名都不一样</td>
+<td>没给完整结构示例</td>
+<td>给<strong>一整条完整范例</strong>，不是描述字段</td>
+</tr>
+<tr>
+<td>约束写在开头，它还是不听</td>
+<td>离生成位置太远</td>
+<td><strong>最关键的约束放结尾</strong></td>
+</tr>
+<tr>
+<td>十条规则写下去，它还是不懂「礼貌」</td>
+<td>规则本身不可判定</td>
+<td><strong>换成给三个例子</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 2 · RAG</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户问法和原文用词不同，就检索不到</td>
+<td>纯关键词检索不认同义</td>
+<td><strong>混合检索</strong>（关键词 ＋ 向量）</td>
+</tr>
+<tr>
+<td>改了文档，检索结果还是旧的</td>
+<td><strong>只改文件没重建索引</strong></td>
+<td>文档更新与索引重建<strong>必须绑成一步</strong></td>
+</tr>
+<tr>
+<td>找到 20 段全塞进去，答案反而变差</td>
+<td>噪音淹没了信号</td>
+<td><strong>限制 top-k</strong>（通常 3–5 段）</td>
+</tr>
+<tr>
+<td>检索内容递过去了，它还是自己编</td>
+<td>没给约束和替代动作</td>
+<td>补「只依据给定资料回答 ＋ 资料未提及就明说」</td>
+</tr>
+<tr>
+<td>以为微调能让它「记住业务数据」</td>
+<td>微调改风格，不注入知识</td>
+<td><strong>注入知识用 RAG</strong>，改行为才用微调</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 3 · Agent 与工具调用</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>工具选错、参数填错</td>
+<td>工具描述写的是「我是什么」而不是「什么时候该选我」</td>
+<td>描述里写<strong>适用条件</strong> ＋ 给调用例子</td>
+</tr>
+<tr>
+<td>它反复调用同一个失败的工具</td>
+<td>失败后没给替代路径</td>
+<td>错误信息要<strong>可执行</strong>（告诉它接下来能做什么）</td>
+</tr>
+<tr>
+<td>上下文越来越贵、越来越慢</td>
+<td>轨迹只增不减</td>
+<td><strong>上下文压缩</strong> ＋ <strong>轮次上限</strong></td>
+</tr>
+<tr>
+<td>以为换更强的模型能解决「老是选错工具」</td>
+<td>选错是<strong>描述问题</strong>，不是能力问题</td>
+<td><strong>先改工具描述</strong>，再考虑换模型</td>
+</tr>
+<tr>
+<td>它说「做完了」其实没做完</td>
+<td>完成只是它的一句宣称</td>
+<td>要<strong>独立证据</strong>（跑一遍测试、看实际输出）</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 4 · 多 Agent 协作</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>几个 Agent 说得几乎一模一样</td>
+<td>独立判断变成了同声同气</td>
+<td>让它们<strong>看不同材料</strong>再讨论</td>
+</tr>
+<tr>
+<td>分工之后开始互相抵消</td>
+<td>目标互斥却没有仲裁机制</td>
+<td>指定一个<strong>拍板的人</strong>，其余提供意见</td>
+</tr>
+<tr>
+<td>传话传了三手就变味</td>
+<td>每转述一次都在丢信息、 加解释</td>
+<td><strong>传路径/产物，不传转述</strong></td>
+</tr>
+<tr>
+<td>活干到一半就停了，还说做完了</td>
+<td>过早终止：看起来像成功</td>
+<td>检查<strong>独立证据</strong>，不看宣称</td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 5 · 工程化</h3>
+<blockquote>
+<p>⚠️ 这一节的大多数坑<strong>发生在具体机器环境上</strong>（装环境、配代理、跑 Docker）。<br>
+<strong>不写代码、只做判断与验收的学员，只需要看最后 3 条</strong> —— 知道「出问题时该往哪个方向怀疑」就够了。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>上线后变差，没人发现</td>
+<td>没有持续对比</td>
+<td>建<strong>评测集</strong>，每次改动重跑一次</td>
+</tr>
+<tr>
+<td>改提示词之后，回滚不回去</td>
+<td>提示词和配置没版本记录</td>
+<td><strong>提示词也要存版本</strong>，和代码一起</td>
+</tr>
+<tr>
+<td>「好像好了一点」其实只是噪声</td>
+<td>没有对照基线</td>
+<td>固定样本重跑，看<strong>通过率</strong>而不是感觉</td>
+</tr>
+<tr>
+<td>模型换版本 / 提示词换版本之后，不知道是哪个引起的变好变坏</td>
+<td>三个变量同时动了</td>
+<td>记录<strong>模型版本 ＋ 提示词版本 ＋ 工具版本</strong></td>
+</tr>
+<tr>
+<td>容器就是绝对安全的</td>
+<td>容器<strong>共享内核</strong></td>
+<td>隔离分三档：进程级 / 容器 / microVM；<strong>按「输入可不可信」选档</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 6 · 垂直应用</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>没有 API 也上 Computer Use</td>
+<td>跳过了最便宜的一步</td>
+<td><strong>先问有没有 API</strong>，没有再考虑操作界面</td>
+</tr>
+<tr>
+<td>流程很简单却上了框架</td>
+<td>框架的长期维护成本被低估</td>
+<td>流程简单就直接做，<strong>框架是最后选项</strong></td>
+</tr>
+<tr>
+<td>框架搭的东西坏了查不出原因</td>
+<td>抽象层太多，调试变难</td>
+<td>每一层抽象都是新的盲区</td>
+</tr>
+<tr>
+<td>低代码搭的东西上线后没人管质量</td>
+<td>演示容易，维护难</td>
+<td>上线前问清：<strong>谁维护、怎么发现坏了</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>阶段 7 · 综合实战</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>怎么解决</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>被要求写代码就慌</td>
+<td>你的价值不在手写</td>
+<td>先反问这道题要验什么 → 说清分工 → 把话题转到强项</td>
+</tr>
+<tr>
+<td>讲项目像流水账</td>
+<td>只讲了「做了什么」，没讲「为什么这么选」</td>
+<td>用 STAR：<strong>背景 / 任务 / 行动 / 结果</strong>，重点在行动</td>
+</tr>
+<tr>
+<td>说的和资料上的说法对不上</td>
+<td>同名不同义</td>
+<td><strong>主动桥接</strong>：「你说的那个意思是…，我这边叫…」</td>
+</tr>
+<tr>
+<td>把「资深要求」当「入门门槛」</td>
+<td>招聘描述常把两者混写</td>
+<td>「精通 X」＋「有大规模生产经验」是招资深，不是入门门槛</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>这份文件怎么维护</h2>
+<p><strong>不需要你手动维护。</strong> Scout 会在每次教学后自动更新「我的记录」和「阶段总览」两节。</p>
+<p>如果换了新的 AI 对话（记忆丢了），<strong>把这份文件发给新对话的教练</strong>，它就能接着往下记。</p>
+</div>
+
+<script>
+(function(){
+  var K='aigc-theme', r=document.documentElement;
+  var saved=null;
+  try{ saved=localStorage.getItem(K); }catch(e){}
+  if(saved){ r.setAttribute('data-theme',saved); }
+  function cur(){
+    var a=r.getAttribute('data-theme');
+    if(a) return a;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  }
+  window.__toggleTheme=function(){
+    var n = cur()==='dark'?'light':'dark';
+    r.setAttribute('data-theme',n);
+    try{ localStorage.setItem(K,n); }catch(e){}
+  };
+  var b=document.createElement('button');
+  b.className='theme-btn';
+  b.type='button';
+  b.title='切换深色 / 浅色';
+  b.setAttribute('aria-label','切换深色或浅色主题');
+  function icon(){
+    b.textContent = cur()==='dark' ? '☀' : '☾';
+  }
+  b.onclick=function(){ window.__toggleTheme(); icon(); };
+  document.addEventListener('DOMContentLoaded',function(){
+    icon(); document.body.appendChild(b);
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -73,37 +98,36 @@ strong{color:var(--strong);}
 <div class="wrap">
 <h1>阶段 7 讲义：求职实战</h1>
 <blockquote>
-<p>** 按教材核验 ⑦ 补 2 节 ＋ 3 处<strong><br>
-本阶段目标：把前六个阶段学的东西，翻译成面试官想听的答案，并补齐「转行」这个身份的正面叙事。<br>
-阅读重点：</strong>7.2 项目怎么讲<strong>（含「你是审核者」这段话）、</strong>7.3 转行怎么解释<strong>、<br>
-</strong>7.8 被要求写代码怎么答<strong>、</strong>7.9 AI 岗位分层**。</p>
+<p>本阶段目标：把前六个阶段学的东西，整理成能清楚讲出来、也经得起追问的表述，并补齐「转行」这个身份的正面叙事。<br>
+阅读重点：<strong>7.2 项目怎么讲</strong>（含「审核者定位」这段）、<strong>7.3 怎么解释背景转变</strong>、<br>
+<strong>7.8 被要求写代码怎么应对</strong>、<strong>7.9 AI 岗位分层</strong>。</p>
 </blockquote>
 <h2>怎么用这份讲义</h2>
 <ul>
-<li><strong>读多久</strong>：全篇 11 节，约 30 分钟。</li>
+<li><strong>读多久</strong>：全篇 10 节，约 30 分钟。</li>
 <li><strong>什么顺序</strong>：<strong>7.1 → 7.10 顺序读</strong>，没有例外。</li>
 <li>
-<p><strong>重点在哪</strong>：<strong>7.2 / 7.3 / 7.8 / 7.9 这四节</strong>——7.4–7.7 是清单和话术，<br>
+<p><strong>重点在哪</strong>：<strong>7.2 / 7.3 / 7.8 / 7.9 这四节</strong>——7.4–7.7 是清单和对照表，<br>
 <strong>当查询手册用就行，不用背</strong>。</p>
 </li>
 <li>
-<p><strong>怎么练</strong>：本阶段<strong>没有选择题</strong>，读完直接做<strong>模拟面试卷</strong>（同目录 <code>测验.md</code>，<br>
-  5 题、<strong>无选择项</strong>、按「讲得对不对」评分）。<strong>它不是考你答全，是考你能不能对着面试官把话说圆。</strong></p>
+<p><strong>怎么练</strong>：本阶段<strong>没有选择题</strong>，读完直接做<strong>表述训练卷</strong>（同目录 <code>测验.html</code>，<br>
+  5 题、<strong>无选择项</strong>、按「讲得对不对」评分）。<strong>它不是考你答全，是考你能不能把话说圆、把判断讲出来。</strong></p>
 </li>
 <li>
-<p><strong>⚠️ 7.4 有个必看的东西</strong>：<strong>「六步」和「四道防线」被问到时要做桥接</strong>——<br>
-  我们的说法和行业通行说法同名不同义，<strong>不说桥接会被当成答偏了</strong>。</p>
+<p><strong>⚠️ 7.4 有个必看的东西</strong>：<strong>「六步」和「四道防线」对外讲的时候要先做一次桥接</strong>——<br>
+  我们的说法和行业通行说法同名不同义，<strong>不说桥接会被理解成答偏了</strong>。</p>
 </li>
 </ul>
 <hr>
-<h2>7.1 先纠正一个误区：面试不是在考试</h2>
-<p>大多数转行的人把面试当成「知识测验」，所以拼命背概念。<strong>方向错了。</strong></p>
-<p>面试官真正想判断的是三件事：</p>
+<h2>7.1 先纠正一个误区：考核的不是记忆，是能不能做事</h2>
+<p>大多数刚开始学的人把「被考核」当成「知识测验」，所以拼命背概念。<strong>方向错了。</strong></p>
+<p>真正决定你能不能被认可的是三件事：</p>
 <table>
 <thead>
 <tr>
-<th>他想知道</th>
-<th>他通过什么判断</th>
+<th>对方想知道</th>
+<th>通过什么判断</th>
 </tr>
 </thead>
 <tbody>
@@ -113,7 +137,7 @@ strong{color:var(--strong);}
 </tr>
 <tr>
 <td><strong>你懂不懂原理</strong></td>
-<td>你知不知道<strong>为什么这么选</strong>，而不是背了话术</td>
+<td>你知不知道<strong>为什么这么选</strong>，而不是背了套话</td>
 </tr>
 <tr>
 <td><strong>你好不好合作</strong></td>
@@ -178,9 +202,9 @@ strong{color:var(--strong);}
 </table>
 <p><strong>看出区别了吗</strong>：差的讲法在说「做了什么」，好的讲法在说「为什么这么做」。<br>
 后者正是前面六个阶段反复训练的东西。</p>
-<h3>⭐ 你在项目里的真实角色是「审核者」，这句话要主动讲出来</h3>
+<h3>⭐ 你在项目里的真实角色是「审核者」，这是最该讲清的一点</h3>
 <p>这是你<strong>最容易被讲漏、但最值钱的一条</strong>。</p>
-<p>教材里有两处直接对应这个角色的依据：</p>
+<p>资料里有两处直接对应这个角色的依据：</p>
 <table>
 <thead>
 <tr>
@@ -191,18 +215,18 @@ strong{color:var(--strong);}
 </thead>
 <tbody>
 <tr>
-<td><strong>教材</strong></td>
+<td><strong>工程资料</strong></td>
 <td>「测试套件<strong>提供明确的验收标准</strong>」</td>
 <td>你做的事就是<strong>定验收标准</strong>——不是写实现</td>
 </tr>
 <tr>
-<td><strong>教材</strong></td>
+<td><strong>工程资料</strong></td>
 <td>同一上下文里的模型<strong>难发现自身盲区</strong>，所以要「<strong>提议者 — 审核者</strong>」</td>
 <td>你站在<strong>审核者</strong>位置，<strong>不是提议者</strong></td>
 </tr>
 </tbody>
 </table>
-<p><strong>这意味着你在面试里该怎么讲</strong>：</p>
+<p><strong>这意味着你在讲项目时该怎么说</strong>：</p>
 <blockquote>
 <p>「我的分工是<strong>审核者，不是提议者</strong>。我负责三件事：<br>
 ① <strong>定义「做完」是什么样</strong>——把需求翻译成可判定的验收条件；<br>
@@ -214,15 +238,15 @@ strong{color:var(--strong);}
 </blockquote>
 <p><strong>这段话为什么强</strong>：</p>
 <ul>
-<li>它<strong>把「不写代码」从缺陷变成了定位</strong>——不是「我不会」，是「我的岗位是审核者」；</li>
-<li>它<strong>有教材依据</strong>（提议者—审核者），不是自吹；</li>
+<li>它<strong>把「不写代码」从缺陷变成了定位</strong>——不是「我不行」，是「我的定位是审核者」；</li>
+<li>它<strong>有依据</strong>（提议者—审核者），不是自吹；</li>
 <li>它<strong>暗含了你会追证据</strong>——这正是「有效信号」那套东西。</li>
 </ul>
 <p>⚠️ <strong>别硬套</strong>：如果对方是个纯工程岗、明确要「能独立写实现的人」，<br>
-<strong>这不等于你不适合</strong>——那是另一个岗位。<strong>判断岗位属于哪一层，看 7.8。</strong></p>
+<strong>这不等于你不适合</strong>——那是另一个岗位。<strong>判断岗位属于哪一层，看 7.9。</strong></p>
 <hr>
-<h2>7.3 转行怎么解释（这是你的必答题）</h2>
-<p>面试官一定会问：「你不是这个专业的，为什么觉得自己能做这个？」</p>
+<h2>7.3 怎么解释自己的背景转变（这是你的必答题）</h2>
+<p>这一问几乎一定会出现：「你不是这个专业的，为什么觉得自己能做这个？」</p>
 <p><strong>三条原则</strong>：</p>
 <ol>
 <li><strong>不回避、不道歉。</strong> 不要用「虽然我不是科班，但是……」这种示弱句式</li>
@@ -230,7 +254,7 @@ strong{color:var(--strong);}
 <li><strong>把原专业变成优势，而不是包袱</strong></li>
 </ol>
 <h3>第三条怎么理解</h3>
-<p>转行者的原背景不是空白，很多能力是<strong>可迁移</strong>的：</p>
+<p>原来的背景不是空白，很多能力是<strong>可迁移</strong>的：</p>
 <table>
 <thead>
 <tr>
@@ -253,119 +277,122 @@ strong{color:var(--strong);}
 </tr>
 </tbody>
 </table>
-<p><strong>面试话术模板</strong>（按自己情况改）：</p>
+<p><strong>完整表述模板</strong>（按自己情况改）：</p>
 <blockquote>
 <p>「我不是科班出身，但我在（原岗位）里实际遇到了（某个具体问题），当时没有现成方案，我就用 AI 把它做出来了——（一句话说结果）。这个过程中我发现，做 AI 应用最难的不是写代码，而是<strong>判断该用哪一层手段、怎么验证结果</strong>。这两件事我在（原岗位）里天天在做。」</p>
 </blockquote>
-<p><strong>这段话的厉害之处</strong>：既承认了转行，又证明了「我做过」，还提出了一个专业判断。</p>
+<p><strong>这段表述的厉害之处</strong>：既承认了转行，又证明了「我做过」，还提出了一个专业判断。</p>
 <hr>
-<h2>7.4 高频面试题清单（附答题方向）</h2>
+<h2>7.4 章节小测：能答上来才算真会了</h2>
+<blockquote>
+<p>合上讲义自测。每题答得出来才算真会；答不出来的，回对应小节重读。</p>
+</blockquote>
 <h3>概念类</h3>
 <table>
 <thead>
 <tr>
-<th>问题</th>
-<th>答题方向</th>
+<th>自测题</th>
+<th>正确理解</th>
 <th>对应阶段</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「模型有记忆吗？」</td>
+<td>模型有记忆吗？</td>
 <td>没有，记忆是外面存的</td>
 <td>0</td>
 </tr>
 <tr>
-<td>「怎么防幻觉？」</td>
+<td>怎么防幻觉？</td>
 <td>给它材料，不是求它别编</td>
 <td>0</td>
 </tr>
 <tr>
-<td>「Prompt / RAG / Agent / 微调怎么选？」</td>
+<td>Prompt / RAG / Agent / 微调怎么选？</td>
 <td>说五问表，强调「能往上不往下」</td>
 <td>0</td>
 </tr>
 <tr>
-<td>「什么是 RAG？」</td>
+<td>什么是 RAG？</td>
 <td>五步：切块 → 向量化 → 入库 → 检索 → 生成</td>
 <td>2</td>
 </tr>
 <tr>
-<td>「RAG 和微调的区别？」</td>
+<td>RAG 和微调的区别？</td>
 <td>RAG 给知识，微调改风格</td>
 <td>2</td>
 </tr>
 <tr>
-<td>「Agent 和普通调用差在哪？」</td>
+<td>Agent 和普通调用差在哪？</td>
 <td>多了循环：能看结果再决定下一步</td>
 <td>3</td>
 </tr>
 <tr>
-<td>「工具调用怎么实现的？」</td>
+<td>工具调用怎么实现的？</td>
 <td>四步链条，强调模型只出请求</td>
 <td>3</td>
 </tr>
 <tr>
-<td>「怎么防止 Agent 乱来？」</td>
+<td>怎么防止 Agent 乱来？</td>
 <td>四道防线 ＋ 兜底在数据层</td>
 <td>3</td>
 </tr>
 </tbody>
 </table>
-<h3>⚠️ 「六步」和「四道防线」被问到时，<strong>先做一次桥接</strong></h3>
-<p>阶段 3 讲义里的<strong>六步机制</strong>和<strong>四道防线</strong>是我们自己的教学结构，<strong>和教材的通用说法不完全同名</strong>。<br>
-面试官心里想的通常是他自己熟悉的那套，<strong>你不说桥接，他会以为你答偏了</strong>。</p>
+<h3>⚠️ 「六步」和「四道防线」对外讲的时候，<strong>先做一次桥接</strong></h3>
+<p>阶段 3 讲义里的<strong>六步机制</strong>和<strong>四道防线</strong>是我们自己的教学结构，<strong>和业界的通用说法不完全同名</strong>。<br>
+听的人心里想的通常是他自己熟悉的那套，<strong>你不说桥接，他会以为你答偏了</strong>。</p>
 <table>
 <thead>
 <tr>
-<th>面试官心里的版本（教材通行说法）</th>
+<th>业界通行说法（听的人心里的版本）</th>
 <th>我们的版本（阶段 3）</th>
-<th>桥接话术</th>
+<th>桥接说法</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>工具调用四步</strong>（教材）：① 上下文里声明工具 → ② 模型决定调不调、调哪个、传什么 → ③ 结果追加回上下文 → ④ 模型据此决定下一步</td>
+<td><strong>工具调用四步</strong>（业界通行说法）：① 上下文里声明工具 → ② 模型决定调不调、调哪个、传什么 → ③ 结果追加回上下文 → ④ 模型据此决定下一步</td>
 <td><strong>六步</strong>：在四步之外，补上了<strong>「静态前缀 + 轨迹」怎么拼</strong>、<strong>「外层程序怎么执行与校验」</strong></td>
 <td>「您说的四步是主循环。我这边习惯拆得更细一点——<strong>除了模型和工具之间的四步，还要加上静态前缀怎么组织、轨迹怎么累积、以及外层程序收到请求后的校验和执行</strong>。核心逻辑跟您说的是同一个。」</td>
 </tr>
 <tr>
-<td><strong>三层护栏</strong>（教材）：<strong>上下文层 / 执行层 / 数据层</strong>，按<strong>被绕过的难度</strong>排</td>
+<td><strong>三层护栏</strong>（业界通行说法）：<strong>上下文层 / 执行层 / 数据层</strong>，按<strong>被绕过的难度</strong>排</td>
 <td><strong>四道防线</strong>（权限最小化 / 高风险确认 / 参数校验 / 轮次成本上限）</td>
 <td>「防线讲的是<strong>动手那一刻的拦截</strong>，属于执行层。但完整的防护是三层——<strong>越靠下的层越不依赖模型自己的判断，越难被穿透</strong>。所以真正的兜底在数据层，不在执行层。」</td>
 </tr>
 </tbody>
 </table>
 <p><strong>为什么要写这一节</strong>：这两处<strong>不是讲错，是命名不同</strong>。<br>
-但面试里「命名不同」= <strong>对方听不懂你说的</strong>= <strong>丢分</strong>。<br>
+但对外讲的时候「命名不同」= <strong>对方听不懂你说的</strong>= <strong>讲不到位</strong>。<br>
 <strong>会做桥接的人，才是真的懂</strong>——因为他知道两套说法各自站在什么位置。</p>
 <h3>工程类</h3>
 <table>
 <thead>
 <tr>
-<th>问题</th>
-<th>答题方向</th>
+<th>自测题</th>
+<th>正确理解</th>
 <th>对应阶段</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「怎么保证输出稳定？」</td>
+<td>怎么保证输出稳定？</td>
 <td>固定测试用例 + few-shot + 限格式 + 低温度</td>
 <td>1</td>
 </tr>
 <tr>
-<td>「怎么知道改得更好了？」</td>
+<td>怎么知道改得更好了？</td>
 <td>评测集重跑、对比通过率</td>
 <td>5</td>
 </tr>
 <tr>
-<td>「线上出问题怎么查？」</td>
+<td>线上出问题怎么查？</td>
 <td>可观测性：记完整输入输出 + 工具轨迹</td>
 <td>5</td>
 </tr>
 <tr>
-<td>「LLM 应用有什么安全风险？」</td>
+<td>LLM 应用有什么安全风险？</td>
 <td>提示词注入；安全判断不交给模型</td>
 <td>5</td>
 </tr>
@@ -375,24 +402,24 @@ strong{color:var(--strong);}
 <table>
 <thead>
 <tr>
-<th>问题</th>
-<th>答题方向</th>
+<th>自测题</th>
+<th>正确理解</th>
 <th>对应阶段</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「有个 800 页文档问答需求，你怎么做？」</td>
+<td>有个 800 页文档问答需求，你怎么做？</td>
 <td>五问表走一遍 → RAG</td>
 <td>0/2</td>
 </tr>
 <tr>
-<td>「怎么让 Agent 处理一个复杂多步任务？」</td>
+<td>怎么让 Agent 处理一个复杂多步任务？</td>
 <td>规划 + 记忆 + 反思</td>
 <td>4</td>
 </tr>
 <tr>
-<td>「你怎么看 AI 在 X 行业的应用？」</td>
+<td>你怎么看 AI 在 X 行业的应用？</td>
 <td>这个行业哪些环节绝对不能出错</td>
 <td>6</td>
 </tr>
@@ -411,7 +438,7 @@ strong{color:var(--strong);}
 <tbody>
 <tr>
 <td>「熟悉 RAG、Agent、Prompt 工程」</td>
-<td>「独立完成一个账单核对助手：判断资料规模后选用 TF-IDF 检索（而非向量库），因为账单关键信息是字面匹配的」</td>
+<td>「独立完成一个合同审查助手：判断资料规模后选用 TF-IDF 检索（而非向量库），因为合同里的编号、金额、日期都是字面匹配的」</td>
 </tr>
 <tr>
 <td>「会使用 AI 工具提效」</td>
@@ -422,11 +449,18 @@ strong{color:var(--strong);}
 <p><strong>为什么后者强</strong>：</p>
 <ul>
 <li>有<strong>具体的判断</strong>（为什么选 TF-IDF 而不是向量库）→ 证明懂原理</li>
-<li>有<strong>数字</strong>（2 天 → 1 天）→ 证明有结果</li>
+<li>有<strong>数字</strong>（2 天→ 1 天）→ 证明有结果</li>
 </ul>
-<p><strong>注意</strong>：不要为了好看编项目。面试官会追问细节，编的一问就露。</p>
+<blockquote>
+<p>⚠️ <strong>注意这两条的差别不只是措辞</strong>。它们示范的是<strong>思路</strong>：<br>
+第一条在证明「我懂原理」，第二条在证明「我能拿到结果」。<br>
+真正决定这份材料有没有分量的，是后者——<strong>你做了什么判断、换来了什么</strong>。<br>
+所以简历上的每一句话，你都要能回答「<strong>这个判断是怎么来的</strong>」。<br>
+至于你实际做过的项目是哪些，换成你真做过的就行，<strong>结构照抄这个模式</strong>。</p>
+</blockquote>
+<p><strong>注意</strong>：不要为了好看编项目。细节一问就露。</p>
 <hr>
-<h2>7.6 面试现场怎么应对不会的问题</h2>
+<h2>7.6 遇到不会的问题怎么应对</h2>
 <p><strong>三个动作，按顺序：</strong></p>
 <ol>
 <li><strong>先给框架</strong>：「这个我具体没做过，但按我的理解，可以从 X 和 Y 两个角度想」</li>
@@ -434,56 +468,59 @@ strong{color:var(--strong);}
 <li><strong>给一个可验证的答案</strong>：「如果让我做，我会先 Z 验证一下」</li>
 </ol>
 <p><strong>绝对不能做的</strong>：硬编、糊弄、假装懂。</p>
-<p><strong>为什么</strong>：面试官最怕的不是你不会，是你<strong>不会却说自己会</strong>——那意味着以后会在生产环境出事。</p>
+<p><strong>为什么</strong>：最危险的不是你不会，是你<strong>不会却说自己会</strong>——那意味着以后会在生产环境出事。</p>
 <blockquote>
 <p>回到阶段 3 的「宁可说不知道」——<strong>这个原则不只是给 Agent 的，也是给你自己的。</strong></p>
 </blockquote>
 <hr>
-<h2>7.7 面试会怎么问（元问题）</h2>
+<h2>7.7 章节小测：怎么把自己讲清楚（元问题）</h2>
+<blockquote>
+<p>这几问考的不是知识，是<strong>你怎么介绍自己</strong>。先自己答一遍，再对照右边。</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>面试官问</th>
-<th>别这么答</th>
-<th>该这么答</th>
+<th>自测题</th>
+<th>常见误解</th>
+<th>正确理解</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>「你为什么转行？」</td>
+<td>你为什么转行？</td>
 <td>「因为 AI 有前途」</td>
 <td>讲<strong>具体做了什么</strong>，再讲<strong>发现了什么判断</strong></td>
 </tr>
 <tr>
-<td>「你最大的短板是什么？」</td>
+<td>你最大的短板是什么？</td>
 <td>「我太追求完美」</td>
 <td>说<strong>真实且在改进</strong>的短板，比如「工程基础不如科班，我现在用系统的验收条件来补」</td>
 </tr>
 <tr>
-<td>「你有什么想问的？」</td>
+<td>你有什么想问的？</td>
 <td>「没有」</td>
 <td>问团队在做什么场景、怎么评测评效——<strong>显示你在意怎么把事做好</strong></td>
 </tr>
 <tr>
-<td>「你会不会觉得自己经验不够？」</td>
+<td>你会不会觉得自己经验不够？</td>
 <td>「我会努力学」</td>
 <td>用<strong>已完成的真实项目</strong>回应，别用态度回应</td>
 </tr>
 </tbody>
 </table>
 <hr>
-<h2>7.8 被要求写代码 / 面试代码题时怎么答（ 新增）</h2>
-<p>这是<strong>你一定会遇到</strong>的场景，而且<strong>一定会让你难受</strong>——因为你确实不手写。</p>
+<h2>7.8 被要求写代码时怎么答</h2>
+<p>这是<strong>你一定会遇到</strong>的场景，而且<strong>一定会让你难受</strong>——因为你的分工不是亲手写实现。</p>
 <p>先给结论：</p>
 <blockquote>
 <p><strong>这一节不是教你怎么写代码，是教你「不被这一问打倒」。</strong></p>
 </blockquote>
 <h3>🔴 先认清事实：这是<strong>岗位分层问题</strong>，不是「你行不行」的问题</h3>
 <p>招聘里那句「精通 Go 或 Python、熟悉 K8s」，<strong>对应的就是 infra 层岗位</strong>。<br>
-你如果投的是应用层（见 7.9），<strong>这题不该出现在你的面试里</strong>——<br>
-<strong>它出现，说明你可能投错了层</strong>。</p>
-<p>所以正确顺序是：<strong>先判断这题该不该被问</strong>，再决定怎么答。</p>
-<h3>面试现场的四步应对（真被问了就这么走）</h3>
+你如果做的是应用层（见 7.9），<strong>这一问不该出现在你面前</strong>——<br>
+<strong>它出现，说明你可能选错了层</strong>。</p>
+<p>所以正确顺序是：<strong>先判断这一问该不该出现</strong>，再决定怎么答。</p>
+<h3>遇到这一问时的四步应对（真遇到了就这么走）</h3>
 <table>
 <thead>
 <tr>
@@ -501,7 +538,7 @@ strong{color:var(--strong);}
 <tr>
 <td><strong>2. 说清分工（不遮掩）</strong></td>
 <td>「我的工作方式是：<strong>代码由 AI 实现，我定验收条件并独立核对结果</strong>。这不是回避，是我在团队里的实际定位。」</td>
-<td><strong>别假装能手写</strong>——面试官能看出来，一露馅全盘崩塌。**坦诚反而可信。</td>
+<td><strong>别假装能手写</strong>——一露馅全盘崩塌。<strong>坦诚反而可信。</strong></td>
 </tr>
 <tr>
 <td><strong>3. 把话题转到你的强项</strong></td>
@@ -509,9 +546,9 @@ strong{color:var(--strong);}
 <td><strong>这一步是胜负手</strong>：你把一道<strong>你答不出的题</strong>，换成了<strong>你最擅长的题</strong>。</td>
 </tr>
 <tr>
-<td><strong>4. 补上教材依据（加分）</strong></td>
+<td><strong>4. 补上依据（加分）</strong></td>
 <td>「这套做法的依据是：<strong>同一个模型在同一个上下文里很难发现自己的盲区</strong>，所以验收要靠外部证据，不能靠它自己说完成了。」</td>
-<td>有依据的判断 = 专业的判断。这句 教材。</td>
+<td>有依据的判断 = 专业的判断。</td>
 </tr>
 </tbody>
 </table>
@@ -558,10 +595,10 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>区别在哪</strong>：前者在说<strong>我怎么做</strong>，后者在说<strong>这个岗位该怎么做</strong>。<br>
-<strong>面试官问的是「你行不行」，你回答的应该是「我行不行」，不是「这行不行」。</strong></p>
+<strong>对方问的是「你行不行」，你回答的应该是「我行不行」，不是「这行不行」。</strong></p>
 <p><strong>这个区分也是 7.7 那个原则的延伸</strong>——所有回答都要落在<strong>你能负责的东西</strong>上。</p>
 <hr>
-<h2>7.9 AI 岗位分层：怎么认准方向，别被 K8s 带跑（ 新增）</h2>
+<h2>7.9 AI 岗位分层：怎么认准方向，别被 K8s 带跑</h2>
 <p>这节解决一个具体问题：<strong>你搜「大模型岗位」时，涌出来的全是 K8s / GPU / 分布式——然后你以为那些是入行门槛。</strong></p>
 <p><strong>它们不是。它们是另一层岗位的门槛。</strong></p>
 <h3>一句判据</h3>
@@ -616,9 +653,8 @@ strong{color:var(--strong);}
 <strong>别只搜「大模型」「AI 岗」</strong>——搜出来一堆推理平台和算法岗，<strong>你会被带跑</strong>。</p>
 </blockquote>
 <h3>⚠️ 一个真实的陷阱：<strong>资深要求被包装进入行门槛</strong></h3>
-<p>招聘话术里最常见的操作：<strong>把「3–5 年经验、做过平台级系统」的要求，写成「熟悉 K8s、有微服务经验」</strong>——<br>
+<p>招聘描述里最常见的操作：<strong>把「3–5 年经验、做过平台级系统」的要求，写成「熟悉 K8s、有微服务经验」</strong>——<br>
 <strong>读起来像「入行必须会」，实际是「这岗招的是资深」。</strong></p>
-<p>你之前读过的那份）。</p>
 <p><strong>你的判断方法</strong>（看 JD 的两条线）：</p>
 <table>
 <thead>
@@ -643,19 +679,19 @@ strong{color:var(--strong);}
 </tbody>
 </table>
 <p><strong>最后一条尤其重要</strong>：<strong>精通 ≠ 会用。</strong> 「精通 Go」是招人的理想画像，不是招人的门槛。</p>
-<h3>面试时怎么用这一节</h3>
-<p>如果对方问「你为什么不做 infra」：</p>
+<h3>怎么用这一节做判断</h3>
+<p>如果有人问「你为什么不做 infra」：</p>
 <blockquote>
-<p>「我看过 token 平台那类岗位，它的核心是把模型做成<strong>可被调用的标准服务</strong>——<br>
+<p>「我看过 token 平台那类岗位——把模型做成<strong>可被调用的标准服务</strong>：<br>
 网关、调度、多租户隔离，那属于<strong>模型商品化的基建层</strong>。<br>
 我做的是<strong>把模型用到具体业务里</strong>这一层：场景判断、技术选型、结果验收。<br>
 <strong>这两层我都看得懂区别，我能判断一个需求该用哪一层的手段——这比只会一层更有用。</strong>」</p>
 </blockquote>
-<p><strong>这段话的价值</strong>：它把「我不会 infra」变成<strong>「我知道 infra 和应用的区别，并且我知道需求该落到哪一层」</strong>。<br>
+<p><strong>这段表述的价值</strong>：它把「我不会 infra」变成<strong>「我知道 infra 和应用的区别，并且我知道需求该落到哪一层」</strong>。<br>
 <strong>后者是资深的信号，前者是短板。</strong></p>
 <hr>
-<h2>7.10 最后一件事：把七个阶段串成一句话</h2>
-<p>面试的最后，面试官常常会问「还有别的吗」。这时候你如果能用一句话总结你的方法论，印象分直接拉满：</p>
+<h2>7.10 最后一件事：把前面七个阶段串成一句话</h2>
+<p>最后常常有人问「还有别的吗」。这时候你如果能用一句话总结你的方法论，印象分直接拉满：</p>
 <blockquote>
 <p>「我做事有一个固定的判断顺序：<strong>先问结果是不是必须精确算（是就用代码），再问内容塞不塞得进上下文（塞得进就写进提示词），塞不进才上检索，要动手才上 Agent，要改风格才考虑微调。</strong> 每一步都先定验收条件，再让 AI 实现。」</p>
 </blockquote>
@@ -663,7 +699,7 @@ strong{color:var(--strong);}
 <hr>
 <h2>本阶段要带走的话</h2>
 <ol>
-<li><strong>面试不是考试，是判断你能不能干活。</strong> 讲「为什么这么选」，比讲「做了什么」值钱。</li>
+<li><strong>考核的不是记忆，是能不能做事。</strong> 讲「为什么这么选」，比讲「做了什么」值钱。</li>
 <li><strong>你在项目里的角色是「审核者」——这是定位，不是短板。</strong> 定验收条件 ＋ 独立核对 ＋ 让 AI 列出没验的。</li>
 <li><strong>转行不是短板，是可迁移经验 + 真实项目的组合。</strong> 不道歉、示弱、回避。</li>
 <li><strong>不会就说不会，但要说清边界和验证思路。</strong> 这跟教 Agent 的原则是同一个。</li>
@@ -671,11 +707,10 @@ strong{color:var(--strong);}
 <li><strong>搜岗限定词，认准应用层。</strong> K8s / GPU / 分布式是 infra 岗的门槛，不是你方向的门槛。</li>
 </ol>
 <hr>
-<p>学完请去做同目录下的 <code>测验.md</code>。这套题没有标准答案，是<strong>模拟面试</strong>，答完会逐题点评。</p>
+<p>学完请去做同目录下的 <code>测验.html</code>。这套题没有标准答案，是<strong>表述训练</strong>，答完会逐题点评。</p>
 <hr>
 <blockquote>
-<p><strong>本阶段易踩的坑</strong>：见上级目录的 <code>踩坑清单.md</code>「第一类 · 阶段 7」——<br>
-每条都写清了<strong>现象 / 原因 / 规避方式</strong>，遇到对不上的现象先查那一节。</p>
+<p><strong>遇到卡住的地方</strong>：「学员错题本」里有你踩过的坑记录——Scout 教学时会自动往里写。</p>
 </blockquote>
 </div>
 

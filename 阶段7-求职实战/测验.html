@@ -3,67 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>阶段 7 测验：求职实战（模拟面试） · AIGC 求职培训</title>
+<title>阶段 7 测验：求职实战（表述训练） · AIGC 应用工程课程</title>
 <style>
   :root{
-    --bg:#ffffff;--fg:#1c1c1a;--muted:#5f5e5a;--line:#e4e2da;--card:#f8f7f3;
-    --accent:#185fa5;--accent-bg:#eaf2fb;--warn:#8a5109;--warn-bg:#fdf3e0;
-    --ok:#3b6d11;--ok-bg:#eef5e3;--bad:#a32d2d;--bad-bg:#fbeceb;--code:#f1efe8;
+    --bg:#f7f6f3;--card:#ffffff;--text:#1f1e1c;--muted:#6b6862;
+    --line:#e5e2db;--accent:#0e7490;--code-bg:#f2efe9;--th:#efece5;
+    --accent-bg:#eaf4f8;--warn:#8a5109;--warn-bg:#fdf3e0;
+    --ok:#146c34;--ok-bg:#e8f5ec;--bad:#a32d2d;--bad-bg:#fbeceb;
   }
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-      --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-      --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+      --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+      --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+      --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+      --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
     }
   }
   /* 手动指定深色（覆盖系统设置） */
   :root[data-theme="dark"]{
-    --bg:#1b1b19;--fg:#ebebe6;--muted:#a5a59e;--line:#383834;--card:#232321;
-    --accent:#8ab8ea;--accent-bg:#152c42;--warn:#e8c078;--warn-bg:#3a2d10;
-    --ok:#bcd792;--ok-bg:#1f2c10;--bad:#f0a0a0;--bad-bg:#3a1a1a;--code:#26262a;
+    --bg:#0b1220;--card:#151d2e;--text:#e6edf3;--muted:#8b98a9;
+    --line:#263449;--accent:#22d3ee;--code-bg:#0e1524;--th:#1c2837;
+    --accent-bg:#0f2f3d;--warn:#d4a15f;--warn-bg:#3a2d10;
+    --ok:#34d399;--ok-bg:#12291f;--bad:#f0a0a0;--bad-bg:#33161f;
   }
   .theme-btn{
-    position:fixed;top:12px;right:14px;z-index:99;
-    width:36px;height:36px;border-radius:50%;
-    border:1px solid var(--line);background:var(--card);color:var(--fg);
-    font-size:16px;cursor:pointer;line-height:1;
-    box-shadow:0 1px 4px rgba(0,0,0,.14);
+    position:fixed;top:14px;right:16px;z-index:99;
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:var(--card);color:var(--text);
+    font-size:17px;cursor:pointer;line-height:1;
+    box-shadow:0 1px 4px rgba(0,0,0,.12);
   }
   .theme-btn:hover{border-color:var(--accent);}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-    font:16px/1.75 -apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
-  .wrap{max-width:820px;margin:0 auto;padding:40px 24px 72px}
+  /* body 写成一行：与入口页一致，且每条声明都带分号（工具脚本按分号切取值） */
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;font-size:16px;line-height:1.7;transition:background .2s,color .2s}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 24px 96px}
+  /* 表格：短单元格不能被压到换行（中文三个字会断成两行）。
+     markdown 的 |:--:| 会生成 inline text-align:center，浏览器据此收紧列宽，
+     所以给短列一个 min-width，让最长的「说明」列吃掉剩余空间。 */
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:0.92rem;
+    background:var(--card);table-layout:auto}
+  th{background:var(--th);text-align:left;padding:11px 13px;font-weight:600}
+  td{padding:10px 13px;border-top:1px solid var(--line);vertical-align:top}
+  th,td{min-width:5.5em}
+  td:first-child,th:first-child{white-space:nowrap}
+  table td:nth-child(1){min-width:6.5em}
   header{border-bottom:2px solid var(--line);padding-bottom:20px;margin-bottom:28px}
-  h1{font-size:26px;font-weight:600;margin:0 0 10px}
+  h1{font-size:28px;font-weight:600;margin:0 0 10px}
   .meta{color:var(--muted);font-size:14px;line-height:1.9}
   .bar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);
     padding:12px 0;margin:20px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:9}
   button{font:inherit;font-size:14px;padding:8px 16px;border-radius:8px;cursor:pointer;
     border:1px solid var(--accent);background:var(--accent-bg);color:var(--accent)}
   button:hover{opacity:.85}
-  button.ghost{border-color:var(--line);background:var(--card);color:var(--fg)}
+  button.ghost{border-color:var(--line);background:var(--card);color:var(--text)}
   .score{font-weight:600;font-size:15px;margin-left:auto}
   .item{border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:16px 0;background:var(--card)}
   .qhead{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:.5px;margin-bottom:6px}
   .qtext{margin:0 0 12px;font-weight:500}
   .qtext blockquote{margin:8px 0;padding:8px 14px;border-left:3px solid var(--line);
-    background:var(--bg);border-radius:0 8px 8px 0;color:var(--fg);font-weight:400}
-  .qtext code{background:var(--code);padding:2px 6px;border-radius:4px;
+    background:var(--bg);border-radius:0 8px 8px 0;color:var(--text);font-weight:400}
+  .qtext code{background:var(--code-bg);padding:2px 6px;border-radius:4px;
     font-family:"SF Mono",Consolas,monospace;font-size:.88em}
   .opt{display:block;padding:9px 12px;border-radius:8px;cursor:pointer;margin:5px 0;
     border:1px solid transparent;transition:background .12s}
   .opt:hover{background:var(--accent-bg)}
   .opt input{margin-right:9px;accent-color:var(--accent)}
-  .opt code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.88em}
+  .opt code{background:var(--code-bg);padding:1px 5px;border-radius:4px;font-size:.88em}
   .fb{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:14.5px;display:none;line-height:1.7}
   .fb.show{display:block}
   .fb.ok{background:var(--ok-bg);border-left:3px solid var(--ok)}
   .fb.bad{background:var(--bad-bg);border-left:3px solid var(--bad)}
   .fb.warn{background:var(--warn-bg);border-left:3px solid var(--warn)}
   textarea{width:100%;font:inherit;font-size:15px;padding:12px;border-radius:8px;
-    border:1px solid var(--line);background:var(--bg);color:var(--fg);resize:vertical;margin-top:6px}
+    border:1px solid var(--line);background:var(--bg);color:var(--text);resize:vertical;margin-top:6px}
   .hint{margin-top:12px;padding:14px 16px;border-radius:8px;background:var(--accent-bg);
     font-size:14.5px;line-height:1.8;display:none}
   .hint.show{display:block}
@@ -78,8 +91,8 @@
 <body>
 <div class="wrap">
 <header>
-  <h1>阶段 7 测验：求职实战（模拟面试）</h1>
-  <div class="meta">** 按规则 13c 重编（v2，5 题）**<br><strong>满分 10 分 ｜ 及格线 8 分（80%）</strong><br><strong>本阶段特殊</strong>：这是<strong>模拟面试</strong>，不是知识测验。没有标准答案，按「讲得对不对、够不够专业」给分。<br>答法：<strong>成段作答，就当面对面试官说</strong>。分几个点都行——<strong>判分只看内容，不看形式</strong>。<br><strong>写完会逐题点评</strong>，重点看「有没有讲出判断」。</div>
+  <h1>阶段 7 测验：求职实战（表述训练）</h1>
+  <div class="meta"><strong>满分 10 分 ｜ 及格线 8 分（80%）</strong><br><strong>本阶段特殊</strong>：这是<strong>表述训练</strong>，不是知识测验。没有标准答案，按「讲得对不对、够不够专业」给分。<br>答法：<strong>成段作答，就当自己在讲一遍</strong>。分几个点都行——<strong>判分只看内容，不看形式</strong>。<br><strong>写完会逐题点评</strong>，重点看「有没有讲出判断」。</div>
 </header>
 <div class="rule">做题方式：先自己答，不要翻讲义。简答题写完再点「查看参考要点」自评。最后点「生成答卷」，把结果复制后发给教练 Agent 批改。</div>
 <h2 style="font-size:18px;margin:32px 0 4px">一、必答题（每题 2 分，共 6 分）</h2>
@@ -90,7 +103,7 @@
 （考点：7.3 ｜ 不回避、有证据、把原背景变优势）</div>
   <textarea id="a1" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h1')">查看参考要点</button>
-  <div class="hint" id="h1">考点：[7.3] [7.7]。<b>这题考三点：不回避、有证据、把原背景变优势。</b><br>· <b>不要</b>用「虽然我不是科班，但是……」这种示弱句式——一开口就把自己放在下风<br>· <b>结构</b>：原岗位里遇到某个具体问题 → 当时没有现成方案 → 用 AI 做出来了 → 一句话说结果<br>· <b>往专业上收</b>：得出一个判断——「做 AI 应用最难的不是写代码，而是判断该用哪一层手段、怎么验证结果」<br>· <b>可迁移能力</b>（挑相关的说）：处理过大量杂乱数据 → 对数据脏乱敏感；跟很多客户/部门打过交道 → 更懂真实需求；自己用 AI 提过效 → 是早期实践者不是纸上谈兵<br>· <b>7.7 延伸</b>：如果对方追问「你经验够吗」，用<b>已完成的真实项目</b>回应，<b>别用态度回应</b></div>
+  <div class="hint" id="h1">考点：[7.3] [7.7]。<b>这题考三点：不回避、有证据、把原背景变优势。</b><br>· <b>不要</b>用「虽然我不是科班，但是……」这种示弱句式——一开口就把自己放在下风<br>· <b>结构</b>：原岗位里遇到某个具体问题 → 当时没有现成方案 → 用 AI 做出来了 → 一句话说结果<br>· <b>往专业上收</b>：得出一个判断——「做 AI 应用最难的不是写代码，而是判断该用哪一层手段、怎么验证结果」<br>· <b>可迁移能力</b>（挑相关的说）：处理过大量杂乱数据 → 对数据脏乱敏感；跟很多客户/部门打过交道 → 更懂真实需求；自己用 AI 提过效 → 是早期实践者不是纸上谈兵<br>· <b>7.7 延伸</b>：如果被追问「你经验够吗」，用<b>已完成的真实项目</b>回应<b>别用态度回应</b></div>
 </div>
 <div class="item" id="q-q2">
   <div class="qhead">Q2</div>
@@ -98,13 +111,13 @@
 挑一个你做过的项目，用 <strong>S（背景）/ T（任务）/ A（行动）/ R（结果）</strong> 讲一遍。</p>
 <p><strong>⚠️ A 段除了说清「为什么这么选」，还要回答一个额外的问题</strong>：</p>
 <blockquote>
-<p><strong>你在项目里到底扮演什么角色？</strong><br>
-提示：讲义 7.2 说这是<strong>「审核者」不是「提议者」</strong>——<strong>这题必须自己讲出来，不要等我问。</strong></p>
+<p><strong>你在项目里到底负责什么角色？</strong><br>
+提示：讲义 7.2 说这是<strong>「审核者」不是「提议者」</strong>——<strong>这题要自己主动讲出来，不要等人问。</strong></p>
 </blockquote>
 <p>（考点：7.2 ｜ 能不能讲出判断，而不是流水账；有没有把定位讲成优势）</p></div>
   <textarea id="a2" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h2')">查看参考要点</button>
-  <div class="hint" id="h2">考点：7.2。<b>本卷最重要的一题。A 段是重点，但这题还多问一层：你扮演什么角色。</b><br>· <b>S 背景</b>：一句话说清痛点<br>· <b>T 任务</b>：你负责什么，边界在哪（别把别人的功劳说成自己的）<br>· <b>A 行动（最重要）</b>：<b>你的判断过程</b>。差的讲法是「我用 RAG 做了个问答助手」；好的讲法是「我先判断资料塞不塞得进上下文，塞不进才上 RAG；切块用按段落切，因为制度文档结构清晰」<br>· <b>R 结果</b>：有数字最好（省了多少时间、处理多少量）<br>· <b>⭐ 必须自己讲出来的角色定位</b>：「我在项目里是<b>审核者，不是提议者</b>。我负责三件事：<b>①定义「做完」是什么样</b>（把需求翻译成可判定的验收条件）<b>②让 AI 按条件实现 ③独立核对结果</b>——我要求它主动列出哪些没验、哪些验不了，而不是只看它说『完成了』」<br>· <b>依据（说了加分）</b>：教材「同一上下文里的模型难发现自身盲区」＋ 教材「测试套件提供明确的验收标准」<br>· <b>扣分点</b>：如果他只讲做了什么、<b>没讲角色定位</b>——扣 0.3（这是本卷要他自己主动说出的东西）<br>· <b>⚠️ 不扣分的地方</b>：没提术语名字（提议者/审核者/verifier）<b>不扣</b>，只要讲清了自己负责「定标准＋核对」就算到位</div>
+  <div class="hint" id="h2">考点：7.2。<b>本卷最重要的一题。A 段是重点，但这题还多问一层：你实际负责什么。</b><br>· <b>S 背景</b>：一句话说清痛点<br>· <b>T 任务</b>：你负责什么，边界在哪（别把别人的功劳说成自己的）<br>· <b>A 行动（最重要）</b><b>你的判断过程</b>。差的讲法是「我用 RAG 做了个问答助手」；好的讲法是「我先判断资料塞不塞得进上下文，塞不进才上 RAG；切块用按段落切，因为制度文档结构清晰」<br>· <b>R 结果</b>：有数字最好（省了多少时间、处理多少量）<br>· <b>⭐ 必须自己讲出来的角色定位</b>：「我在项目里是<b>审核者，不是提议者</b>。我负责三件事<b>①定义「做完」是什么样</b>（把需求翻译成可判定的验收条件）<b>②让 AI 按条件实现 ③独立核对结果</b>——我要求它主动列出哪些没验、哪些验不了，而不是只看它说『完成了』」<br>· <b>依据（说了加分）</b>：「同一上下文里的模型难发现自身盲区」＋ 「测试套件提供明确的验收标准」<br>· <b>扣分点</b>：如果他只讲做了什么<b>没讲角色定位</b>——扣 0.3（这是本卷要他自己主动说出的东西）<br>· <b>⚠️ 不扣分的地方</b>：没提术语名字（提议者/审核者/verifier）<b>不扣</b>，只要讲清了自己负责「定标准＋核对」就算到位</div>
 </div>
 <div class="item" id="q-q3">
   <div class="qhead">Q3</div>
@@ -114,20 +127,20 @@
 （考点：7.10 + 阶段 0/1 ｜ 五问表内化了没有；能不能不看稿说出来）</div>
   <textarea id="a3" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h3')">查看参考要点</button>
-  <div class="hint" id="h3">考点：[7.11]。<b>要把五问表说成一段连贯的话，不是背名词。</b><br>· <b>顺序</b>：① 结果必须精确算吗 → 用代码 ② 塞得进上下文吗 → 写进提示词 ③ 塞不进且模型没学过 → RAG ④ 要它动手做事 → Agent + 工具 ⑤ 要风格格式极稳定且量大 → 微调<br>· <b>要说的关键句</b>：「能往上就不往下」——每往下一层都更贵、更慢、更难维护<br>· <b>加分</b>：点出第 ② 问最容易被跳过。「大多数新手会直接从『这是知识』跳到『上 RAG』，跳过了『塞得下吗』」<br>· <b>本题的另一半</b>：要能<b>把那句话讲成自己的话，并配一个自己的项目例子</b>——不是背出句子就够，要能说出「我这个项目为什么停在第 ② 步」<br>· <b>不扣分</b>：句子不必一字不差，意思对就行</div>
+  <div class="hint" id="h3">考点：[7.10]。<b>要把五问表说成一段连贯的话，不是背名词。</b><br>· <b>顺序</b>：① 结果必须精确算吗 → 用代码 ② 塞得进上下文吗 → 写进提示词 ③ 塞不进且模型没学过 → RAG ④ 要它动手做事 → Agent + 工具 ⑤ 要风格格式极稳定且量大 → 微调<br>· <b>要说的关键句</b>：「能往上就不往下」——每往下一层都更贵、更慢、更难维护<br>· <b>加分</b>：点出第 ② 问最容易被跳过。「大多数新手会直接从『这是知识』跳到『上 RAG』，跳过了『塞得下吗』」<br>· <b>本题的另一半</b>：要能<b>把那句话讲成自己的话，并配一个自己的项目例子</b>——不是背出句子就够，要能说出「我这个项目为什么停在第 ② 步」<br>· <b>不扣分</b>：句子不必一字不差，意思对就行</div>
 </div>
 <h2 style="font-size:18px;margin:40px 0 4px">二、场景题（每题 2 分，共 4 分）</h2>
 <div class="item" id="q-q4">
   <div class="qhead">Q4</div>
-  <div class="qtext"><p>【⭐ 压力题 · 手写代码被问到】<br>
-面试官看了你的简历，说：</p>
+  <div class="qtext"><p>【⭐ 压力题 · 被要求现场手写代码】<br>
+设想一个场景：对方看了你的项目经历，说：</p>
 <blockquote>
 <p>「我看你这些项目都是 AI 写的。那我问你个实际的——<br>
 <strong>现在要你手写一个带重试和超时的 HTTP 调用，你写一下。</strong></p>
 </blockquote>
 <p><strong>请给出你的完整回答。</strong><br>
 （考点：7.8 ｜ 这一题<strong>不考你会不会写代码</strong>，考你<strong>被这么问时会不会被打倒</strong>）</p>
-<p><strong>评分时我会看四点</strong>：</p>
+<p><strong>评分时重点看四点</strong>：</p>
 <ul>
 <li>有没有<strong>先反问这道题要验什么</strong>（而不是直接说「我不会」）</li>
 <li>有没有<strong>坦诚说明分工</strong>，并且说得清楚、不心虚</li>
@@ -136,12 +149,12 @@
 </ul></div>
   <textarea id="a4" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h4')">查看参考要点</button>
-  <div class="hint" id="h4">考点：[7.9] [7.6]。<b>⚠️ 这题不考你会不会写代码，考你被这么问时会不会被打倒。</b><br>· <b>第一步：先反问，不急着答</b>——「我想先确认这道题要验的是什么：是我的编码熟练度，还是这个模块的设计思路？」<b>一句话把话题从手速转到判断力</b><br>· <b>第二步：坦诚说明分工</b>——「我的工作方式是代码由 AI 实现，我定验收条件并独立核对结果。<b>这不是回避，是我在团队里的实际定位</b>」<br>· <b>第三步（胜负手）：把话题转到强项</b>——「如果这题考的是『怎么保证它是对的』，我可以在几分钟内给你一套验收条件：输入长什么样、输出必须满足什么、哪些情况要挡、怎么测」<br>· <b>第四步（加分）：补教材依据</b>——「同一上下文里的模型难发现自身盲区，所以验收要靠外部证据，不能靠它自己说完成了」（教材）<br>· <b>🔴 扣分点</b>：<b>①硬着头皮现场写</b>（-0.4，节奏断了，后面的题来不及答）<b>②含糊其辞「我也可以学」</b>（-0.3，等于否认自己的核心能力）<b>③反向质疑对方</b>（-0.4，「我觉得手写不重要」——这话只能他自己说，被质疑就不成立）<br>· <b>⭐ 最关键的那条区分</b>：<b>可以说「我的定位是审核者，这是我的分工」</b>（陈述事实）<b>；不该说「会写代码的人没价值」</b>（这是行业判断，不是能力描述）。<b>面试官问的是「你行不行」，你回答的应该是「我行不行」，不是「这行不行」。</b><br>· <b>不扣分</b>：没答出具体技术细节（超纲了，超出他的定位）</div>
+  <div class="hint" id="h4">考点：[7.9] [7.6]。<b>⚠️ 这题不考你会不会写代码，考你被这么问时会不会被打倒。</b><br>· <b>第一步：先反问，不急着答</b>——「我想先确认这道题要验的是什么：是我的编码熟练度，还是这个模块的设计思路？」<b>一句话把话题从手速转到判断力</b><br>· <b>第二步：坦诚说明分工</b>——「我的工作方式是代码由 AI 实现，我定验收条件并独立核对结果。<b>这不是回避，是我在团队里的实际定位</b>」<br>· <b>第三步（胜负手）：把话题转到强项</b>——「如果这题考的是『怎么保证它是对的』，我可以在几分钟内给你一套验收条件：输入长什么样、输出必须满足什么、哪些情况要挡、怎么测」<br>· <b>第四步（加分）：补依据</b>——「同一上下文里的模型难发现自身盲区，所以验收要靠外部证据，不能靠它自己说完成了」<br>· <b>🔴 扣分点</b><b>①硬着头皮现场写</b>（-0.4，节奏断了，后面的问题来不及答）<b>②含糊其辞「我也可以学」</b>（-0.3，等于否认自己的核心能力）<b>③反向质疑对方</b>（-0.4，「我觉得手写不重要」——这话只能他自己说，被质疑就不成立）<br>· <b>⭐ 最关键的那条区分</b><b>可以说「我的定位是审核者，这是我的分工」</b>（陈述事实）<b>；不该说「会写代码的人没价值」</b>（这是行业判断，不是能力描述）。<b>对方问的是「你行不行」，你回答的应该是「我行不行」，不是「这行不行」。</b><br>· <b>不扣分</b>：没答出具体技术细节（超纲了，超出他的定位）</div>
 </div>
 <div class="item" id="q-q5">
   <div class="qhead">Q5</div>
   <div class="qtext"><p>【场景设计 ＋ 岗位判断】<br>
-面试官给你一个需求：</p>
+对方给你一个需求：</p>
 <blockquote>
 <p>「我们要做一个能回答 300 页员工手册问题的内部助手，手册每季度更新。」</p>
 </blockquote>
@@ -149,12 +162,12 @@
 <p><strong>⚠️ 答完追加一问</strong>（这次真的问了）：</p>
 <blockquote>
 <p>「<strong>如果我说我们这个岗位不需要写代码，只要用大模型做业务——<br>
-你还投吗？</strong>」</p>
+你还做吗？</strong>」</p>
 </blockquote>
 <p>（考点：7.4 + 7.9 ｜ 四种失效模式是否真懂；<strong>岗位分层的判断</strong>能不能讲出来）</p></div>
   <textarea id="a5" rows="5" placeholder="在这里写你的答案"></textarea>
   <button class="ghost" style="margin-top:10px" onclick="toggleHint('h5')">查看参考要点</button>
-  <div class="hint" id="h5">考点：[7.4] [7.10]。<b>第一问：技术选型 + 效果保障。第二问：岗位分层判断。</b><br>· <b>选型</b>：走五问表——不需要精确计算；300 页塞不进上下文 → <b>RAG</b>；不需要它动手，所以不上 Agent<br>· <b>为什么不微调</b>：手册每季度更新，微调跟不上（一更新就要重训），而且微调改的是风格不是知识<br>· <b>落地路径</b>：定指标（省多少人力）/ 小范围试（先给一个部门用）/ 再迭代<br>· <b>效果保障（阶段 5）</b>：① 建评测集（30～100 条真实问题，每次改动后重跑对比）② 记可观测性（完整输入输出 + 检索轨迹）③ 约束边界（只依据资料回答，资料未提及就明说）④ 提示词注入防御<br>· <b>⭐ 第二问（追加问）答好的样子</b>：先用一句话判据——「这岗位是<b>用</b>模型做业务，还是<b>造</b>让模型跑起来的东西？」→ 前者是他该投的；然后指出<b>第二问本身是个好消息</b>（说明这岗是应用层岗，不是 infra 岗），再表态投。<br>· <b>加分</b>：说出<b>「精通 ≠ 会用」</b>——招聘话术常把资深要求包装进入行门槛，看到「精通 X ＋ 有大规模生产经验」就知道这是招资深不是招入门<br>· <b>不扣分</b>：没把四层表格背出来——只要能用「用 vs 造/训」这条判据现场分类就是到位</div>
+  <div class="hint" id="h5">考点：[7.4] [7.10]。<b>第一问：技术选型 + 效果保障。第二问：岗位分层判断。</b><br>· <b>选型</b>：走五问表——不需要精确计算；300 页塞不进上下文 → <b>RAG</b>；不需要它动手，所以不上 Agent<br>· <b>为什么不微调</b>：手册每季度更新，微调跟不上（一更新就要重训），而且微调改的是风格不是知识<br>· <b>落地路径</b>：定指标（省多少人力）/ 小范围试（先给一个部门用）/ 再迭代<br>· <b>效果保障</b>：① 建评测集（30～100 条真实问题，每次改动后重跑对比）② 记可观测性（完整输入输出 + 检索轨迹）③ 约束边界（只依据资料回答，资料未提及就明说）④ 提示词注入防御<br>· <b>⭐ 第二问（追加问）答好的样子</b>：先用一句话判据——「这岗位是<b>用</b>模型做业务，还是<b>造</b>让模型跑起来的东西？」→ 前者是他该投的；然后指出<b>第二问本身是个好消息</b>（说明这岗是应用层岗，不是 infra 岗），再表态投。<br>· <b>加分</b>：说出<b>「精通 ≠ 会用」</b>——招聘描述常把资深要求包装进入行门槛，看到「精通 X ＋ 有大规模生产经验」就知道这是招资深不是招入门<br>· <b>不扣分</b>：没把四层表格背出来——只要能用「用 vs 造/训」这条判据现场分类就是到位</div>
 </div>
 <h2 style="font-size:18px;margin:40px 0 4px">交卷</h2>
 <div class="bar" style="position:static">
@@ -164,7 +177,7 @@
 <textarea id="sheet" rows="14" placeholder="点「生成答卷」后，结果会出现在这里。复制后发给教练 Agent 批改。"></textarea>
 <p class="note">选择题我会自动核对；简答题我会按要点逐条看，然后追问你「为什么这么选」——答对但说不出理由，按未掌握处理。</p>
 <footer style="margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px">
-  文件：<code>阶段7-求职实战/测验.md</code>
+  阶段7-求职实战 · 阶段练习卷（答完点「生成答卷」，复制后发给教练 Agent 批改）
 </footer>
 </div>
 <script>
@@ -200,7 +213,7 @@ var CHOICE = [];
 var ESSAY = ["a1", "a2", "a3", "a4", "a5"];
 var ESSAY_NO = [1, 2, 3, 4, 5];
 var TOTAL = 0;
-var PAPER = "阶段 7 测验：求职实战（模拟面试）";
+var PAPER = "阶段 7 测验：求职实战（表述训练）";
 
 function checkChoice(){
   var score = 0;

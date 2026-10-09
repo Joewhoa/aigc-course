@@ -7,30 +7,30 @@
 <style>
 :root{
   --bg:#f7f6f3; --card:#ffffff; --text:#1f1e1c; --muted:#6b6862;
-  --line:#e5e2db; --accent:#c0392b; --accent2:#8a5109; --code-bg:#f2efe9;
-  --th:#efece5; --strong:#000;
+  --line:#e5e2db; --accent:#0e7490; --accent2:#8a5109; --code-bg:#f2efe9;
+  --th:#efece5; --strong:#000000;
 }
 /* 深色模式：跟随系统，也可手动切换（右上角按钮） */
 :root[data-theme="dark"]{
-  --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-  --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-  --th:#2e2d2b; --strong:#f5f2ec;
+  --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+  --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+  --th:#1c2837; --strong:#f0f4f8;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1a1a19; --card:#232322; --text:#e6e3dc; --muted:#a3a099;
-    --line:#3a3937; --accent:#e07a6c; --accent2:#d4a15f; --code-bg:#2b2a28;
-    --th:#2e2d2b; --strong:#f5f2ec;
+    --bg:#0b1220; --card:#151d2e; --text:#e6edf3; --muted:#8b98a9;
+    --line:#263449; --accent:#22d3ee; --accent2:#d4a15f; --code-bg:#0e1524;
+    --th:#1c2837; --strong:#f0f4f8;
   }
 }
 *{box-sizing:border-box;}
 body{
   margin:0; background:var(--bg); color:var(--text);
-  font-family:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  line-height:1.75; font-size:16px;
+  font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;
+  line-height:1.7; font-size:16px;
   transition:background .2s,color .2s;
 }
-.wrap{max-width:820px; margin:0 auto; padding:48px 28px 96px;}
+.wrap{max-width:760px; margin:0 auto; padding:40px 24px 96px;}
 /* 主题切换按钮 */
 .theme-btn{
   position:fixed; top:14px; right:16px; z-index:99;
@@ -40,9 +40,9 @@ body{
   box-shadow:0 1px 4px rgba(0,0,0,.12);
 }
 .theme-btn:hover{border-color:var(--accent);}
-h1{font-size:1.9rem; margin:0 0 8px; letter-spacing:-0.01em;
+h1{font-size:28px; margin:0 0 8px; letter-spacing:-0.01em;
    border-bottom:3px solid var(--accent); padding-bottom:14px;}
-h2{font-size:1.35rem; margin:52px 0 16px; padding-left:12px;
+h2{font-size:20px; margin:52px 0 16px; padding-left:12px;
    border-left:4px solid var(--accent);}
 h3{font-size:1.08rem; margin:30px 0 10px; color:var(--accent2);}
 h4{font-size:1rem; margin:22px 0 8px;}
@@ -50,22 +50,47 @@ p{margin:12px 0;}
 blockquote{margin:18px 0; padding:12px 18px; background:var(--card);
   border-left:4px solid var(--accent2); border-radius:0 8px 8px 0;}
 blockquote p{margin:6px 0;}
+details.fold{margin:18px 0; border:1px solid var(--line); border-radius:8px;
+  background:var(--card); overflow:hidden;}
+details.fold>summary{cursor:pointer; padding:11px 15px; font-weight:600;
+  color:var(--accent2); list-style:none; user-select:none;
+  border-left:4px solid var(--accent2);}
+details.fold>summary::-webkit-details-marker{display:none;}
+details.fold>summary::before{content:"▸ "; color:var(--accent2);}
+details.fold[open]>summary::before{content:"▾ ";}
+details.fold>summary:hover{background:var(--th);}
+details.fold .foldbody{padding:4px 15px 14px 15px;}
+details.fold .foldbody>*:first-child{margin-top:8px;}
+details.fold .foldbody>*:last-child{margin-bottom:0;}
 table{width:100%; border-collapse:collapse; margin:18px 0; font-size:0.92rem;
   background:var(--card); border-radius:8px; overflow:hidden;
-  box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+  box-shadow:0 1px 2px rgba(0,0,0,0.04);
+  table-layout:auto;}
 th{background:var(--th); text-align:left; padding:11px 13px; font-weight:600;}
 td{padding:10px 13px; border-top:1px solid var(--line); vertical-align:top;}
+/* 表格里的短单元格（如「上下文」「大脑」）不能被压到换行：
+   浏览器对 inline text-align:center 的列会按内容宽度收紧，中文三个字就断成两行。
+   给这些短列一个最小宽度，最长的一列（通常是「说明」列）吃掉剩余宽度。 */
+th,td{ min-width:5.5em; }
+td:first-child,th:first-child{ white-space:nowrap; }
+table td:nth-child(1){ min-width:6.5em; }
 code{background:var(--code-bg); padding:2px 6px; border-radius:4px;
   font-family:"SF Mono",Consolas,monospace; font-size:0.88em;}
-pre{background:#2b2a28; color:#f0ede6; padding:16px 18px; border-radius:8px;
+pre{background:var(--code-bg); color:var(--text); border:1px solid var(--line);
+  padding:16px 18px; border-radius:8px;
   overflow-x:auto; font-size:0.86rem; line-height:1.6;}
 pre code{background:none; padding:0; color:inherit; font-size:0.86rem;}
 hr{border:none; border-top:1px solid var(--line); margin:44px 0;}
 li{margin:6px 0;}
 ul,ol{padding-left:26px; margin:12px 0;}
 ol > li::marker{font-weight:700; color:var(--accent);}
-a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(192,57,43,.35);}
+a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(14,116,144,.35);}
 a:hover{border-bottom-color:var(--accent);}
+/* 深色下主色变亮，下划线跟着提亮，否则在蓝黑底上几乎看不见 */
+:root[data-theme="dark"] a{border-bottom-color:rgba(34,211,238,.38);}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) a{border-bottom-color:rgba(34,211,238,.38);}
+}
 strong{color:var(--strong);}
 </style>
 </head>
@@ -111,25 +136,19 @@ strong{color:var(--strong);}
 <td><strong>Computer Use</strong>（★ 含<strong>「先问有没有 API」决策准则</strong>）</td>
 </tr>
 <tr>
-<td><strong>6.8</strong></td>
-<td>⭐ <strong>框架了解</strong> —— LangChain / LlamaIndex 到底要不要用（本阶段新增）<br>　★ 另含：<strong>同一个场景四种搭法</strong> ＋ <strong>低代码平台怎么跑</strong>（接回 ReAct）＋ <strong>它的致命短板</strong> ＋ <strong>你的验收三看</strong></td>
+<td>6.8</td>
+<td>⭐ <strong>框架了解</strong> —— LangChain / LlamaIndex 到底要不要用<br>★ 另含：<strong>同一个场景四种搭法</strong> ＋ <strong>低代码平台怎么跑</strong>（接回 ReAct）＋ <strong>它的致命短板</strong> ＋ <strong>你的验收三看</strong></td>
 </tr>
 <tr>
 <td>6.9</td>
-<td>面试会怎么问</td>
+<td>章节小测：能答上来才算真会了</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>** 按教材核验 ⑥ 补充<strong>（教材 / ch5 / ch6 / ch10 ＋ 公开课 02 / 15）：<br>
-</strong>原 8 节 → 现 9 节**（新增 6.8 框架了解）；就地补 5 处<br>
-（6.2 行业趋势结论、6.3 A2A 实质、6.5 手段三步递进、6.7 「先问有没有 API」、6.3 NLWeb 出处标注）。<br>
-</p>
-</blockquote>
 <h2>文件</h2>
 <ul>
-<li><code>讲义.md</code> / <code>讲义.html</code> —— 正文（<strong>9 节</strong>）</li>
-<li><code>测验.md</code> / <code>测验.html</code> —— <strong>14 题（选择 6 ＋ 简答 8），11.2 分及格</strong> ＋ 配套 <code>测验-答案与解析.json</code></li>
+<li><code>讲义</code> / <code>讲义.html</code> —— 正文（<strong>9 节</strong>）</li>
+<li><code>测验</code> / <code>测验.html</code> —— <strong>14 题（选择 6 ＋ 简答 8），11.2 分及格</strong></li>
 </ul>
 <h2>过关标准</h2>
 <ul>
@@ -139,44 +158,15 @@ strong{color:var(--strong);}
 <li><strong>能说清 A2A 与 MCP 的分工（MCP 接工具 / A2A 接 Agent）</strong></li>
 <li><strong>能说清「先问有没有 API」——为什么 API 优先于 Computer Use</strong></li>
 <li><strong>能说清框架的取舍：什么情况值得上、什么情况直接调 API 更好</strong></li>
+<li><strong>考核是「判断取舍」，不考手写框架代码</strong> —— 代码由 AI 写，你负责判断和验收</li>
 </ul>
-<h2>本阶段最该记住的三句</h2>
+<h2>本阶段最该记住的四句</h2>
 <blockquote>
+<p><strong>垂直应用 = 把通用能力装进具体场景</strong>——价值在<strong>对场景的理解</strong>，不在模型本身。</p>
 <p><strong>行业正从「能做事」转向「可靠地做事」</strong>——竞争力在<strong>工程</strong>，不在调模型（这正是阶段 3–5 的内容）。</p>
 <p><strong>手段有顺序</strong>：先提示词 → 再工作流 → 最后自主 Agent；<strong>Agent 不是更高级，是更不可控。</strong></p>
 <p><strong>框架是工具，不是信仰。</strong> <strong>直接的 API 调用优于复杂框架</strong>——<strong>因为每层抽象都是一个调试盲区。</strong></p>
 </blockquote>
-<hr>
-<h2>✅ 开课待补已并入（ 结清）</h2>
-<blockquote>
-<p>来源： ）。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>原待补</th>
-<th>落点</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>主流框架了解</strong>（LangChain / LlamaIndex）</td>
-<td>→ <strong>6.9 框架了解</strong></td>
-<td>✅ 已并入</td>
-</tr>
-</tbody>
-</table>
-<p><strong>这一节的口径（重要）</strong>：</p>
-<ul>
-<li>✅ <strong>只讲「它解决什么问题、什么时候值得用、什么时候不划算」</strong></li>
-<li>✅ <strong>不教调 API、不要求写 LangChain 代码</strong></li>
-<li>✅ <strong>考核形式是「判断取舍」</strong>（Q6 / Q12 / Q13），<strong>不是「会不会用」</strong></li>
-<li>📖 <strong>教材依据</strong>：<strong>教材的立场是 skeptical（讲取舍）</strong>，原话「<strong>直接的 API 调用优于复杂的框架</strong>」<br>
-  「<strong>每多一层抽象都会成为以后调试时新的盲区</strong>」「<strong>学会某个具体框架的用法并不重要</strong>」——<br>
-<strong>本节取这个立场</strong>（公开课 02 的立场是 supportive / 教用法，<strong>不取</strong>）。</li>
-</ul>
-<p><strong>仍然坚持的原则</strong>：<strong>不补「手写框架代码」</strong>——本课程的分工是「代码由 AI 写、他负责判断与验收」。</p>
 </div>
 
 <script>
